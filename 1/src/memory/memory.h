@@ -1,56 +1,50 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-// Return codes
-#define M_ERR_OK 0
-#define M_ERR_INVALID_ARGUMENTS 1
-#define M_ERR_OUT_OF_MEMORY 2
-#define M_ERR_OUT_OF_BOUNDS 3
+#define M_ERR_OK 0 // Everything is ok
+#define M_ERR_ALLOCATION_OUT_OF_MEMORY 1 // Not enough memory for allocation
+#define M_ERR_ALREADY_DEALLOCATED 2 // The chunk was already deallocated
+#define M_ERR_INVALID_CHUNK 3 // The chunk is invalid, the operation did not succeed
+#define M_ERR_OUT_OF_BOUNDS 4 // The read/write operation out of bounds
 
 
-typedef int m_err_code; // error code of sandbox memory
-typedef void* m_id; // identifier of sandbox memory chunk
+typedef int m_err_code; // Error code of sandbox memory
+typedef void* m_id; // Identifier of sandbox memory chunk
 
 
 // Allocates a chunk in sandbox memory
-// returns M_ERR_OK, M_ERR_INVALID_ARGUMENTS, M_ERR_OUT_OF_MEMORY
-m_err_code m_malloc(
-  m_id* output_id, // a pointer to chunk
-  int size_of_chunk // size of the chunk in bytes
-);
+// @param size_of_chunk Desired size in bytes to be allocated in sandbox memory
+// @param error_code [out] M_ERR_OK, M_ERR_ALLOCATION_OUT_OF_MEMORY
+// @return An identifier for newly allocated chunk
+m_id m_malloc(int size_of_chunk, m_err_code* error_code);
 
 
 // Deallocates a chunk in sandbox memory
-// returns M_ERR_OK, M_ERR_INVALID_ARGUMENTS
-m_err_code m_free(
-  m_id ptr // chunk identifier
-);
+// @param chunk_id Chunk identifier
+// @param error_code [out] M_ERR_OK, M_ERR_ALREADY_DEALLOCATED, M_ERR_INVALID_CHUNK
+void m_free(m_id chunk_id, m_err_code* error_code);
 
 
 // Reads from chunk to a buffer
-// returns M_ERR_OK, M_ERR_INVALID_ARGUMENTS, M_ERR_OUT_OF_BOUNDS
-m_err_code m_read(
-  m_id read_from_id, // chunk identifier to read from
-  void* read_to_buffer, // pointer to buffer(real memory address) where to read into
-  int size_to_read // size to read from chunk
-);
+// @param read_from_id The chunk to read from
+// @param read_to_buffer [out] The buffer to store data into
+// @param size_to_read Size of data in bytes to read from chunk
+// @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
+void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error_code);
 
 
-// Writes to chunk from a buffer
-// returns M_ERR_OK, M_ERR_INVALID_ARGUMENTS, M_ERR_OUT_OF_BOUNDS
-m_err_code m_write(
-  m_id write_to_id, // chunk identifier to write into
-  void* write_from_buffer, // pointer to buffer(real memory address) where to write from
-  int size_to_write // size to write into chunk
-);
+// Writes from buffer to a chunk
+// @param write_to_id The chunk to store data into
+// @param write_from_buffer The buffer to read from
+// @param size_to_write Size of data in bytes to be stored into chunk
+// @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
+void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error_code);
 
 
-// Initializes sandbox memory allocator
-// returns M_ERR_OK, M_ERR_INVALID_ARGUMENTS
-m_err_code m_init(
-  int number_of_pages,
-  int size_of_page
-);
+// Initializes sandbox memory allocator. Usually it is number_of_pages*size_of_page.
+// @param number_of_pages Number of pages to allocate
+// @param size_of_page Size of the page
+void m_init(int number_of_pages, int size_of_page);
 
 
 #endif /* MEMORY_H */
