@@ -9,28 +9,8 @@
 
 
 typedef int m_err_code; // Error code of sandbox memory
-typedef void *m_id; // Identifier of sandbox memory chunk
 
-typedef struct chunk {
-    size_t size;
-    size_t start_pointer;
-    size_t shift;
-    struct chunk *next;
-} chunk;
-
-typedef struct memory_manager {
-    void *memory;
-    size_t allocated_memory;
-    size_t max_allocated;
-    chunk *first_chunk;
-    chunk *last_chunk;
-} memory_manager;
-
-
-typedef struct cache {
-    void *data;
-    size_t size;
-} cache;
+typedef struct chunk chunk;
 
 
 // Allocates a chunk in sandbox memory
@@ -42,24 +22,24 @@ chunk* m_malloc(int size_of_chunk, m_err_code *error_code);
 
 // Deallocates a chunk in sandbox memory
 // @param chunk_id Chunk identifier
-// @param error_code [out] M_ERR_OK, M_ERR_ALREADY_DEALLOCATED, M_ERR_INVALID_CHUNK
-m_err_code m_free(chunk *chunk_id);
+// @return error_code M_ERR_OK, M_ERR_ALREADY_DEALLOCATED, M_ERR_INVALID_CHUNK
+m_err_code m_free(chunk* chunk_id);
 
 
 // Reads from chunk to a buffer
 // @param read_from_id The chunk to read from
 // @param read_to_buffer [out] The buffer to store data into
 // @param size_to_read Size of data in bytes to read from chunk
-// @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
-void m_read(m_id read_from_id, void *read_to_buffer, int size_to_read, m_err_code *error_code);
+// @return error_code M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
+m_err_code m_read(chunk* read_from_id, void *read_to_buffer, int size_to_read);
 
 
 // Writes from buffer to a chunk
 // @param write_to_id The chunk to store data into
 // @param write_from_buffer The buffer to read from
 // @param size_to_write Size of data in bytes to be stored into chunk
-// @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
-m_err_code m_write(m_id write_to_id, void *write_from_buffer, int size_to_write);
+// @return error_code M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
+m_err_code m_write(chunk* write_to_id, void *write_from_buffer, int size_to_write);
 
 
 // Initializes sandbox memory allocator. Usually it is number_of_pages*size_of_page.

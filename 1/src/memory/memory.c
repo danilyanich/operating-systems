@@ -5,6 +5,26 @@
 #include "memory.h"
 
 
+typedef struct chunk {
+    size_t size;
+    size_t start_pointer;
+    size_t shift;
+    struct chunk *next;
+} chunk;
+
+typedef struct memory_manager {
+    void *memory;
+    size_t allocated_memory;
+    size_t max_allocated;
+    chunk *first_chunk;
+    chunk *last_chunk;
+} memory_manager;
+
+typedef struct cache {
+    void *data;
+    size_t size;
+} cache;
+
 memory_manager my_manager = {.memory = NULL, .allocated_memory = 0, .max_allocated = 0, .first_chunk = NULL};
 
 chunk* m_malloc(int size_of_chunk, m_err_code *error) {
@@ -74,14 +94,19 @@ m_err_code m_free(chunk *ptr) {
 }
 
 
-void m_read(m_id read_from_id, void *read_to_buffer, int size_to_read, m_err_code *error) {
-    memcpy(read_to_buffer, read_from_id, size_to_read);
-    *error = M_ERR_OK;
+m_err_code m_read(chunk* read_from_id, void *read_to_buffer, int size_to_read) {
+    if(read_from_id == NULL || read_from_id->start_pointer > my_manager.max_allocated)return M_ERR_INVALID_CHUNK;
+    if(size_to_read > read_from_id->size)return M_ERR_OUT_OF_BOUNDS;
+    memcpy(read_to_buffer, my_manager.memory + read_from_id->start_pointer, size_to_read);
+    return M_ERR_OK;
 }
 
 
-m_err_code m_write(m_id write_to_id, void *write_from_buffer, int size_to_write) {
-    memcpy(write_to_id, write_from_buffer, size_to_write);
+m_err_code m_write(chunk* write_to_id, void *write_from_buffer, int size_to_write) {
+    if(write_to_id == NULL || write_to_id->start_pointer > my_manager.max_allocated)return M_ERR_INVALID_CHUNK;
+    if(write_to_id->size - write_to_id->shift < size_to_write)return M_ERR_OUT_OF_BOUNDS;
+    memcpy(my_manager.memory + (write_to_id->start_pointer + write_to_id->shift), write_from_buffer, size_to_write);
+    write_to_id->shift += size_to_write;
     return M_ERR_OK;
 }
 
