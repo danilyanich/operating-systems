@@ -1,65 +1,81 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 
 #include "memory/memory.h"
+
+void test(m_err_code error, char* test_name){
+    printf("Test \"%s\" started...\n", test_name);
+    switch(error) {
+        case M_ERR_OK:{
+            printf("Test \"%s\" PASSED\n", test_name);
+            break;
+        }
+        case M_ERR_INVALID_CHUNK:{
+            printf("Test \"%s\" EXIT: M_ERR_INVALID_CHUNK\n", test_name);
+            abort();
+        }
+        case M_ERR_OUT_OF_BOUNDS:{
+            printf("Test \"%s\" EXIT: M_ERR_OUT_OF_BOUNDS\n", test_name);
+            abort();
+        }
+        case M_ERR_ALREADY_DEALLOCATED:{
+            printf("Test \"%s\" WARNING: M_ERR_ALREADY_DEALLOCATED\n", test_name);
+            break;
+        }
+        case M_ERR_ALLOCATION_OUT_OF_MEMORY:{
+            printf("Test \"%s\" WARNING: M_ERR_ALLOCATION_OUT_OF_MEMORY\n", test_name);
+            break;
+        }
+        default:{
+            printf("Hello there!\n");
+        }
+    }
+    printf("\n");
+}
 
 int main() {
     int error;
     m_init(500);
-    chunk *first = m_malloc(34, &error);
-    assert(error == M_ERR_OK);
+    segment_addr first = m_malloc(34, &error);
+    test(error, "TEST 1");
 
-    chunk *second = m_malloc(36, &error);
-    assert(error == M_ERR_OK);
+    segment_addr second = m_malloc(36, &error);
+    test(error, "TEST 2");
 
-    chunk *third = m_malloc(23, &error);
-    assert(error == M_ERR_OK);
+    segment_addr third = m_malloc(23, &error);
+    test(error, "TEST 3");
 
-    chunk *fourth = m_malloc(64, &error);
-    assert(error == M_ERR_OK);
+    segment_addr fourth = m_malloc(64, &error);
+    test(error, "TEST 4");
 
-    m_err_code success = m_free(fourth);
-    assert(success == M_ERR_OK);
+    test(m_free(fourth), "TEST 5");
 
-    chunk *chunk_1 = m_malloc(13, &error);
-    if (error != M_ERR_OK) abort();
+    segment_addr chunk_1 = m_malloc(13, &error);
+    test(error, "TEST 6");
 
-    chunk *chunk_2 = m_malloc(20, &error);
-    if (error != M_ERR_OK) abort();
+    segment_addr chunk_2 = m_malloc(20, &error);
+    test(error, "TEST 7");
 
-    chunk *chunk_3 = m_malloc(50, &error);
-    if (error != M_ERR_OK) abort();
+    segment_addr chunk_3 = m_malloc(50, &error);
+    test(error, "TEST 8");
 
-    error = m_write(chunk_1, "Hello World!", 13);
-    if (error != M_ERR_OK) abort();
+    test(m_write(chunk_1, "Hello World!", 13), "TEST 9");
 
-    error = m_write(chunk_2, "Operating Systems", 18);
-    if (error != M_ERR_OK) abort();
+    test(m_write(chunk_2, "Operating Systems", 18), "TEST 10");
 
-    error = m_write(chunk_3, "Super dumb memory allocator", 28);
-    if (error != M_ERR_OK) abort();
+    test(m_write(chunk_3, "Super dumb memory allocator", 28), "TEST 11");
 
     char* buffer = malloc(50);
 
-    error = m_read(chunk_1, buffer, 13);
-    if (error != M_ERR_OK) abort();
-    printf("%s\n", buffer);
+    test(m_read(chunk_1, buffer, 13), "TEST 12");
 
-    error = m_read(chunk_2, buffer, 18);
-    if (error != M_ERR_OK) abort();
-    printf("%s\n", buffer);
+    test(m_read(chunk_2, buffer, 18), "TEST 13");
 
-    error = m_read(chunk_3, buffer, 28);
-    if (error != M_ERR_OK) abort();
-    printf("%s\n", buffer);
+    test(m_read(chunk_3, buffer, 28), "TEST 14");
 
-    error = m_free(chunk_1);
-    if (error != M_ERR_OK) abort();
+    test(m_free(chunk_1), "TEST 15");
 
-    error = m_free(chunk_2);
-    if (error != M_ERR_OK) abort();
+    test(m_free(chunk_2), "TEST 16");
 
-    error = m_free(chunk_3);
-    if (error != M_ERR_OK) abort();
+    test(m_free(chunk_3), "TEST 17");
 }
