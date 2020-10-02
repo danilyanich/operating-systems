@@ -9,7 +9,7 @@
 #define M_WARN_NO_IN_CACHE 5 // No specific chunk in cache
 
 typedef int m_err_code; // Error code of sandbox memory
-typedef size_t* segment_addr;
+typedef int* segment_addr;
 typedef struct chunk chunk;
 
 

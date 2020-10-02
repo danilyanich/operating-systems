@@ -7,23 +7,24 @@
 #define CACHE_SIZE 5
 
 typedef struct chunk {
-    size_t size;
-    size_t start_pointer;
+    int size;
+    int start_pointer;
     struct chunk *next;
 } chunk;
 
 typedef struct cache {
-    size_t free_chunk;
+    int free_chunk;
     chunk* segments[CACHE_SIZE];
 } cache;
 
 typedef struct memory_manager {
     void *memory;
-    size_t allocated_memory;
-    size_t max_allocated;
+    int allocated_memory;
+    int max_allocated;
     chunk *first_chunk;
     chunk *last_chunk;
     cache _cache;
+    int DEALLOCATED;
 } memory_manager;
 
 memory_manager my_manager = {.memory = NULL, .allocated_memory = 0, .max_allocated = 0, .first_chunk = NULL};
@@ -70,12 +71,14 @@ segment_addr m_malloc(int size_of_chunk, m_err_code *error) {
 
 
 m_err_code m_free(segment_addr ptr) {
-    if(*ptr > my_manager.max_allocated)return M_ERR_ALREADY_DEALLOCATED;
+    if (*ptr == my_manager.DEALLOCATED)return M_ERR_ALREADY_DEALLOCATED;
+    if(*ptr > my_manager.max_allocated)return M_ERR_INVALID_CHUNK;
     if (*ptr == my_manager.first_chunk->start_pointer && my_manager.first_chunk->next == NULL){
         my_manager.first_chunk = NULL;
         my_manager.last_chunk = NULL;
         my_manager.allocated_memory = 0;
         free(my_manager.first_chunk);
+        *ptr = my_manager.DEALLOCATED;
         return M_ERR_OK;
     }
     chunk* to_delete = NULL;
@@ -109,9 +112,10 @@ m_err_code m_free(segment_addr ptr) {
     if (is_find){
         my_manager.allocated_memory -= to_delete->size;
         free(to_delete);
+        *ptr = my_manager.DEALLOCATED;
         return M_ERR_OK;
     }
-    return M_ERR_INVALID_CHUNK;
+    return M_ERR_ALREADY_DEALLOCATED;
 }
 
 
@@ -155,6 +159,7 @@ void m_init(int size) {
     for (int i = 0; i < CACHE_SIZE; ++i) {
         my_manager._cache.segments[i] = NULL;
     }
+    my_manager.DEALLOCATED = 1;
     my_manager.memory = malloc(size);
     my_manager.allocated_memory = 0;
     my_manager.max_allocated = size;

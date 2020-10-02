@@ -50,6 +50,20 @@ int main() {
 
     test(m_free(fourth), "TEST 5");
 
+    //uncomment for M_ERR_ALLOCATION_OUT_OF_MEMORY
+    //segment_addr chunk_5 = m_malloc(555, &error);
+    //test(error, "TEST OUT OF MEMORY");
+
+    //uncomment for M_ERR_ALREADY_DEALLOCATED
+    //test(m_free(fourth), "TEST ALREADY DEALLOC");
+
+    //uncomment for M_ERR_INVALID_CHUNK
+    //int addr = 1111;
+    //test(m_free(&addr), "TEST INVALID CHUNK");
+
+    //uncomment for M_ERR_OUT_OF_BOUNDS
+    //test(m_write(third, "ddd", 2222), "TEST BOUNDS 1");
+
     segment_addr chunk_1 = m_malloc(13, &error);
     test(error, "TEST 6");
 
@@ -68,6 +82,9 @@ int main() {
     char* buffer = malloc(50);
 
     test(m_read(chunk_1, buffer, 13), "TEST 12");
+
+    //uncomment for M_ERR_OUT_OF_BOUNDS
+    //test(m_read(chunk_1, buffer, 1111), "TEST BOUNDS 2");
 
     test(m_read(chunk_2, buffer, 18), "TEST 13");
 
