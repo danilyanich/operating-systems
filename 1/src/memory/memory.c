@@ -6,6 +6,11 @@
 
 #define CACHE_SIZE 5
 
+typedef struct chunk_usage_detector {
+    int usage_count;
+    chunk* _chunk;
+}chunk_usage_detector;
+
 typedef struct chunk {
     int size;
     int start_pointer;
@@ -13,8 +18,7 @@ typedef struct chunk {
 } chunk;
 
 typedef struct cache {
-    int free_chunk;
-    chunk* segments[CACHE_SIZE];
+    chunk_usage_detector segments[CACHE_SIZE];
 } cache;
 
 typedef struct memory_manager {
@@ -29,22 +33,30 @@ typedef struct memory_manager {
 
 memory_manager my_manager = {.memory = NULL, .allocated_memory = 0, .max_allocated = 0, .first_chunk = NULL};
 
+void write_cache(chunk* to_write_chunk){
+    int to_delete_index = 0;
+    int min_usage = my_manager._cache.segments[0].usage_count;
+    for(int i = 1; i < 5; ++i) {
+        if(min_usage > my_manager._cache.segments[i].usage_count){
+            min_usage = my_manager._cache.segments[i].usage_count;
+            to_delete_index = i;
+        }
+    }
+    my_manager._cache.segments[to_delete_index].usage_count = 1;
+    my_manager._cache.segments[to_delete_index]._chunk = to_write_chunk;
+}
+
 m_err_code read_cache(segment_addr addr, void* buffer, size_t read_size){
     for (int i = 0; i < CACHE_SIZE; ++i) {
-        if (my_manager._cache.segments[i] != NULL && my_manager._cache.segments[i]->start_pointer == *addr){
-            chunk* selected_chunk = my_manager._cache.segments[i];
+        if (my_manager._cache.segments[i]._chunk != NULL && my_manager._cache.segments[i]._chunk->start_pointer == *addr){
+            chunk* selected_chunk = my_manager._cache.segments[i]._chunk;
             if(read_size > selected_chunk->size)return M_ERR_OUT_OF_BOUNDS;
             memcpy(buffer, my_manager.memory + selected_chunk->start_pointer, read_size);
+            my_manager._cache.segments[i].usage_count++;
             return M_ERR_OK;
         }
     }
     return M_WARN_NO_IN_CACHE;
-}
-
-void write_cache(chunk* to_write_chunk){
-    my_manager._cache.segments[my_manager._cache.free_chunk] = to_write_chunk;
-    my_manager._cache.free_chunk++;
-    if(my_manager._cache.free_chunk >= CACHE_SIZE)my_manager._cache.free_chunk -= CACHE_SIZE;
 }
 
 segment_addr m_malloc(int size_of_chunk, m_err_code *error) {
@@ -155,9 +167,10 @@ m_err_code m_write(segment_addr write_to_id, void *write_from_buffer, int size_t
 void m_init(int size) {
     if (my_manager.memory != NULL) free(my_manager.memory);
 
-    my_manager._cache.free_chunk = 0;
+    chunk_usage_detector temp;
+    temp.usage_count  = -1;
     for (int i = 0; i < CACHE_SIZE; ++i) {
-        my_manager._cache.segments[i] = NULL;
+        my_manager._cache.segments[i] = temp;
     }
     my_manager.DEALLOCATED = 1;
     my_manager.memory = malloc(size);
