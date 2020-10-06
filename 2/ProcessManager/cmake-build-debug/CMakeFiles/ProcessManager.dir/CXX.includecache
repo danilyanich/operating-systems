@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+O:/projects/ProcessManager/main.cpp
+future
+-
+thread
+-
+chrono
+-
+iostream
+-
+cstdio
+-
+cstdlib
+-
+windows.h
+-
+vector
+-
+
