@@ -4,7 +4,7 @@
 
 #include "memory.h"
 
-// Number of pages is hardcoded
+
 struct {
     char* pages[MAX_PAGES]; // List of pages pointers
     int pages_num;
@@ -86,8 +86,6 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 
 
 void m_init(int number_of_pages, int size_of_page) {
-    //if (_g_allocator_memory != NULL) free(_g_allocator_memory); Delete memory var
-
     // Init sandbox memory
     _g_allocator_memory.page_size = size_of_page;
     _g_allocator_memory.pages_num = number_of_pages;
