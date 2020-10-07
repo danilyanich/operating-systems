@@ -1,20 +1,7 @@
-# C/C++ starter
+# Paged Memory Manager
 
-This project contains `C/C++` starter configuration.
-To start using it put source files and headers into `src` folder.
+3 variant
 
-## How to use
+This project contains simple paged memory manager. 
 
-### Generate Makefile:
-```bash
-cmake .
-```
-### Build project:
-```bash
-make
-```
-
-### Run project:
-```bash
-./bin
-```
+Сlearing memory is carried out by marking the memory chunk as free. Freed space could be used for allocating memory for new chunks, this ability is covered by tests.
