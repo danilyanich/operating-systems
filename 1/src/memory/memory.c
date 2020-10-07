@@ -7,9 +7,9 @@
 
 struct {
     char* pages[MAX_PAGES]; // List of pages pointers
-    int pages_num;
+    int pages_num; // Num of pages
     int page_size; // Size of each page
-    int bytes_allocated[MAX_PAGES][MAX_PAGE_SIZE]; // Allocated bytes of each page
+    int bytes_allocated[MAX_PAGES][MAX_PAGE_SIZE]; // Usage matrix
 
 } _g_allocator_memory;
 
@@ -64,11 +64,16 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
 
 
 void m_free(m_id ptr, int size_to_free, int page, m_err_code* error) {
+
+    // Marking memory as free
     int start = (int)(ptr - (int)_g_allocator_memory.pages[page]);
     int end = start + size_to_free;
+
     for (int i = start; i <= end; ++i) {
         _g_allocator_memory.bytes_allocated[page][i] = 0;
     }
+
+    ptr = NULL;
     *error = M_ERR_OK;
 }
 

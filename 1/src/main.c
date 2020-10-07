@@ -37,6 +37,12 @@ int main(int argc, char **argv) {
     m_write(chunk_4, "laba", 5, &error_code);
     if (error_code != M_ERR_OK) abort();
 
+    // Allocating Fifth Chunck with size 40, to show page separation; Memory for this chunk will be allocated from second page
+    m_id chunk_5 = m_malloc(40, &error_code);
+    if (error_code != M_ERR_OK) abort();
+    m_write(chunk_5, "Paging is working))", 40, &error_code);
+    if (error_code != M_ERR_OK) abort();
+
     // Printing chunks from memory
     char buffer[60];
     m_read(chunk_1, buffer, 13, &error_code);
@@ -48,6 +54,10 @@ int main(int argc, char **argv) {
     printf("%s\n", buffer);
 
     m_read(chunk_4, buffer, 5, &error_code);
+    if (error_code != M_ERR_OK) abort();
+    printf("%s\n", buffer);
+
+    m_read(chunk_5, buffer, 40, &error_code);
     if (error_code != M_ERR_OK) abort();
     printf("%s\n", buffer);
 
