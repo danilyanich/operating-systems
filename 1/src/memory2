@@ -9,66 +9,53 @@ struct {
     char* pages[MAX_PAGES]; // List of pages pointers
     int pages_num;
     int page_size; // Size of each page
-    int bytes_allocated[MAX_PAGES][MAX_PAGE_SIZE]; // Allocated bytes of each page
+    int bytes_allocated[MAX_PAGES]; // Allocated bytes of each page
+    m_id* pointers_of_page[MAX_PAGES][MAX_PAGE_SIZE];
 
 } _g_allocator_memory;
 
 
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
-    bool space_is_found = false;
+    bool page_is_found = false;
     int *result_id;
 
-    // Iteration in pages
     for (int i = 0; i<_g_allocator_memory.pages_num; i++) {
+        int page_free_space = _g_allocator_memory.page_size - _g_allocator_memory.bytes_allocated[i];
+        if (page_free_space >= size_of_chunk){
+            page_is_found = true;
+            result_id = _g_allocator_memory.pages[i] + _g_allocator_memory.bytes_allocated[i];
 
-        // Iteration in space of page
-        int free_counter = 0;
-        for (int t = 0; t < _g_allocator_memory.page_size; t++) {
+            _g_allocator_memory.bytes_allocated[i] += size_of_chunk;
 
-            if (_g_allocator_memory.bytes_allocated[i][t] == 0) {
-                free_counter++;
-
-                // if there is enough space
-                if (free_counter >= size_of_chunk) {
-                    space_is_found = true;
-                    int start = t-free_counter+1;
-
-                    for (int j = start; j <= t; j++) {
-                        _g_allocator_memory.bytes_allocated[i][j] = 1;
-                    }
-
-                    result_id = _g_allocator_memory.pages[i] + start;
-                    goto massive_break;
-
+            for (int t = 0; t<_g_allocator_memory.page_size; t++){
+                if (_g_allocator_memory.pointers_of_page[i][t] != 0){
+                    _g_allocator_memory.pointers_of_page[i][t] = &result_id;
                 }
-            } else {
-                free_counter = 0;
             }
 
+            break;
         }
     }
 
-    massive_break:
-
-
-
-    if (space_is_found == false) {
+    if (page_is_found == false) {
         *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
         return NULL;
     }
 
 
     *error = M_ERR_OK;
-    return result_id;
+    return &result_id;
 }
 
 
 void m_free(m_id ptr, int size_to_free, int page, m_err_code* error) {
-    int start = (int)(ptr - (int)_g_allocator_memory.pages[page]);
-    int end = start + size_to_free;
-    for (int i = start; i <= end; ++i) {
-        _g_allocator_memory.bytes_allocated[page][i] = 0;
+    int space_after = _g_allocator_memory.page_size - *(int*)(ptr - *_g_allocator_memory.pages[page]) - size_to_free;
+    memmove(ptr, ptr+size_to_free, space_after);
+    for (int t = 0; t<_g_allocator_memory.page_size; t++){
+        _g_allocator_memory.pointers_of_page[page][t]
     }
+
+    _g_allocator_memory.bytes_allocated[page] -= size_to_free;
     *error = M_ERR_OK;
 }
 
@@ -93,10 +80,11 @@ void m_init(int number_of_pages, int size_of_page) {
     _g_allocator_memory.pages_num = number_of_pages;
     for (int i = 0; i<number_of_pages; i++)
     {
-        // Fill usage matrix with zeros
         _g_allocator_memory.pages[i] = malloc(size_of_page);
+        _g_allocator_memory.bytes_allocated[i] = 0;
+
         for (int t = 0; t<size_of_page; t++){
-            _g_allocator_memory.bytes_allocated[i][t] = 0;
+            _g_allocator_memory.pointers_of_page[i][t] = 0;
         }
     }
 }

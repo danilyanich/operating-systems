@@ -1,6 +1,8 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#define MAX_PAGES 4 // Max amount of pages
+#define MAX_PAGE_SIZE 50 // Max page size
 #define M_ERR_OK 0 // Everything is ok
 #define M_ERR_ALLOCATION_OUT_OF_MEMORY 1 // Not enough memory for allocation
 #define M_ERR_ALREADY_DEALLOCATED 2 // The chunk was already deallocated
@@ -22,7 +24,7 @@ m_id m_malloc(int size_of_chunk, m_err_code* error_code);
 // Deallocates a chunk in sandbox memory
 // @param chunk_id Chunk identifier
 // @param error_code [out] M_ERR_OK, M_ERR_ALREADY_DEALLOCATED, M_ERR_INVALID_CHUNK
-void m_free(m_id chunk_id, m_err_code* error_code);
+void m_free(m_id chunk_id, int size_to_free, int page, m_err_code* error_code);
 
 
 // Reads from chunk to a buffer
