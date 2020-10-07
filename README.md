@@ -1,6 +1,4 @@
-# Operating Systems
-
-Group №9, 3 variant;
+# Group №9, 3 variant;
 
 Козлов Кирилл Александрович
 Пашкевич Владислав Леонидович
