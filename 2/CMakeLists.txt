@@ -4,4 +4,8 @@ project(2)
 set(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_FLAGS -pthread)
 
-add_executable(2 main.cpp catch.hpp queque.h)
+add_executable(2 consumer_producer.h main.cpp)
+add_executable(tests consumer_producer.h test.cpp)
+
+enable_testing()
+add_test(NAME tests COMMAND test_suite1)
