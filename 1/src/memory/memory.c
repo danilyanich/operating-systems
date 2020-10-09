@@ -43,7 +43,7 @@ struct block* m_malloc(int size_of_chunk, m_err_code* error) {
 	tmp->prev = &(*top);
 	top = tmp;
 	if (begin == NULL) begin = tmp;
-	printf("%d \n", (int)tmp->start);
+	//printf("%d \n", (int)tmp->start);
 	*error = M_ERR_OK;
 	return tmp;
 }
@@ -55,13 +55,14 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	struct block* prev2 = NULL;
 	struct block* tmp;
 	struct block* iter;
-	struct block* iter2;
+	char* iter2;
 	char buffer[100];
 	int move;
 	
 	
 
 	if (ptr->start == top->start) {
+		printf("\nFCUK\n");
 		tmp = top;
 		top = ptr->prev;
 		memset(tmp->start, 0, size);
@@ -74,14 +75,10 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 		iter = top;
 		iter2 = NULL;
 		while (q != NULL) {
-			//printf("%d \n", _g_bytes_allocated);
 			if (q->start == tmp->start) {
 				begin = prev;
-				printf("%d \n", (int)tmp->start - (int)_g_allocator_memory);
-				memcpy(tmp->start, prev->start, (int)tmp->start - (int)_g_allocator_memory);
-				//printf("%s\n", ((int)tmp->start+size));
-				//memset(top->start, 0, size);
-				//free(&(top->start));
+				memcpy(q->start, prev->start, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
+				memset(top->start, 0, size);
 				return;
 			}
 			prev = q;
@@ -90,20 +87,12 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	}
 
 	q = top;
-
 	while (q != NULL) {
-		//printf("%d \n", q->start);
 		if (q->start == ptr->start) {
-			iter = top;
-			printf("%s \n",q->start);
-			printf((int)q->start + 23);
-			printf("\n%d\n",_g_bytes_allocated);
-			printf("\n%d \n", _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
+			//printf("\n%d \n", _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
 			memcpy(buffer, prev->start, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
-			printf(buffer);
 			memcpy(q->start,buffer, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
-			//q->size = prev->size;
-			//free(&(top->start));
+			iter=top;
 		}
 		prev = q;
 		q = q->prev;

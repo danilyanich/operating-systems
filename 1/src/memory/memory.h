@@ -9,7 +9,7 @@
 #define M_ERR_OUT_OF_BOUNDS 4 // The read/write operation out of bounds
 
 typedef int m_err_code; // Error code of sandbox memory
-typedef void* m_id; // Identifier of sandbox memory chunk
+typedef char* m_id; // Identifier of sandbox memory chunk
 
 struct block {
 	m_id start;
