@@ -28,5 +28,5 @@ make
 ```
 ### Run project:
 ```bash
-./bin
+./bin -file [path to file]
 ```
