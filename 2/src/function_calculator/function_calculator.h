@@ -62,15 +62,17 @@ public:
 private:
 
     static void
-    calculatorSubscribe(ConsumersProducer<Point> &cq, ConsumersProducer<PointWithSysInfo> &cq2, std::ostream &os) {
-        auto foo = [&cq2, &os](Point &v) {
+    calculatorSubscribe(ConsumersProducer<Point> &subscribe,
+                        ConsumersProducer<PointWithSysInfo> &publish,
+                        std::ostream &os) {
+        auto foo = [&publish, &os](Point &v) {
             PointWithSysInfo pointWithSysInfo(v);
             pointWithSysInfo.accept_time = std::chrono::system_clock::now();
             os << v.y << " " << v.x << "\n";
             pointWithSysInfo.write_time = std::chrono::system_clock::now();
-            cq2.Publish(pointWithSysInfo);
+            publish.Publish(pointWithSysInfo);
         };
-        cq.Subscribe(foo);
+        subscribe.Subscribe(foo);
     }
 
     static void logging(ConsumersProducer<PointWithSysInfo> &cq, std::ostream &os) {

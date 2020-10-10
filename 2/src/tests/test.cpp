@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 
 #include <chrono>
-#include "catch.hpp"
-#include "function_calculator.h"
+#include "../../vendor/catch.hpp"
+#include "../function_calculator/function_calculator.h"
 #include <iostream>
 
 

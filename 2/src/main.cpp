@@ -3,8 +3,8 @@
 //
 
 #include <iostream>
-#include "function_calculator.h"
-#include "command_parser.h"
+#include "function_calculator/function_calculator.h"
+#include "function_calculator/command_parser.h"
 
 int main(int argc, char **argv) {
     CommandParser parser(argc, argv);
