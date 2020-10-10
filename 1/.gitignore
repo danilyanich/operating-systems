@@ -4,3 +4,10 @@ CMakeFiles/
 CMakeCache.txt
 Makefile
 bin
+
+.idea/
+
+*.xml
+*.cbp
+
+cmake-build-debug/
