@@ -18,6 +18,7 @@ This is a calculator of math function with parallel writing logs to stdout and f
 Implementation of consumer(many)-producer(1) problem solve. It represents an array of syncronized queues,
 so consumers don't have a problem with concurent access to same queue and less time of blocking. 
 
+![name](docs/consumer_producer.jpg)
 ### Generate Makefile:
 ```bash
 cmake .

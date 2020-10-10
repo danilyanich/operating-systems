@@ -16,7 +16,6 @@ template<typename T>
 class ConsumersProducer {
 private:
     std::atomic<int> thread_counter{-1};
-    std::atomic<int> thread_end_counter{-1};
     std::atomic<bool> is_publishing{true};
     std::mutex mx;
     std::vector<std::shared_ptr<std::queue<T>>>
