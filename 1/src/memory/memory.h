@@ -11,6 +11,11 @@
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
 
+struct mem_chunk{ //structure of the memory chunk
+    char* ptr;//pointer of the beginning of memory block
+    int size;//size of block
+};
+
 
 // Allocates a chunk in sandbox memory
 // @param size_of_chunk Desired size in bytes to be allocated in sandbox memory
@@ -18,6 +23,7 @@ typedef void* m_id; // Identifier of sandbox memory chunk
 // @return An identifier for newly allocated chunk
 m_id m_malloc(int size_of_chunk, m_err_code* error_code);
 
+void debug();
 
 // Deallocates a chunk in sandbox memory
 // @param chunk_id Chunk identifier
