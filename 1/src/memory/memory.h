@@ -14,6 +14,8 @@ typedef void* m_id; // Identifier of sandbox memory chunk
 struct mem_chunk{ //structure of the memory chunk
     char* ptr;//pointer of the beginning of memory block
     int size;//size of block
+    struct mem_chunk* next;
+    struct mem_chunk* prev;
 };
 
 
