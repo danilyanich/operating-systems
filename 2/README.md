@@ -29,5 +29,10 @@ make
 ```
 ### Run project:
 ```bash
-./bin -file [path to file]
+./os2 -file [path to file]
+```
+
+### Run tests
+```bash
+./tests
 ```
