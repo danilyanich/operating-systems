@@ -36,14 +36,15 @@ struct block* m_malloc(int size_of_chunk, m_err_code* error) {
 	_g_bytes_allocated += size_of_chunk;
 
 	char* ptr_new = _g_allocator_memory + _g_bytes_allocated;
-
 	struct block* tmp = malloc(sizeof(*tmp));
-	//tmp->size = size_of_chunk;
+
+	tmp->size = size_of_chunk;
 	tmp->start = ptr_new;
 	tmp->prev = &(*top);
+	if (tmp->prev!=NULL) tmp->prev->next=tmp;
 	top = tmp;
 	if (begin == NULL) begin = tmp;
-	//printf("%d \n", (int)tmp->start);
+	printf("%d \n", (int)tmp->size);
 	*error = M_ERR_OK;
 	return tmp;
 }
@@ -54,10 +55,10 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	struct block* prev = NULL;
 	struct block* prev2 = NULL;
 	struct block* tmp;
-	struct block* iter;
-	char* iter2;
+	int move=0;
+	char* tmp_addr1;
+	char* tmp_addr2;
 	char buffer[100];
-	int move;
 	
 	
 
@@ -72,8 +73,6 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 
 	if (ptr->start == begin->start) {
 		tmp = begin;
-		iter = top;
-		iter2 = NULL;
 		while (q != NULL) {
 			if (q->start == tmp->start) {
 				begin = prev;
@@ -89,10 +88,26 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	q = top;
 	while (q != NULL) {
 		if (q->start == ptr->start) {
-			//printf("\n%d \n", _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
+			printf("\n%d \n", _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
+			
 			memcpy(buffer, prev->start, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
 			memcpy(q->start,buffer, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
-			iter=top;
+			printf("\n%s \n", q->start+43);
+			tmp=q;
+			while(tmp!=top){
+			tmp->size=tmp->next->size;
+			tmp=tmp->next;
+			//tmp->start=q->start+move;
+			//printf(tmp->start);
+			}
+			tmp=q->next;
+			while( tmp !=top)
+			{	
+				move+=tmp->size;
+				tmp->start=q->start+move;
+				tmp=tmp->next;
+			}
+			break;
 		}
 		prev = q;
 		q = q->prev;
@@ -102,11 +117,11 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	*error = M_ERR_OK;
 }
 
-void m_read(struct block read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
+void m_read(struct block* read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
 	//if (size_to_read > read_from_id.size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
-	if (&read_from_id != NULL && read_from_id.start != NULL)
+	if (&read_from_id != NULL && read_from_id->start != NULL)
 	{
-		memcpy(read_to_buffer, read_from_id.start, size_to_read);
+		memcpy(read_to_buffer, read_from_id->start, size_to_read);
 	}
 	else { *error = M_ERR_INVALID_CHUNK; }
 
@@ -128,3 +143,18 @@ void m_init(int number_of_pages, int size_of_page) {
 	_g_allocator_memory = (char*)malloc(_g_allocator_memory_size);
 	_g_bytes_allocated = 0;
 }
+
+
+// if(chunks_list[size] == *tmp)
+// free(*tmp);
+// for(int i=0; i < size; i++){
+// //printf("%d\n",begin_of_chunk);
+// if(chunks_list[i]==*tmp){
+// //struct mem_chunk* for_delete=chunks_list[i];
+// free(chunks_list[i]);
+// for(int j=i; j < size - 1; j++){
+// memcpy(_g_allocator_memory+begin_of_chunk,chunks_list[j+1]->ptr,chunks_list[j+1]->size);
+// chunks_list[j+1]->ptr=_g_allocator_memory+begin_of_chunk;
+// begin_of_chunk+=chunks_list[j+1]->size;
+// chunks_list[j]=chunks_list[j+1];
+// chunks_list[j+1]=NULL;
