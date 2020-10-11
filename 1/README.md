@@ -17,5 +17,5 @@ make
 ```
 ### Run project:
 ```bash
-./bin
+./os1
 ```
