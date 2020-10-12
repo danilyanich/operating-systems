@@ -18,7 +18,6 @@ struct block {
 	struct block* next;
 };
 
-void check(struct block checked_block);
 
 // Allocates a chunk in sandbox memory
 // @param size_of_chunk Desired size in bytes to be allocated in sandbox memory

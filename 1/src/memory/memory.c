@@ -9,24 +9,6 @@ int _g_bytes_allocated = 0;
 struct block* top = NULL;
 struct block* begin = NULL;
 
-void check(struct block checked_block) {
-	if (checked_block.start != NULL) {
-		printf(checked_block.start);
-		printf("\n");
-	}
-	else {
-		printf("START IS NULL\n");
-		printf("\n");
-	}
-	if (checked_block.prev != NULL) {
-		printf(checked_block.prev);
-		printf("\n");
-	}
-	else {
-		printf("PREV IS NULL\n");
-		printf("\n");
-	}
-};
 
 struct block* m_malloc(int size_of_chunk, m_err_code* error) {
 	if (_g_bytes_allocated + size_of_chunk > _g_allocator_memory_size) {
@@ -61,7 +43,6 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	char buffer[100];
 	
 	
-
 	if (ptr->start == top->start) {
 		printf("\nFCUK\n");
 		tmp = top;
