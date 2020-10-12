@@ -53,3 +53,11 @@ dkms.conf
 .idea
 CMakeFiles
 cmake-build-debug
+*.swp
+*.swo
+*.swn
+*.tmp
+bazel-bin
+bazel-out
+bazel-testlogs
+bazel-grpc_getting_started
