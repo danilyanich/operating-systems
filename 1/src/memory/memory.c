@@ -26,7 +26,6 @@ struct block* m_malloc(int size_of_chunk, m_err_code* error) {
 	if (tmp->prev!=NULL) tmp->prev->next=tmp;
 	top = tmp;
 	if (begin == NULL) begin = tmp;
-	printf("%d \n", (int)tmp->size);
 	*error = M_ERR_OK;
 	return tmp;
 }
@@ -44,11 +43,9 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	
 	
 	if (ptr->start == top->start) {
-		printf("\nFCUK\n");
 		tmp = top;
 		top = ptr->prev;
 		memset(tmp->start, 0, size);
-		//free(&(tmp->start));
 		return;
 	}
 
@@ -73,13 +70,10 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 			
 			memcpy(buffer, prev->start, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
 			memcpy(q->start,buffer, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
-			printf("\n%s \n", q->start+43);
 			tmp=q;
 			while(tmp!=top){
 			tmp->size=tmp->next->size;
 			tmp=tmp->next;
-			//tmp->start=q->start+move;
-			//printf(tmp->start);
 			}
 			tmp=q->next;
 			while( tmp !=top)
@@ -98,11 +92,11 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	*error = M_ERR_OK;
 }
 
-void m_read(struct block* read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
-	//if (size_to_read > read_from_id.size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
-	if (&read_from_id != NULL && read_from_id->start != NULL)
+void m_read(struct block read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
+	if (size_to_read > read_from_id.size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
+	if (&read_from_id != NULL && read_from_id.start != NULL)
 	{
-		memcpy(read_to_buffer, read_from_id->start, size_to_read);
+		memcpy(read_to_buffer, read_from_id.start, size_to_read);
 	}
 	else { *error = M_ERR_INVALID_CHUNK; }
 
@@ -113,7 +107,7 @@ void m_write(struct block write_to_id, void* write_from_buffer, int size_to_writ
 	if (&write_to_id == NULL) { *error = M_ERR_INVALID_CHUNK; }
 
 	memcpy(write_to_id.start, write_from_buffer, size_to_write);
-	//if (size_to_write > write_to_id.size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
+	if (size_to_write > write_to_id.size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
 	*error = M_ERR_OK;
 }
 
@@ -124,18 +118,3 @@ void m_init(int number_of_pages, int size_of_page) {
 	_g_allocator_memory = (char*)malloc(_g_allocator_memory_size);
 	_g_bytes_allocated = 0;
 }
-
-
-// if(chunks_list[size] == *tmp)
-// free(*tmp);
-// for(int i=0; i < size; i++){
-// //printf("%d\n",begin_of_chunk);
-// if(chunks_list[i]==*tmp){
-// //struct mem_chunk* for_delete=chunks_list[i];
-// free(chunks_list[i]);
-// for(int j=i; j < size - 1; j++){
-// memcpy(_g_allocator_memory+begin_of_chunk,chunks_list[j+1]->ptr,chunks_list[j+1]->size);
-// chunks_list[j+1]->ptr=_g_allocator_memory+begin_of_chunk;
-// begin_of_chunk+=chunks_list[j+1]->size;
-// chunks_list[j]=chunks_list[j+1];
-// chunks_list[j+1]=NULL;

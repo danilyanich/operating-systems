@@ -18,7 +18,6 @@ struct block {
 	struct block* next;
 };
 
-
 // Allocates a chunk in sandbox memory
 // @param size_of_chunk Desired size in bytes to be allocated in sandbox memory
 // @param error_code [out] M_ERR_OK, M_ERR_ALLOCATION_OUT_OF_MEMORY
@@ -36,7 +35,7 @@ void m_free(struct block* chunk_id, m_err_code* error_code, int size);
 // @param read_to_buffer [out] The buffer to store data into
 // @param size_to_read Size of data in bytes to read from chunk
 // @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
-void m_read(struct block* read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error_code);
+void m_read(struct block read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error_code);
 
 
 // Writes from buffer to a chunk
