@@ -35,7 +35,7 @@ void m_free(struct block* chunk_id, m_err_code* error_code, int size);
 // @param read_to_buffer [out] The buffer to store data into
 // @param size_to_read Size of data in bytes to read from chunk
 // @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
-void m_read(struct block read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error_code);
+void m_read(struct block* read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error_code);
 
 
 // Writes from buffer to a chunk
@@ -43,7 +43,7 @@ void m_read(struct block read_from_id, void* read_to_buffer, int size_to_read, m
 // @param write_from_buffer The buffer to read from
 // @param size_to_write Size of data in bytes to be stored into chunk
 // @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
-void m_write(struct block write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error_code);
+void m_write(struct block* write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error_code);
 
 
 // Initializes sandbox memory allocator. Usually it is number_of_pages*size_of_page.

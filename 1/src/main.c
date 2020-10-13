@@ -26,19 +26,19 @@ int main(int argc, char** argv) {
 
 	char buffer[100];
 
-	m_write(*chunk_1, "Hello World!", chunk_1->size, &error_code);
+	m_write(chunk_1, "Hello World!", chunk_1->size, &error_code);
 	if (error_code != M_ERR_OK) abort();
 
-	m_write(*chunk_2, "1234567890", chunk_2->size, &error_code);
+	m_write(chunk_2, "1234567890", chunk_2->size, &error_code);
 	if (error_code != M_ERR_OK) abort();
 
-	m_write(*chunk_3, "LAB COATS", chunk_3->size, &error_code);
+	m_write(chunk_3, "LAB COATS", chunk_3->size, &error_code);
 	if (error_code != M_ERR_OK) abort();
 
-	m_write(*chunk_4, "EL PSY CONGROO", chunk_4->size, &error_code);
+	m_write(chunk_4, "EL PSY CONGROO", chunk_4->size, &error_code);
 	if (error_code != M_ERR_OK) abort();
 
-	m_write(*chunk_5, "Jormungand", chunk_5->size, &error_code);
+	m_write(chunk_5, "Jormungand", chunk_5->size, &error_code);
 	if (error_code != M_ERR_OK) abort();
 
 	printf("\n    BEFORE:    \n");

@@ -92,22 +92,22 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 	*error = M_ERR_OK;
 }
 
-void m_read(struct block read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
-	if (size_to_read > read_from_id.size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
-	if (&read_from_id != NULL && read_from_id.start != NULL)
+void m_read(struct block* read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
+	if (size_to_read > read_from_id->size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
+	if (&read_from_id != NULL && read_from_id->start != NULL)
 	{
-		memcpy(read_to_buffer, read_from_id.start, size_to_read);
+		memcpy(read_to_buffer, read_from_id->start, size_to_read);
 	}
 	else { *error = M_ERR_INVALID_CHUNK; }
 
 	*error = M_ERR_OK;
 }
 
-void m_write(struct block write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error) {
+void m_write(struct block* write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error) {
 	if (&write_to_id == NULL) { *error = M_ERR_INVALID_CHUNK; }
 
-	memcpy(write_to_id.start, write_from_buffer, size_to_write);
-	if (size_to_write > write_to_id.size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
+	memcpy(write_to_id->start, write_from_buffer, size_to_write);
+	if (size_to_write > write_to_id->size) { *error = M_ERR_OUT_OF_BOUNDS; return; }
 	*error = M_ERR_OK;
 }
 
