@@ -32,14 +32,10 @@ struct block* m_malloc(int size_of_chunk, m_err_code* error) {
 
 void m_free(struct block* ptr, m_err_code* error, int size) {
 	if (ptr == NULL) { *error = M_ERR_ALREADY_DEALLOCATED; }
-	struct block* q = top;
-	struct block* prev = NULL;
-	struct block* prev2 = NULL;
+	struct block* curent_block = top;
+	struct block* prev_block = NULL;
 	struct block* tmp;
 	int move=0;
-	char* tmp_addr1;
-	char* tmp_addr2;
-	char buffer[100];
 	
 	
 	if (ptr->start == top->start) {
@@ -51,41 +47,42 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 
 	if (ptr->start == begin->start) {
 		tmp = begin;
-		while (q != NULL) {
-			if (q->start == tmp->start) {
-				begin = prev;
-				memcpy(q->start, prev->start, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
+		while (curent_block != NULL) {
+			if (curent_block->start == tmp->start) {
+				begin = prev_block;
+				memcpy(curent_block->start, prev_block->start, _g_bytes_allocated - ((int)curent_block->start - (int)_g_allocator_memory));
 				memset(top->start, 0, size);
 				return;
 			}
-			prev = q;
-			q = q->prev;
+			prev_block = curent_block;
+			curent_block = curent_block->prev;
 		}
 	}
 
-	q = top;
-	while (q != NULL) {
-		if (q->start == ptr->start) {
-			printf("\n%d \n", _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
+	curent_block = top;
+	char buffer[100];
+	while (curent_block != NULL) {
+		if (curent_block->start == ptr->start) {
+			printf("\n%d \n", _g_bytes_allocated - ((int)curent_block->start - (int)_g_allocator_memory));
 			
-			memcpy(buffer, prev->start, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
-			memcpy(q->start,buffer, _g_bytes_allocated - ((int)q->start - (int)_g_allocator_memory));
-			tmp=q;
+			memcpy(buffer, prev_block->start, _g_bytes_allocated - ((int)curent_block->start - (int)_g_allocator_memory));
+			memcpy(curent_block->start,buffer, _g_bytes_allocated - ((int)curent_block->start - (int)_g_allocator_memory));
+			tmp=curent_block;
 			while(tmp!=top){
 			tmp->size=tmp->next->size;
 			tmp=tmp->next;
 			}
-			tmp=q->next;
+			tmp=curent_block->next;
 			while( tmp !=top)
 			{	
 				move+=tmp->size;
-				tmp->start=q->start+move;
+				tmp->start=curent_block->start+move;
 				tmp=tmp->next;
 			}
 			break;
 		}
-		prev = q;
-		q = q->prev;
+		prev_block = curent_block;
+		curent_block = curent_block->prev;
 	}
 
 	_g_bytes_allocated -= size;
