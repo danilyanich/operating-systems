@@ -3,6 +3,14 @@
 #include <string.h>
 #include "memory/memory.h"
 
+void _read(struct block* chunk) {
+				char buffer[100];
+				int error_code;
+				m_read(*chunk, buffer, chunk->size, &error_code);
+				if (error_code != M_ERR_OK) abort();
+				printf("%s\n", buffer);
+				memset(buffer, 0, sizeof(buffer));
+}
 
 int main(int argc, char** argv) {
 	m_init(1, 500);
@@ -43,39 +51,19 @@ int main(int argc, char** argv) {
 
 	printf("\n    BEFORE:    \n");
 	printf("----------FIRST CHUNK----------- \n");
-
-	m_read(chunk_1, buffer, chunk_1->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+	_read(chunk_1);
 
 	printf("----------SECOND CHUNK--------- \n");
-
-	m_read(chunk_2, buffer, chunk_2->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+	_read(chunk_2);
 
 	printf("---------THIRD CHUNK------- \n");
-
-	m_read(chunk_3, buffer, chunk_3->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+_read(chunk_3);
 
 	printf("---------FOURTH CHUNK------- \n");
-
-	m_read(chunk_4, buffer, chunk_4->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+_read(chunk_4);
 
 	printf("---------FIFTH CHUNK------- \n");
-
-	m_read(chunk_5, buffer, chunk_5->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+_read(chunk_5);
 
 	//-----------------------------------------------
 
@@ -86,37 +74,20 @@ int main(int argc, char** argv) {
 	printf("\n    AFTER:    \n");
 
 	printf("--------FIRST CHUNK--------- \n");
-
-	m_read(chunk_1, buffer, chunk_1->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+	_read(chunk_1);
  
 	printf("----------SECOND CHUNK------\n");
 
-	m_read(chunk_2, buffer, chunk_2->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+_read(chunk_2);
 
 	printf("---------THIRD CHUNK------- \n");
 
-	m_read(chunk_3, buffer, chunk_3->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+_read(chunk_3);
 
 	printf("---------FOURTH CHUNK------- \n");
 
-	m_read(chunk_4, buffer, chunk_4->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+_read(chunk_4);
 
 	printf("---------FIFTH CHUNK------- \n");
-
-	m_read(chunk_5, buffer, chunk_5->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-	printf("%s\n", buffer);
-	memset(buffer, 0, sizeof(buffer));
+	_read(chunk_5);
 }
