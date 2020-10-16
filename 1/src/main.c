@@ -12,25 +12,29 @@ void _read(struct block* chunk) {
 				memset(buffer, 0, sizeof(buffer));
 }
 
+struct block* _malloc(int size) {
+				int error_code;
+				struct block* newBlock = m_malloc(size, &error_code);
+				if (error_code != M_ERR_OK) abort();
+				return newBlock;
+}
+
+void _write(struct block* chunk, char* data) {
+				int error_code;
+				m_write(*chunk,data, chunk->size, &error_code);
+				if (error_code != M_ERR_OK) abort();
+}
+
 int main(int argc, char** argv) {
 	m_init(1, 500);
 
 	int error_code;
 
-	struct block* chunk_1 = m_malloc(23, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	struct block* chunk_2 = m_malloc(33, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	struct block* chunk_3 = m_malloc(23, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	struct block* chunk_4 = m_malloc(43, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	struct block* chunk_5 = m_malloc(23, &error_code);
-	if (error_code != M_ERR_OK) abort();
+	struct block* chunk_1 = _malloc(23);
+	struct block* chunk_2 = _malloc(33);
+	struct block* chunk_3 = _malloc(23);
+	struct block* chunk_4 = _malloc(43);
+	struct block* chunk_5 = _malloc(23);
 
 	char buffer[100];
 
