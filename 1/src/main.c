@@ -36,22 +36,11 @@ int main(int argc, char** argv) {
 	struct block* chunk_4 = _malloc(43);
 	struct block* chunk_5 = _malloc(23);
 
-	char buffer[100];
-
-	m_write(*chunk_1, "Hello World!", chunk_1->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	m_write(*chunk_2, "1234567890", chunk_2->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	m_write(*chunk_3, "LAB COATS", chunk_3->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	m_write(*chunk_4, "EL PSY CONGROO", chunk_4->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
-
-	m_write(*chunk_5, "Jormungand", chunk_5->size, &error_code);
-	if (error_code != M_ERR_OK) abort();
+	_write(chunk_1, "Hello World!");
+	_write(chunk_2, "1234567890"); 
+	_write(chunk_3, "LAB COATS"); 
+	_write(chunk_4, "EL PSY CONGROO");
+	_write(chunk_5, "Jormungand"); 
 
 	printf("\n    BEFORE:    \n");
 	printf("----------FIRST CHUNK----------- \n");
