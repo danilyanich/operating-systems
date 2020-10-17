@@ -6,7 +6,7 @@
 void _read(struct block* chunk) {
 				char buffer[100];
 				int error_code;
-				m_read(*chunk, buffer, chunk->size, &error_code);
+				m_read(chunk, buffer, chunk->size, &error_code);
 				if (error_code != M_ERR_OK) abort();
 				printf("%s\n", buffer);
 				memset(buffer, 0, sizeof(buffer));
@@ -21,7 +21,7 @@ struct block* _malloc(int size) {
 
 void _write(struct block* chunk, char* data) {
 				int error_code;
-				m_write(*chunk,data, chunk->size, &error_code);
+				m_write(chunk,data, chunk->size, &error_code);
 				if (error_code != M_ERR_OK) abort();
 }
 
