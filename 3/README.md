@@ -1,19 +1,22 @@
-# grpc_getting_started
+# Client-server functions calculator 
+
+## Author
+ Ilya Hontarau, Maria Zhirko
 
 ## Overview
-Getting started with grpc (in C++).
+Implementation of client-server function calculation sigmoid function using gRPC.
+Using dependency manager Bazel for gRPC installation. 
 
-Building with bazel.
-
-## Building and Running the Code
+## Building
 To only build the server and client, run the following:
 ```
-bazel build :greeter_server
-bazel build :greeter_client
+bazel build :func_calc_server
+bazel build :func_calc_client
 ```
 
+## Run
 To build and run the server and client, run the following:
 ```
-bazel run :greeter_server
-bazel run :greeter_client
+bazel run :func_calc_server
+bazel run :func_calc_client
 ```
