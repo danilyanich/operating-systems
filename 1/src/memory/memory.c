@@ -17,6 +17,7 @@ typedef struct block {
 typedef struct page {
     size_t total_size;
     size_t reserved_size;
+    int8_t is_reserved;
     block *block;
     struct page *next;
     size_t num_blocks;
@@ -49,8 +50,9 @@ void set_values_to_block(page *page, block *block, size_t szBlock) {
 }
 
 int add_new_block(VA *ptr, page *page, block *block, size_t szBlock) {
-    block = calloc(1, sizeof(block));
+    block = calloc(1, sizeof(struct block));
     *ptr = (VA) block;
+    page->is_reserved = 1;
     set_values_to_block(page, block, szBlock);
     return SUCCESS;
 }
@@ -59,6 +61,7 @@ int add_new_block(VA *ptr, page *page, block *block, size_t szBlock) {
 int add_first_block(VA *ptr, page *page, size_t szBlock) {
     page->block = calloc(1, sizeof(block));
     *ptr = (VA) page->block;
+    page->is_reserved = 1;
     set_values_to_block(page, page->block, szBlock);
     return SUCCESS;
 }
@@ -67,7 +70,7 @@ page *init_segment_pages(segment *segment) {
     segment->first_page = calloc(1, sizeof(page));
     segment->num_pages++;
 
-    page *temp = mem->segment_table->segment->first_page;
+    page *temp = segment->first_page;
     temp->total_size = mem->page_size;
     for (int i = 1; i < mem->num_of_pages_per_segment; ++i) {
         page *next = calloc(1, sizeof(page));
@@ -84,10 +87,12 @@ int _malloc(VA *ptr, size_t szBlock) {
     // случай когда блоку не хватает место в первой странице и переходим на новый
     // случай когда не хватает места в сегменте и создаем новый
     segment *temp_segment = mem->segment_table->segment;
+    segment *prev_segment = temp_segment;
+    memory *m = mem;
     for (size_t i = 0; i < mem->segment_table->num_segments; ++i) {
         page *temp_page = temp_segment->first_page;
         for (size_t j = 0; j < mem->num_of_pages_per_segment; j++) {
-            if (temp_page->total_size - temp_page->reserved_size < szBlock) {
+            if (temp_page->is_reserved == 1) {
                 temp_page = temp_page->next;
                 continue;
             }
@@ -102,11 +107,12 @@ int _malloc(VA *ptr, size_t szBlock) {
             }
             return add_new_block(ptr, temp_page, temp_block->next, szBlock);
         }
+        prev_segment = temp_segment;
         temp_segment = temp_segment->next;
     }
 
     segment *new_segment = calloc(1, sizeof(segment));
-    temp_segment->next = new_segment;
+    prev_segment->next = new_segment;
     mem->segment_table->num_segments++;
 
     page *temp_page = init_segment_pages(new_segment);
@@ -239,7 +245,7 @@ int _init_(int n, int szPage) {
 // нужно ли освобождать выделенные блоки? клиент выделил - должен и удалить.
 int _clean() {
     segment *cur_segment = mem->segment_table->segment;
-    segment *next_segment = mem->segment_table->segment;
+    segment *next_segment = mem->segment_table->segment->next;
     for (size_t i = 0; i < mem->segment_table->num_segments; ++i) {
         page *cur_page = cur_segment->first_page;
         page *next_page = NULL;
