@@ -20,15 +20,12 @@ private:
     std::mutex mx;
     std::vector<std::shared_ptr<std::queue<T>>>
             queues;
-    std::vector<bool> working_queues;
     std::condition_variable cv;
 public:
     explicit ConsumersProducer(int num_consumers) {
         queues.reserve(num_consumers);
-        working_queues.reserve(num_consumers);
         for (int i = 0; i < num_consumers; ++i) {
             queues.push_back(std::make_shared<std::queue<T>>(std::queue<T>()));
-            working_queues.push_back(true);
         }
     }
 
