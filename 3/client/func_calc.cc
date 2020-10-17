@@ -24,7 +24,7 @@ public:
     FuncCalcClient(std::shared_ptr <Channel> channel)
             : stub(FuncCalc::NewStub(channel)) {}
 
-    double SayHello(double x) {
+    double CalcSigmoidFunc(double x) {
         CalculateRequest request;
         request.set_x(x);
 
@@ -45,7 +45,6 @@ private:
 };
 
 std::string getAddress(int argc, char **argv) {
-    std::string server_address;
     if (argc != 2) {
         return "localhost:8888";
     }
@@ -53,7 +52,7 @@ std::string getAddress(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
-    FuncCalcClient greeter(
+    FuncCalcClient calculator(
             grpc::CreateChannel(getAddress(argc, argv),
     grpc::InsecureChannelCredentials())
     );
@@ -61,7 +60,7 @@ int main(int argc, char **argv) {
     double res = 0;
     double x = 10;
     try {
-        res = greeter.SayHello(x);
+        res = calculator.CalcSigmoidFunc(x);
     }
     catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
