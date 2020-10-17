@@ -61,3 +61,4 @@ bazel-bin
 bazel-out
 bazel-testlogs
 bazel-grpc_getting_started
+bazel-3

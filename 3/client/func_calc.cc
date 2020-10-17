@@ -16,22 +16,22 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 using func_calc::FuncCalc;
-using func_calc::HelloReply;
-using func_calc::HelloRequest;
+using func_calc::CalculateReply;
+using func_calc::CalculateRequest;
 
 class FuncCalcClient {
 public:
     FuncCalcClient(std::shared_ptr <Channel> channel)
-            : stub_(FuncCalc::NewStub(channel)) {}
+            : stub(FuncCalc::NewStub(channel)) {}
 
     double SayHello(double x) {
-        HelloRequest request;
+        CalculateRequest request;
         request.set_x(x);
 
-        HelloReply reply;
+        CalculateReply reply;
         ClientContext context;
 
-        Status status = stub_->SayHello(&context, request, &reply);
+        Status status = stub->CalculateSigmoidFunc(&context, request, &reply);
 
         if (!status.ok()) {
             throw std::domain_error("got non ok response: " + status.error_message());
@@ -41,7 +41,7 @@ public:
     }
 
 private:
-    std::unique_ptr <FuncCalc::Stub> stub_;
+    std::unique_ptr <FuncCalc::Stub> stub;
 };
 
 std::string getAddress(int argc, char **argv) {

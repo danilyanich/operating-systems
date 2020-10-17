@@ -1,4 +1,4 @@
-licenses(["notice"])  # 3-clause BSD
+licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
 
@@ -25,8 +25,8 @@ cc_proto_library(
 )
 
 cc_binary(
-    name = "greeter_client",
-    srcs = ["greeter_client.cc"],
+    name = "func_calc_client",
+    srcs = ["client/func_calc.cc"],
     defines = ["BAZEL_BUILD"],
     deps = [
         ":func_calc_cc_grpc",
@@ -35,8 +35,8 @@ cc_binary(
 )
 
 cc_binary(
-    name = "greeter_server",
-    srcs = ["greeter_server.cc"],
+    name = "func_calc_server",
+    srcs = ["server/func_calc.cc"],
     defines = ["BAZEL_BUILD"],
     deps = [
         ":func_calc_cc_grpc",
