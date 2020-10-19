@@ -85,6 +85,16 @@ void m_free(struct block* ptr, m_err_code* error, int size) {
 		curent_block = curent_block->prev;
 	}
 
+
+	tmp = top;
+	top = tmp->prev;
+	tmp->prev = NULL;
+	tmp->size = 0;
+	tmp->start = NULL;
+	tmp->start = NULL;
+	top->next = NULL;
+	free(tmp);
+	
 	_g_bytes_allocated -= size;
 	*error = M_ERR_OK;
 }
