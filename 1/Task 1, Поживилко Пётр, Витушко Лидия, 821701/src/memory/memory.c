@@ -137,7 +137,11 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 
 void m_init(int number_of_pages, int size_of_page) {
   if (_g_allocator_memory != NULL) free(_g_allocator_memory);
-  mem_chunks=NULL;
+  while(mem_chunks!=NULL){
+	struct mem_chunk*tmp=mem_chunks;
+	mem_chunks=mem_chunks->next;
+	free(tmp);
+  }
   _g_allocator_memory_size = number_of_pages * size_of_page;
   _g_allocator_memory = malloc(_g_allocator_memory_size);
   _g_bytes_allocated = 0;
