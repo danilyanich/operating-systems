@@ -13,10 +13,9 @@ typedef int m_err_code; // Error code of sandbox memory
 
 
 struct block {
-	m_id start;
+	m_id memory;
 	int size;
-	struct block* prev;
-	struct block* next;
+	
 };
 
 // Allocates a chunk in sandbox memory
