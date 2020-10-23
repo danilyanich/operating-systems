@@ -4,12 +4,6 @@
 
 #include "memory.h"
 
-#define CACHE_SIZE 5
-
-typedef struct chunk_usage_detector {
-    int usage_count;
-    chunk* _chunk;
-}chunk_usage_detector;
 
 typedef struct chunk {
     int size;
@@ -18,8 +12,14 @@ typedef struct chunk {
 } chunk;
 
 typedef struct cache {
-    chunk_usage_detector segments[CACHE_SIZE];
+    int start;
+    int size;
+    int count;
+    struct cache* next;
 } cache;
+
+int max_cache = 300;
+void* cache_memory = NULL;
 
 typedef struct memory_manager {
     void *memory;
@@ -27,36 +27,90 @@ typedef struct memory_manager {
     int max_allocated;
     chunk *first_chunk;
     chunk *last_chunk;
-    cache _cache;
+    cache *_cache;
     int DEALLOCATED;
 } memory_manager;
 
-memory_manager my_manager = {.memory = NULL, .allocated_memory = 0, .max_allocated = 0, .first_chunk = NULL};
+memory_manager my_manager = {.memory = NULL, .allocated_memory = 0, .max_allocated = 0, .first_chunk = NULL, ._cache = NULL};
 
-void write_cache(chunk* to_write_chunk){
-    int to_delete_index = 0;
-    int min_usage = my_manager._cache.segments[0].usage_count;
-    for(int i = 1; i < 5; ++i) {
-        if(min_usage > my_manager._cache.segments[i].usage_count){
-            min_usage = my_manager._cache.segments[i].usage_count;
-            to_delete_index = i;
+bool find_free_space(cache** cur, int need_space){
+    if(my_manager._cache == NULL)return false;
+    for (cache* temp = my_manager._cache; temp != NULL; temp = temp->next){
+        if (temp->next != NULL){
+            int free_s = temp->next->start - (temp->start + temp->size);
+            if(need_space < free_s){
+                *cur = temp;
+                return true;
+            }
+        }else{
+            if(need_space < (max_cache - (temp->start + temp->start))){
+                *cur = temp;
+                return true;
+            }
         }
     }
-    my_manager._cache.segments[to_delete_index].usage_count = 1;
-    my_manager._cache.segments[to_delete_index]._chunk = to_write_chunk;
+    return false;
+}
+
+cache* find_cache(int start_addr){
+    for (cache* temp = my_manager._cache; temp != NULL; temp = temp->next){
+        if (temp->start == start_addr){
+            temp->count++;
+            return temp;
+        }
+    }
+    return NULL;
+}
+
+bool delete_cache_el(){
+    int max_count = -1;
+    cache* prev = NULL;
+    if (my_manager._cache != NULL){
+        max_count = my_manager._cache->count;
+    } else return false;
+    for (cache* temp = my_manager._cache; temp != NULL; temp = temp->next){
+        if (temp->next != NULL && temp->next->count > max_count){
+            prev = temp;
+            max_count = temp->next->next->count;
+        }
+    }
+    if (prev){
+        prev->next = prev->next->next;
+    } else {
+        my_manager._cache = my_manager._cache->next;
+    }
+    return true;
+}
+
+void write_cache(chunk* to_write_chunk){
+    cache* e = find_cache(to_write_chunk->start_pointer);
+    if (e)return;
+    if (to_write_chunk->size >= max_cache){
+        return;
+    }
+    cache* write_to = NULL;
+    bool ans = find_free_space(&write_to, to_write_chunk->size);
+    while (!ans){
+        delete_cache_el();
+        ans = find_free_space(&write_to, to_write_chunk->size);
+    }
+    cache* temp = write_to->next;
+    cache* new_cache;
+    new_cache->start = write_to->start + write_to->size;
+    new_cache->size = to_write_chunk->size;
+    new_cache->count = 0;
+    memcpy(cache_memory + new_cache->start, my_manager.memory + to_write_chunk->start_pointer, to_write_chunk->size);
+    write_to->next = new_cache;
+    new_cache->next = temp;
 }
 
 m_err_code read_cache(segment_addr addr, void* buffer, size_t read_size){
-    for (int i = 0; i < CACHE_SIZE; ++i) {
-        if (my_manager._cache.segments[i]._chunk != NULL && my_manager._cache.segments[i]._chunk->start_pointer == *addr){
-            chunk* selected_chunk = my_manager._cache.segments[i]._chunk;
-            if(read_size > selected_chunk->size)return M_ERR_OUT_OF_BOUNDS;
-            memcpy(buffer, my_manager.memory + selected_chunk->start_pointer, read_size);
-            my_manager._cache.segments[i].usage_count++;
-            return M_ERR_OK;
-        }
+    cache* check = find_cache(*addr);
+    if (check && read_size < check->size){
+       memcpy(buffer, cache_memory + check->start, read_size);
+       return M_ERR_OK;
     }
-    return M_WARN_NO_IN_CACHE;
+    return M_ERR_OUT_OF_BOUNDS;
 }
 
 segment_addr m_malloc(int size_of_chunk, m_err_code *error) {
@@ -134,7 +188,6 @@ m_err_code m_free(segment_addr ptr) {
 m_err_code m_read(segment_addr read_from_id, void *read_to_buffer, int size_to_read) {
     int error = read_cache(read_from_id, read_to_buffer, size_to_read);
     if(error == M_ERR_OK)return M_ERR_OK;
-    if(error == M_ERR_OUT_OF_BOUNDS)return M_ERR_OUT_OF_BOUNDS;
 
     chunk* temp = NULL;
     for(chunk* i = my_manager.first_chunk; i != NULL; i = i->next){
@@ -167,13 +220,9 @@ m_err_code m_write(segment_addr write_to_id, void *write_from_buffer, int size_t
 void m_init(int size) {
     if (my_manager.memory != NULL) free(my_manager.memory);
 
-    chunk_usage_detector temp;
-    temp.usage_count  = -1;
-    for (int i = 0; i < CACHE_SIZE; ++i) {
-        my_manager._cache.segments[i] = temp;
-    }
-    my_manager.DEALLOCATED = 1;
+    my_manager.DEALLOCATED = -1;
     my_manager.memory = malloc(size);
+    cache_memory = malloc(max_cache);
     my_manager.allocated_memory = 0;
     my_manager.max_allocated = size;
     my_manager.first_chunk = NULL;
