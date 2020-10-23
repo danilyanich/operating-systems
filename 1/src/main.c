@@ -25,19 +25,7 @@ int main(int argc, char **argv) {
     m_read(chunk_1, buffer, 5, &error_code);
     if (error_code != M_ERR_OK) abort();
     printf("%s\n", buffer);
-/*
-    m_write(chunk_2,"qqq",4,&error_code);
-    if (error_code != M_ERR_OK) abort();
 
-    m_write(chunk_1,"qqqw",5,&error_code);
-    if (error_code != M_ERR_OK) abort();
-
-    char buffer[50];
-
-    m_read(chunk_2, buffer, 4, &error_code);
-    if (error_code != M_ERR_OK) abort();
-    printf("%s\n", buffer);
-*/
     //m_free(chunk_1, &error_code);
     //m_free(NULL, &error_code);
 

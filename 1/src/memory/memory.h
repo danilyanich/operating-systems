@@ -11,6 +11,7 @@
 typedef struct segment {
     char *va;
     int size_of_segment;
+    int amount_of_uses;
     struct segment *next;
 } segment;
 
