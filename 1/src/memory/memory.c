@@ -15,6 +15,7 @@ typedef struct cache {
     int start;
     int size;
     int count;
+    int chunk_addr;
     struct cache* next;
 } cache;
 
@@ -54,7 +55,7 @@ bool find_free_space(cache** cur, int need_space){
 
 cache* find_cache(int start_addr){
     for (cache* temp = my_manager._cache; temp != NULL; temp = temp->next){
-        if (temp->start == start_addr){
+        if (temp->chunk_addr == start_addr){
             temp->count++;
             return temp;
         }
@@ -75,9 +76,13 @@ bool delete_cache_el(){
         }
     }
     if (prev){
+        cache* temp = prev->next;
         prev->next = prev->next->next;
+        free(temp);
     } else {
+        cache* temp = my_manager._cache;
         my_manager._cache = my_manager._cache->next;
+        free(temp);
     }
     return true;
 }
@@ -90,18 +95,31 @@ void write_cache(chunk* to_write_chunk){
     }
     cache* write_to = NULL;
     bool ans = find_free_space(&write_to, to_write_chunk->size);
-    while (!ans){
-        delete_cache_el();
+    bool del = true;
+    while (!ans && del){
+        del = delete_cache_el();
         ans = find_free_space(&write_to, to_write_chunk->size);
     }
-    cache* temp = write_to->next;
-    cache* new_cache;
-    new_cache->start = write_to->start + write_to->size;
-    new_cache->size = to_write_chunk->size;
-    new_cache->count = 0;
-    memcpy(cache_memory + new_cache->start, my_manager.memory + to_write_chunk->start_pointer, to_write_chunk->size);
-    write_to->next = new_cache;
-    new_cache->next = temp;
+    if (!del){
+        cache* temp = malloc(sizeof(struct cache));
+        temp->start = 0;
+        temp->count = 0;
+        temp->chunk_addr = to_write_chunk->start_pointer;
+        temp->size = to_write_chunk->size;
+        temp->next = NULL;
+        my_manager._cache = temp;
+        memcpy(cache_memory,  my_manager.memory + to_write_chunk->start_pointer, to_write_chunk->size);
+    } else {
+        cache* temp = write_to->next;
+        cache* new_cache = malloc(sizeof(struct cache));
+        new_cache->start = write_to->start + write_to->size;
+        new_cache->size = to_write_chunk->size;
+        new_cache->count = 0;
+        new_cache->chunk_addr = to_write_chunk->start_pointer;
+        memcpy(cache_memory + new_cache->start, my_manager.memory + to_write_chunk->start_pointer, to_write_chunk->size);
+        write_to->next = new_cache;
+        new_cache->next = temp;
+    }
 }
 
 m_err_code read_cache(segment_addr addr, void* buffer, size_t read_size){

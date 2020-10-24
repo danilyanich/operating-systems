@@ -42,7 +42,7 @@ int main() {
     segment_addr second = m_malloc(36, &error);
     test(error, "TEST 2");
 
-    segment_addr third = m_malloc(23, &error);
+    segment_addr third = m_malloc(300, &error);
     test(error, "TEST 3");
 
     segment_addr fourth = m_malloc(64, &error);
