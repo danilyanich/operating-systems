@@ -8,39 +8,158 @@ char* _g_allocator_memory = NULL;
 int _g_allocator_memory_size = 0;
 int _g_bytes_allocated = 0;
 
-
+struct block* top = NULL;
+struct block* begin = NULL;
 
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
-  if (_g_bytes_allocated + size_of_chunk > _g_allocator_memory_size) {
-    *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
-    return NULL;
-  }
 
-  _g_bytes_allocated += size_of_chunk;
+    if (_g_bytes_allocated + size_of_chunk > _g_allocator_memory_size) {
+        *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
+        return NULL;
+    }
 
-  
-  struct block* tmp = malloc(sizeof(*tmp));
+    struct block* tmp = malloc(sizeof(*tmp));
+    struct block* current_block = begin;
+    int result = 0;
 
-  tmp->memory = _g_allocator_memory + _g_bytes_allocated;
-  tmp->size = size_of_chunk;
-  
-
+    if (begin == NULL){
+        begin = tmp;
+        tmp->memory = _g_allocator_memory + size_of_chunk;
+        
+    }
+    else{
+         result= insertBlock(tmp, current_block, size_of_chunk); 
+    }
+   
+    if (result) {
+        printf("\n%d, %d ", (int)_g_allocator_memory, size_of_chunk);
+        printf("\n%d ", (int)tmp->memory);
+        *error = M_ERR_OK;
+        return (m_id)tmp;
+    }
+    else {
+        tmp->size = size_of_chunk;
+        tmp->prev = top;
+        tmp->next = NULL;
+        tmp->isNextNull = 1;
+        if (tmp->prev != NULL) {
+            tmp->memory = (char*)top->memory + size_of_chunk;
+            tmp->prev->next = tmp;
+            tmp->prev->isNextNull = 0;
+        }
+        top = tmp;
+        printf("\n%d, %d ", (int)_g_allocator_memory, size_of_chunk);
+        printf("\n%d ", (int)tmp->memory);
+      
+     }
+ 
   *error = M_ERR_OK;
   return (m_id)tmp;
 
 }
 
+int insertBlock(struct block* tmp, struct block* current_block, int size_of_chunk) {
 
+
+    if ((char*)begin->memory - _g_allocator_memory > size_of_chunk) {
+
+        tmp->memory = _g_allocator_memory + size_of_chunk;
+        tmp->size = size_of_chunk;
+        tmp->isNextNull = 1;
+        tmp->next = begin;
+        tmp->prev = NULL;
+
+        begin->prev = tmp;
+        begin = tmp;
+        return 1;
+    
+    }
+    else if ((char*)begin->memory - _g_allocator_memory == size_of_chunk) {
+   
+        tmp->memory = _g_allocator_memory + size_of_chunk;
+        tmp->size = size_of_chunk;
+        tmp->isNextNull = 0;
+        tmp->next = begin;
+
+        tmp->prev = NULL;
+
+        begin->prev = tmp;
+        begin = tmp;
+        return 1;
+    }
+   
+    while (current_block != top) {
+        
+        if (current_block->isNextNull == 1 &&  current_block->next != NULL)
+        {
+            if ((int)current_block->next->memory - (int)current_block->memory - current_block->next->size  > size_of_chunk)
+            {
+
+                tmp->memory = (char*)current_block->memory + size_of_chunk;
+                tmp->size = size_of_chunk;
+                tmp->isNextNull = 1;
+                tmp->next = current_block->next;
+                tmp->prev = current_block;
+
+                current_block->isNextNull = 0;
+                current_block->next->prev = tmp;
+                current_block->next = tmp;
+                return 1;
+            }
+            else if ((int)current_block->next->memory - (int)current_block->memory - current_block->next->size == size_of_chunk)
+            {
+                tmp->memory = (char*)current_block->memory + size_of_chunk;
+                tmp->size = size_of_chunk;
+                current_block->isNextNull = 0;
+                tmp->isNextNull = 0;
+                tmp->next = current_block->next;
+                tmp->prev = current_block;
+
+                current_block->next->prev = tmp;
+                current_block->next = tmp;
+                return 1;
+            }
+        }
+        current_block = current_block->next;
+
+    }
+    return 0;
+}
 void m_free(m_id ptr, m_err_code* error) {
 
     struct block* ptr_new = ptr;
+   
 
     if (ptr == NULL) {
         *error = M_ERR_ALREADY_DEALLOCATED;
         return;
     }
-    free(ptr_new);
-  *error = M_ERR_OK;
+
+    struct block* tmp;
+    if (ptr_new->memory == top->memory)
+    {
+        tmp = top;
+        top = ptr_new->prev;
+        ptr_new->prev->isNextNull = 1;
+        free(tmp);
+
+    }
+    else if(ptr_new->memory == begin->memory)
+    {
+        tmp = begin;
+        begin = ptr_new->next;
+        free(tmp);
+    }
+        
+    else
+    {
+        tmp = ptr_new;
+        ptr_new->prev->next = tmp->next;
+        ptr_new->next->prev = tmp->prev;
+        ptr_new->prev->isNextNull = 1;
+        free(ptr_new);
+    }
+    *error = M_ERR_OK;
 }
 
 
