@@ -5,29 +5,28 @@
 #include <stdio.h>
 
 
-
 char *_g_allocator_memory = NULL;
 int _g_allocator_memory_size = 0;
 
 static memory_node *memoryNode;
 static segment *cache;
 
-segment* check_cache(m_id ptr){
-    if(cache == NULL){
+segment *check_cache(m_id ptr) {
+    if (cache == NULL) {
         return NULL;
     }
-    if(cache->va+cache->size_of_segment == ptr){
+    if (cache->va + cache->size_of_segment == ptr) {
         return cache;
     } else {
         return NULL;
     }
 }
 
-void up_date_cache(){
+void up_date_cache() {
     segment *tmp = memoryNode->first_segment;
     cache = tmp;
     while (tmp != NULL) {
-        if(tmp->amount_of_uses >= cache->amount_of_uses){
+        if (tmp->amount_of_uses >= cache->amount_of_uses) {
             cache = tmp;
         }
         tmp = tmp->next;
@@ -52,18 +51,30 @@ m_id find_space(int size_of_chunk, m_err_code *error) {
 
     segment *tmp = memoryNode->first_segment;
     while (tmp->next != NULL) {
+        if ((tmp->next->va - tmp->va - tmp->size_of_segment) >= size_of_chunk) {
+            segment *mid = malloc(sizeof(segment));
+            mid->size_of_segment = size_of_chunk;
+            mid->va = tmp->va + tmp->size_of_segment;
+            mid->next = tmp->next;
+            mid->amount_of_uses = 0;
+
+            tmp->next = mid;
+            *error = M_ERR_OK;
+            return mid->va + mid->size_of_segment;
+        }
         tmp = tmp->next;
     }
 
     if (memoryNode->physical_address + memoryNode->size_of_segment
-        - tmp->va + tmp->size_of_segment < size_of_chunk) {
+        - tmp->va - tmp->size_of_segment < size_of_chunk) {
+
         *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
         return NULL;
     }
 
     segment *end = malloc(sizeof(segment));
     end->size_of_segment = size_of_chunk;
-    end->va = tmp->va + size_of_chunk + tmp->size_of_segment;
+    end->va = tmp->va + tmp->size_of_segment;
     end->next = NULL;
     end->amount_of_uses = 0;
 
@@ -97,7 +108,7 @@ segment *find_segment(m_id ptr, m_err_code *error) {
 
         tmp = tmp->next;
     }
-    error = M_ERR_INVALID_CHUNK;
+    *error = M_ERR_INVALID_CHUNK;
 }
 
 void m_free(m_id ptr, m_err_code *error) {
@@ -127,9 +138,9 @@ void m_free(m_id ptr, m_err_code *error) {
 
 void m_read(m_id read_from_id, void *read_to_buffer, int size_to_read, m_err_code *error) {
     segment *foundSeg = check_cache(read_from_id);
-    if(foundSeg == NULL){
-       foundSeg = find_segment(read_from_id, error);
-       if (*error != M_ERR_OK) {
+    if (foundSeg == NULL) {
+        foundSeg = find_segment(read_from_id, error);
+        if (*error != M_ERR_OK) {
             return;
         }
     }
@@ -148,7 +159,7 @@ void m_read(m_id read_from_id, void *read_to_buffer, int size_to_read, m_err_cod
 
 void m_write(m_id write_to_id, void *write_from_buffer, int size_to_write, m_err_code *error) {
     segment *foundSeg = check_cache(write_to_id);
-    if(foundSeg == NULL){
+    if (foundSeg == NULL) {
         foundSeg = find_segment(write_to_id, error);
         if (*error != M_ERR_OK) {
             return;
