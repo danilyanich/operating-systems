@@ -7,4 +7,3 @@ set(UNIT_TESTS_FILES src/mmemory.c tests/unit_tests.c header/memory_model.h head
 set(LOAD_TESTS_FILES src/mmemory.c tests/load_tests.c header/memory_model.h header/util.h)
 add_executable(unit ${UNIT_TESTS_FILES})
 add_executable(load ${LOAD_TESTS_FILES})
-add_executable(main main.c)
