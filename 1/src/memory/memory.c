@@ -9,8 +9,8 @@
 #define PAGE_SIZE_IN_BYTES 16
 
 struct MainMemoryIdNode {
-    struct MainMemoryIdNode* next;
-    char* fromPointer;
+    struct MainMemoryIdNode* previous;
+    char* fromLinearAddressPointer;
     unsigned sizeInBytes;
 };
 
@@ -52,14 +52,68 @@ void flush_cache_where_required(struct CacheMemoryNode* cache_memory_table, unsi
 }
 
 //inserts a new node into the main memory table
-void insert_new_memory_node(struct MainMemoryNode* main_memory_node_to_insert_after,
-                            struct MainMemoryNode* main_memory_node_to_insert) {
+void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
+                            struct MainMemoryNode* main_memory_node_to_insert, char insertAfterAnchor) {
 
 }
 
 //removes a node from the main memory table
 void remove_main_memory_node(struct MainMemoryNode* main_memory_node_to_remove) {
 
+}
+
+unsigned obtain_linear_address_for_chunk(unsigned size_of_chunk) {
+
+}
+
+void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory_id_node) {
+    //create enough count of main memory nodes to fit the chunk in them
+    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+    struct MainMemoryNode* last_main_memory_node = NULL;
+
+    unsigned memory_to_allocate = size_of_chunk;
+    unsigned last_physical_address = 0;
+
+    while (memory_to_allocate > 0) {
+        unsigned gap_from_last_node = current_main_memory_node
+                                      ? current_main_memory_node->fromPhysicalAddress - last_physical_address
+                                      : ~0u;
+
+        if (gap_from_last_node > 0) {
+            //then there's some free space, we are to insert a new main memory node here
+            unsigned nodeSize = gap_from_last_node >= memory_to_allocate
+                                ? memory_to_allocate
+                                : gap_from_last_node;
+
+            memory_to_allocate -= nodeSize;
+
+            struct MainMemoryNode* new_main_memory_node = malloc(sizeof(struct MainMemoryNode));
+
+            new_main_memory_node->sizeInBytes = nodeSize;
+            new_main_memory_node->mainMemoryIdNode = main_memory_id_node;
+            new_main_memory_node->fromPhysicalAddress = last_physical_address;
+
+            if (current_main_memory_node)
+                insert_new_memory_node(current_main_memory_node, new_main_memory_node,
+                                       last_physical_address ? 0 : 1);
+            else {
+                if (last_physical_address)
+                    //insert after everything
+                    insert_new_memory_node(last_main_memory_node, new_main_memory_node, 0);
+                else
+                    //the table is empty
+                    _g_main_memory_table = new_main_memory_node;
+            }
+
+            current_main_memory_node = new_main_memory_node;
+        }
+
+        assert(current_main_memory_node != NULL);
+        last_physical_address = current_main_memory_node->fromPhysicalAddress;
+
+        last_main_memory_node = current_main_memory_node;
+        current_main_memory_node = current_main_memory_node->next;
+    }
 }
 
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
@@ -69,27 +123,22 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
         return NULL;
     }
 
-    struct MainMemoryIdNode* main_memory_id_node = NULL;
-    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+    //create new main memory id node
+    struct MainMemoryIdNode* main_memory_id_node = malloc(sizeof(struct MainMemoryIdNode));
+    main_memory_id_node->sizeInBytes = size_of_chunk;
+    main_memory_id_node->fromLinearAddressPointer = (char*)obtain_linear_address_for_chunk(size_of_chunk);
 
-    unsigned lastToPhysicalAddress = 0;
+    if (_g_main_memory_ids_table)
+        main_memory_id_node->previous = _g_main_memory_ids_table;
 
-    while (current_main_memory_node) {
-        unsigned currentLinearAddress = current_main_memory_node->fromPhysicalAddress - lastToPhysicalAddress;
+    _g_main_memory_ids_table = main_memory_id_node;
 
-        if (currentLinearAddress > 0) {
-            //then there's some free space, we are to insert a new main memory node here
-
-        }
-
-        current_main_memory_node = current_main_memory_node->next;
-    }
+    allocate_chunk(size_of_chunk, main_memory_id_node);
 
     *error = M_ERR_OK;
 
     assert(main_memory_id_node != NULL);
-
-    return main_memory_id_node->fromPointer;
+    return main_memory_id_node->fromLinearAddressPointer;
 }
 
 
@@ -128,7 +177,7 @@ void m_init(int number_of_pages, int size_of_page) {
 
         //free ids' nodes
         while (current_main_memory_id_node) {
-            struct MainMemoryIdNode* next_main_memory_id_node = current_main_memory_id_node->next;
+            struct MainMemoryIdNode* next_main_memory_id_node = current_main_memory_id_node->previous;
 
             free(next_main_memory_id_node);
 
