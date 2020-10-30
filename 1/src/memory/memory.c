@@ -7,6 +7,8 @@
 #define CACHE_SIZE_IN_PAGES 8
 #define LOCALITY_SIZE 2
 #define PAGE_SIZE_IN_BYTES 16
+#define CACHE_PAGE_HEADER sizeof(char) //XXXXXXXF, F - is cache page free
+#define CACHE_SLOT_SIZE CACHE_PAGE_HEADER + PAGE_SIZE_IN_BYTES
 
 struct MainMemoryIdNode {
     struct MainMemoryIdNode* previous;
@@ -16,13 +18,12 @@ struct MainMemoryIdNode {
     struct CachedPage* cachedPages;
 };
 
-struct MainMemoryNode {
-    struct MainMemoryNode* previous;
-    struct MainMemoryNode* next;
+struct MainMemoryNodeHeader {
     struct MainMemoryIdNode* mainMemoryIdNode;
-    unsigned fromPhysicalAddress;
     unsigned sizeInBytes;
 };
+
+#define HEADER_SIZE sizeof(struct MainMemoryNodeHeader)
 
 struct CachedPage {
     struct CachedPage* next;
@@ -33,28 +34,34 @@ struct CachedPage {
 
 struct MainMemoryIdNode* _g_main_memory_ids_table;
 
-char _g_cache_usage_table[CACHE_SIZE_IN_PAGES / sizeof(char)];
-struct MainMemoryNode* _g_main_memory_table = NULL;
-char _g_cache_memory[CACHE_SIZE_IN_PAGES * PAGE_SIZE_IN_BYTES];
-char* _g_main_memory = NULL;
+unsigned char _g_cache_memory[CACHE_SIZE_IN_PAGES * CACHE_SLOT_SIZE];
+unsigned char* _g_main_memory = NULL;
 
 unsigned long _g_main_memory_size;
 unsigned long _g_used_memory_size;
 
+struct MainMemoryNodeHeader* get_header(unsigned address) {
+    return (struct MainMemoryNodeHeader*)(_g_main_memory + address);
+}
+
+struct MainMemoryNodeHeader* getHeaderByPointer(unsigned char* address) {
+    return (struct MainMemoryNodeHeader*)address;
+}
+
 //flushes only one node of cache
 void flush_cache_memory_node(struct CachedPage* cache_memory_node, char* cache_memory,
-                             struct MainMemoryNode* main_memory_table, char* main_memory) {
+                             struct MainMemoryNodeHeader* main_memory_table, char* main_memory) {
 
 }
 
 //checks every node of cache and flushes it if it's needed
 void flush_cache_where_required(struct CachedPage* cache_memory_table, unsigned cache_size_in_pages,
-                                char* cache_memory, struct MainMemoryNode* main_memory_table, char* main_memory) {
+                                char* cache_memory, struct MainMemoryNodeHeader* main_memory_table, char* main_memory) {
 
 }
 
 void free_cache_page(unsigned cache_page_number) {
-    _g_cache_usage_table[cache_page_number / sizeof(char) + cache_page_number % sizeof(char)] = 0;
+    _g_cache_memory[cache_page_number * CACHE_SLOT_SIZE] &= (unsigned char)(~0b1u);
 }
 
 void free_cached_page(struct MainMemoryIdNode* main_memory_id_node, struct CachedPage* cached_page) {
@@ -63,22 +70,6 @@ void free_cached_page(struct MainMemoryIdNode* main_memory_id_node, struct Cache
 
     free_cache_page(cached_page->cachePageNumber);
     free(cached_page);
-}
-
-void free_main_memory_node(struct MainMemoryNode* main_memory_node) {
-    if (main_memory_node->previous) {
-        main_memory_node->previous->next = main_memory_node->next;
-
-        if (main_memory_node->next)
-            main_memory_node->next->previous = main_memory_node->previous;
-    } else {
-        _g_main_memory_table = main_memory_node->next;
-
-        if (main_memory_node->next)
-            main_memory_node->next->previous = NULL;
-    }
-
-    free(main_memory_node);
 }
 
 void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
@@ -94,13 +85,36 @@ void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
     }
 
     //main memory nodes
-    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+    struct MainMemoryNodeHeader* last_header = NULL;
 
-    while (current_main_memory_node) {
-        if (current_main_memory_node->mainMemoryIdNode == main_memory_id_node)
-            free_main_memory_node(current_main_memory_node);
+    for (unsigned p = 0; p < _g_main_memory_size; ) {
+        struct MainMemoryNodeHeader* header = get_header(p);
 
-        current_main_memory_node = current_main_memory_node->next;
+        if (header->mainMemoryIdNode == main_memory_id_node) {
+            unsigned next_header_address = p + HEADER_SIZE + header->sizeInBytes;
+
+            struct MainMemoryNodeHeader* next_header = next_header_address < _g_main_memory_size
+                                                       ? get_header(next_header_address)
+                                                       : NULL;
+
+            //if last_header exists and it's free then it is the header of new merged node of the main memory
+            struct MainMemoryNodeHeader* new_header = NULL;
+
+            //will the next node be merged with current one (and possibly the previous one)
+            unsigned node_size = (next_header && !next_header->mainMemoryIdNode)
+                                 ? HEADER_SIZE + next_header->sizeInBytes
+                                 : header->sizeInBytes;
+
+            if (last_header && !last_header->mainMemoryIdNode) {
+                new_header = last_header;
+                node_size = last_header->sizeInBytes + HEADER_SIZE;
+            } else
+                new_header = header;
+
+            new_header->sizeInBytes = node_size;
+        }
+
+        last_header = header;
     }
 
     //main memory id node
@@ -118,9 +132,9 @@ void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
 }
 
 //inserts a new node into the main memory table
-void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
-                            struct MainMemoryNode* main_memory_node_to_insert, char insertAfterAnchor) {
-    struct MainMemoryNode* anotherSide;
+void insert_new_memory_node(struct MainMemoryNodeHeader* main_memory_anchor_node,
+                            struct MainMemoryNodeHeader* main_memory_node_to_insert, char insertAfterAnchor) {
+    struct MainMemoryNodeHeader* anotherSide;
 
     if (insertAfterAnchor) {
         //after
@@ -176,8 +190,8 @@ unsigned obtain_linear_address_for_chunk(unsigned size_of_chunk) {
 
 void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory_id_node) {
     //create enough count of main memory nodes to fit the chunk in them
-    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
-    struct MainMemoryNode* last_main_memory_node = NULL;
+    struct MainMemoryNodeHeader* current_main_memory_node = _g_main_memory_table;
+    struct MainMemoryNodeHeader* last_main_memory_node = NULL;
 
     unsigned memory_to_allocate = size_of_chunk;
     unsigned last_physical_address = 0;
@@ -198,7 +212,7 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
             memory_to_allocate -= nodeSize;
 
             //todo exclude
-            struct MainMemoryNode* new_main_memory_node = malloc(sizeof(struct MainMemoryNode));
+            struct MainMemoryNodeHeader* new_main_memory_node = malloc(sizeof(struct MainMemoryNodeHeader));
 
             new_main_memory_node->sizeInBytes = nodeSize;
             new_main_memory_node->mainMemoryIdNode = main_memory_id_node;
@@ -306,11 +320,14 @@ void m_init(int number_of_pages, int size_of_page) {
 
     _g_main_memory_size = number_of_pages * size_of_page;
 
-    _g_main_memory = NULL;
-    _g_main_memory_table = NULL;
     _g_main_memory_ids_table = NULL;
     _g_main_memory = malloc(_g_main_memory_size);
-    _g_used_memory_size = 0;
+    _g_used_memory_size = HEADER_SIZE;
+
+    struct MainMemoryNodeHeader* header = get_header(0);
+
+    header->mainMemoryIdNode = NULL;
+    header->sizeInBytes = _g_main_memory_size - _g_used_memory_size;
 
     //set all available cache pages free
     for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
