@@ -64,7 +64,28 @@ void remove_main_memory_node(struct MainMemoryNode* main_memory_node_to_remove) 
 }
 
 unsigned obtain_linear_address_for_chunk(unsigned size_of_chunk) {
+    struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
 
+    if (!current_main_memory_id_node) {
+        return 0;
+    } else {
+        unsigned maximalAddress =
+                current_main_memory_id_node->fromLinearAddressPointer - (char*)0 + current_main_memory_id_node->sizeInBytes;
+        unsigned lastFrom = current_main_memory_id_node->fromLinearAddressPointer - (char*)0;
+
+        while (current_main_memory_id_node) {
+            unsigned currentTo = current_main_memory_id_node->fromLinearAddressPointer - (char*)0;
+            long gap =
+                    lastFrom - currentTo + current_main_memory_id_node->sizeInBytes;
+
+            if (gap > size_of_chunk)
+                return currentTo;
+
+            current_main_memory_id_node = current_main_memory_id_node->previous;
+        }
+
+        return maximalAddress;
+    }
 }
 
 void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory_id_node) {
