@@ -12,6 +12,7 @@ struct MainMemoryIdNode {
     struct MainMemoryIdNode* previous;
     char* fromLinearAddressPointer;
     unsigned sizeInBytes;
+    struct CacheMemoryNode* loadedPages;
 };
 
 struct MainMemoryNode {
@@ -23,15 +24,14 @@ struct MainMemoryNode {
 };
 
 struct CacheMemoryNode {
-    struct MainMemoryIdNode* mainMemoryIdNode;
-    unsigned cacheNodeNumber; //number of page in cache
+    struct CacheMemoryNode* next;
+    unsigned cachePageNumber; //number of page in cache
     unsigned pageNumber; //number of page of the segment
     char flags; //XXXXXXXC, X - reserved for further standardization)), C - a flag which indicates whether the page was changed or not
 };
 
 struct MainMemoryIdNode* _g_main_memory_ids_table;
 
-struct CacheMemoryNode _g_cache_table[CACHE_SIZE_IN_PAGES];
 struct MainMemoryNode* _g_main_memory_table = NULL;
 char _g_cache_memory[CACHE_SIZE_IN_PAGES * PAGE_SIZE_IN_BYTES];
 char* _g_main_memory = NULL;
@@ -179,7 +179,18 @@ void m_init(int number_of_pages, int size_of_page) {
         while (current_main_memory_id_node) {
             struct MainMemoryIdNode* next_main_memory_id_node = current_main_memory_id_node->previous;
 
-            free(next_main_memory_id_node);
+            //free loaded into cache pages nodes
+            struct CacheMemoryNode* current_cache_memory_node = current_main_memory_id_node->loadedPages;
+
+            while (current_cache_memory_node) {
+                struct CacheMemoryNode* next_cache_memory_node = current_cache_memory_node->next;
+
+                free(current_cache_memory_node);
+
+                current_cache_memory_node = next_cache_memory_node;
+            }
+
+            free(current_main_memory_id_node);
 
             current_main_memory_id_node = next_main_memory_id_node;
         }
@@ -192,7 +203,4 @@ void m_init(int number_of_pages, int size_of_page) {
     _g_main_memory_ids_table = NULL;
     _g_main_memory = malloc(_g_main_memory_size);
     _g_used_memory_size = 0;
-
-    for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
-        _g_cache_table[i] = (struct CacheMemoryNode){NULL, 0, i, 0};
 }
