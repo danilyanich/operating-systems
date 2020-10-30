@@ -9,14 +9,19 @@
 #define PAGE_SIZE_IN_BYTES 16
 
 struct MainMemoryId {
-    unsigned fromLinearAddress;
+    char* fromPointer;
     unsigned sizeInBytes;
+};
+
+struct MainMemoryIdNode {
+    struct MainMemoryId* mainMemoryId;
+    struct MainMemoryIdNode* next;
 };
 
 struct MainMemoryNode {
     struct MainMemoryNode* previous;
     struct MainMemoryNode* next;
-    struct MainMemoryId** mainMemoryId;
+    struct MainMemoryId* mainMemoryId;
     unsigned fromPhysicalAddress;
     unsigned sizeInBytes;
 };
@@ -27,6 +32,8 @@ struct CacheMemoryNode {
     unsigned pageNumber; //number of page of the segment
     char flags; //XXXXXXXC, X - reserved for further standardization)), C - a flag which indicates whether the page was changed or not
 };
+
+struct MainMemoryIdNode* _g_main_memory_ids_table;
 
 struct CacheMemoryNode _g_cache_table[CACHE_SIZE_IN_PAGES];
 struct MainMemoryNode* _g_main_memory_table = NULL;
@@ -100,30 +107,38 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 
 void m_init(int number_of_pages, int size_of_page) {
     if (_g_main_memory) {
+        //free the main memory
         free(_g_main_memory);
 
         struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
+        //free the main memory nodes
         while (current_main_memory_node) {
             struct MainMemoryNode* next_main_memory_node = current_main_memory_node->next;
-
-            if (*(current_main_memory_node->mainMemoryId)) {
-                free(*(current_main_memory_node->mainMemoryId));
-
-                *(current_main_memory_node->mainMemoryId) = NULL;
-            }
 
             free(current_main_memory_node);
 
             current_main_memory_node = next_main_memory_node;
         }
 
-        _g_main_memory = NULL;
-        _g_main_memory_table = NULL;
+        struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
+
+        //free ids' nodes and ids
+        while (current_main_memory_id_node) {
+            struct MainMemoryIdNode* next_main_memory_id_node = current_main_memory_id_node->next;
+
+            free(current_main_memory_id_node->mainMemoryId);
+            free(next_main_memory_id_node);
+
+            current_main_memory_id_node = next_main_memory_id_node;
+        }
     }
 
     _g_main_memory_size = number_of_pages * size_of_page;
 
+    _g_main_memory = NULL;
+    _g_main_memory_table = NULL;
+    _g_main_memory_ids_table = NULL;
     _g_main_memory = malloc(_g_main_memory_size);
     _g_used_memory_size = 0;
 
