@@ -55,7 +55,29 @@ void flush_cache_where_required(struct CachedPage* cache_memory_table, unsigned 
 //inserts a new node into the main memory table
 void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
                             struct MainMemoryNode* main_memory_node_to_insert, char insertAfterAnchor) {
+    struct MainMemoryNode* anotherSide;
 
+    if (insertAfterAnchor) {
+        //after
+        anotherSide = main_memory_node_to_insert->next;
+
+        main_memory_anchor_node->next = main_memory_node_to_insert;
+
+        main_memory_node_to_insert->previous = main_memory_anchor_node;
+        main_memory_node_to_insert->next = anotherSide;
+
+        anotherSide->previous = main_memory_node_to_insert;
+    } else {
+        //before
+        anotherSide = main_memory_node_to_insert->previous;
+
+        main_memory_anchor_node->previous = main_memory_node_to_insert;
+
+        main_memory_node_to_insert->previous = anotherSide;
+        main_memory_node_to_insert->next = main_memory_anchor_node;
+
+        anotherSide->next = main_memory_node_to_insert;
+    }
 }
 
 //removes a node from the main memory table
@@ -158,6 +180,8 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     allocate_chunk(size_of_chunk, main_memory_id_node);
 
     *error = M_ERR_OK;
+
+    _g_used_memory_size += size_of_chunk;
 
     assert(main_memory_id_node != NULL);
     return main_memory_id_node->fromLinearAddressPointer;
