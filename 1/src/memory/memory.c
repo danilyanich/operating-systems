@@ -59,7 +59,7 @@ void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
 
     if (insertAfterAnchor) {
         //after
-        anotherSide = main_memory_node_to_insert->next;
+        anotherSide = main_memory_anchor_node->next;
 
         main_memory_anchor_node->next = main_memory_node_to_insert;
 
@@ -68,15 +68,13 @@ void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
 
         anotherSide->previous = main_memory_node_to_insert;
     } else {
-        //before
-        anotherSide = main_memory_node_to_insert->previous;
-
+        //before (it's only allowed to be used when there's nothing before the anchor (it's the beginning))
         main_memory_anchor_node->previous = main_memory_node_to_insert;
 
-        main_memory_node_to_insert->previous = anotherSide;
+        main_memory_node_to_insert->previous = NULL;
         main_memory_node_to_insert->next = main_memory_anchor_node;
 
-        anotherSide->next = main_memory_node_to_insert;
+        _g_main_memory_table = main_memory_node_to_insert;
     }
 }
 
@@ -98,7 +96,7 @@ unsigned obtain_linear_address_for_chunk(unsigned size_of_chunk) {
         while (current_main_memory_id_node) {
             unsigned currentTo = current_main_memory_id_node->fromLinearAddressPointer - (char*)0;
             long gap =
-                    lastFrom - currentTo + current_main_memory_id_node->sizeInBytes;
+                    (long)lastFrom - (currentTo + current_main_memory_id_node->sizeInBytes);
 
             if (gap > size_of_chunk)
                 return currentTo;
@@ -139,7 +137,7 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
 
             if (current_main_memory_node)
                 insert_new_memory_node(current_main_memory_node, new_main_memory_node,
-                                       last_physical_address ? 0 : 1);
+                                       last_physical_address ? 0 : 1);//todo if before then replace root
             else {
                 if (last_physical_address)
                     //insert after everything
@@ -153,7 +151,7 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
         }
 
         assert(current_main_memory_node != NULL);
-        last_physical_address = current_main_memory_node->fromPhysicalAddress;
+        last_physical_address = current_main_memory_node->fromPhysicalAddress + current_main_memory_node->sizeInBytes;
 
         last_main_memory_node = current_main_memory_node;
         current_main_memory_node = current_main_memory_node->next;
