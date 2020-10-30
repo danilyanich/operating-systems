@@ -3,9 +3,9 @@
 
 #include "memory.h"
 
-const unsigned CACHE_SIZE_IN_PAGES = 8;
-const unsigned LOCALITY_SIZE = 2;
-const unsigned PAGE_SIZE_IN_BYTES = 16;
+#define CACHE_SIZE_IN_PAGES 8
+#define LOCALITY_SIZE 2
+#define PAGE_SIZE_IN_BYTES 16
 
 struct MainMemoryId {
     unsigned fromLinearAddress;
@@ -15,7 +15,7 @@ struct MainMemoryId {
 struct MainMemoryNode {
     struct MainMemoryNode* previous;
     struct MainMemoryNode* next;
-    struct MainMemoryId* mainMemoryId;
+    struct MainMemoryId** mainMemoryId;
     unsigned fromPhysicalAddress;
     unsigned sizeInBytes;
 };
@@ -28,9 +28,11 @@ struct CacheMemoryNode {
 };
 
 struct CacheMemoryNode _g_cache_table[CACHE_SIZE_IN_PAGES];
-struct MainMemoryNode* _g_main_memory_table;
-char* _g_cache_memory;
-char* _g_main_memory;
+struct MainMemoryNode* _g_main_memory_table = NULL;
+char _g_cache_memory[CACHE_SIZE_IN_PAGES * PAGE_SIZE_IN_BYTES];
+char* _g_main_memory = NULL;
+
+unsigned long _g_main_memory_size;
 
 //flushes only one node of cache
 void flush_cache_memory_node(struct CacheMemoryNode* cache_memory_node, char* cache_memory,
@@ -76,5 +78,33 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 
 
 void m_init(int number_of_pages, int size_of_page) {
+    if (_g_main_memory) {
+        free(_g_main_memory);
 
+        struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+
+        while (current_main_memory_node) {
+            struct MainMemoryNode* next_main_memory_node = current_main_memory_node->next;
+
+            if (*(current_main_memory_node->mainMemoryId)) {
+                free(*(current_main_memory_node->mainMemoryId));
+
+                *(current_main_memory_node->mainMemoryId) = NULL;
+            }
+
+            free(current_main_memory_node);
+
+            current_main_memory_node = next_main_memory_node;
+        }
+
+        _g_main_memory = NULL;
+        _g_main_memory_table = NULL;
+    } else {
+        _g_main_memory_size = number_of_pages * size_of_page;
+
+        _g_main_memory = malloc(_g_main_memory_size);
+
+        for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
+            _g_cache_table[i] = (struct CacheMemoryNode){NULL, 0, i, 0};
+    }
 }
