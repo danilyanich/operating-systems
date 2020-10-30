@@ -33,6 +33,7 @@ char _g_cache_memory[CACHE_SIZE_IN_PAGES * PAGE_SIZE_IN_BYTES];
 char* _g_main_memory = NULL;
 
 unsigned long _g_main_memory_size;
+unsigned long _g_used_memory_size;
 
 //flushes only one node of cache
 void flush_cache_memory_node(struct CacheMemoryNode* cache_memory_node, char* cache_memory,
@@ -99,12 +100,13 @@ void m_init(int number_of_pages, int size_of_page) {
 
         _g_main_memory = NULL;
         _g_main_memory_table = NULL;
-    } else {
-        _g_main_memory_size = number_of_pages * size_of_page;
-
-        _g_main_memory = malloc(_g_main_memory_size);
-
-        for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
-            _g_cache_table[i] = (struct CacheMemoryNode){NULL, 0, i, 0};
     }
+
+    _g_main_memory_size = number_of_pages * size_of_page;
+
+    _g_main_memory = malloc(_g_main_memory_size);
+    _g_used_memory_size = 0;
+
+    for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
+        _g_cache_table[i] = (struct CacheMemoryNode){NULL, 0, i, 0};
 }
