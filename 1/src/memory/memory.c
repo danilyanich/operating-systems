@@ -76,8 +76,15 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     struct MainMemoryId* main_memory_id = NULL;
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
-    while (current_main_memory_node) {
+    unsigned lastToPhysicalAddress = 0;
 
+    while (current_main_memory_node) {
+        unsigned currentLinearAddress = current_main_memory_node->fromPhysicalAddress - lastToPhysicalAddress;
+
+        if (currentLinearAddress > 0) {
+            //then there's some free space, we are to insert a new main memory node here
+
+        }
 
         current_main_memory_node = current_main_memory_node->next;
     }
@@ -86,7 +93,7 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
 
     assert(main_memory_id != NULL);
 
-    return main_memory_id;
+    return main_memory_id->fromPointer;
 }
 
 
