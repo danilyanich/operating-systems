@@ -8,26 +8,22 @@
 #define LOCALITY_SIZE 2
 #define PAGE_SIZE_IN_BYTES 16
 
-struct MainMemoryId {
+struct MainMemoryIdNode {
+    struct MainMemoryIdNode* next;
     char* fromPointer;
     unsigned sizeInBytes;
-};
-
-struct MainMemoryIdNode {
-    struct MainMemoryId* mainMemoryId;
-    struct MainMemoryIdNode* next;
 };
 
 struct MainMemoryNode {
     struct MainMemoryNode* previous;
     struct MainMemoryNode* next;
-    struct MainMemoryId* mainMemoryId;
+    struct MainMemoryIdNode* mainMemoryIdNode;
     unsigned fromPhysicalAddress;
     unsigned sizeInBytes;
 };
 
 struct CacheMemoryNode {
-    struct MainMemoryId* mainMemoryId;
+    struct MainMemoryIdNode* mainMemoryIdNode;
     unsigned cacheNodeNumber; //number of page in cache
     unsigned pageNumber; //number of page of the segment
     char flags; //XXXXXXXC, X - reserved for further standardization)), C - a flag which indicates whether the page was changed or not
@@ -73,7 +69,7 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
         return NULL;
     }
 
-    struct MainMemoryId* main_memory_id = NULL;
+    struct MainMemoryIdNode* main_memory_id_node = NULL;
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
     unsigned lastToPhysicalAddress = 0;
@@ -91,9 +87,9 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
 
     *error = M_ERR_OK;
 
-    assert(main_memory_id != NULL);
+    assert(main_memory_id_node != NULL);
 
-    return main_memory_id->fromPointer;
+    return main_memory_id_node->fromPointer;
 }
 
 
@@ -130,11 +126,10 @@ void m_init(int number_of_pages, int size_of_page) {
 
         struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
 
-        //free ids' nodes and ids
+        //free ids' nodes
         while (current_main_memory_id_node) {
             struct MainMemoryIdNode* next_main_memory_id_node = current_main_memory_id_node->next;
 
-            free(current_main_memory_id_node->mainMemoryId);
             free(next_main_memory_id_node);
 
             current_main_memory_id_node = next_main_memory_id_node;
