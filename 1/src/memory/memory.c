@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "memory.h"
 
@@ -59,7 +60,26 @@ void remove_main_memory_node(struct MainMemoryNode* main_memory_node_to_remove) 
 }
 
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
+    if (_g_main_memory_size - _g_used_memory_size < size_of_chunk) {
+        *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
 
+        return NULL;
+    }
+
+    struct MainMemoryId* main_memory_id = NULL;
+    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+
+    while (current_main_memory_node) {
+
+
+        current_main_memory_node = current_main_memory_node->next;
+    }
+
+    *error = M_ERR_OK;
+
+    assert(main_memory_id != NULL);
+
+    return main_memory_id;
 }
 
 
