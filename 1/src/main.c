@@ -8,9 +8,13 @@ int main(int argc, char **argv) {
 
     int error_code;
 
-    m_malloc(50, &error_code);
-    m_malloc(32, &error_code);
-
+    m_id a = m_malloc(50, &error_code);
+    m_id b = m_malloc(32, &error_code);
+    m_id c = m_malloc(32, &error_code);
+    m_free(a, &error_code);
+    m_malloc(100, &error_code);
+    m_free(b, &error_code);
+    m_malloc(40, &error_code);
 /*  ;
 
   m_id chunk_1 = m_malloc(13, &error_code);

@@ -11,7 +11,7 @@
 struct MainMemoryIdNode {
     struct MainMemoryIdNode* previous;
     struct MainMemoryIdNode* next;
-    char* fromLinearAddressPointer;
+    char* fromVirtualAddressPointer;
     unsigned sizeInBytes;
     struct CachedPage* cachedPages;
 };
@@ -99,6 +99,8 @@ void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
     while (current_main_memory_node) {
         if (current_main_memory_node->mainMemoryIdNode == main_memory_id_node)
             free_main_memory_node(current_main_memory_node);
+
+        current_main_memory_node = current_main_memory_node->next;
     }
 
     //main memory id node
@@ -129,15 +131,21 @@ void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
         main_memory_node_to_insert->previous = main_memory_anchor_node;
         main_memory_node_to_insert->next = anotherSide;
 
-        anotherSide->previous = main_memory_node_to_insert;
+        if (anotherSide)
+            anotherSide->previous = main_memory_node_to_insert;
     } else {
-        //before (it's only allowed to be used when there's nothing before the anchor (it's the beginning))
+        //before
+        anotherSide = main_memory_anchor_node->previous;
+
         main_memory_anchor_node->previous = main_memory_node_to_insert;
 
-        main_memory_node_to_insert->previous = NULL;
+        main_memory_node_to_insert->previous = anotherSide;
         main_memory_node_to_insert->next = main_memory_anchor_node;
 
-        _g_main_memory_table = main_memory_node_to_insert;
+        if (anotherSide)
+            anotherSide->next = main_memory_node_to_insert;
+        else
+            _g_main_memory_table = main_memory_node_to_insert;
     }
 }
 
@@ -148,11 +156,11 @@ unsigned obtain_linear_address_for_chunk(unsigned size_of_chunk) {
         return 0;
     } else {
         unsigned maximalAddress =
-                current_main_memory_id_node->fromLinearAddressPointer - (char*)0 + current_main_memory_id_node->sizeInBytes;
-        unsigned lastFrom = current_main_memory_id_node->fromLinearAddressPointer - (char*)0;
+                current_main_memory_id_node->fromVirtualAddressPointer - (char*)0 + current_main_memory_id_node->sizeInBytes;
+        unsigned lastFrom = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
 
         while (current_main_memory_id_node) {
-            unsigned currentTo = current_main_memory_id_node->fromLinearAddressPointer - (char*)0;
+            unsigned currentTo = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
             long gap =
                     (long)lastFrom - (currentTo + current_main_memory_id_node->sizeInBytes);
 
@@ -179,6 +187,8 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
                                       ? current_main_memory_node->fromPhysicalAddress - last_physical_address
                                       : ~0u;
 
+        char autoFollow = 0;
+
         if (gap_from_last_node > 0) {
             //then there's some free space, we are to insert a new main memory node here
             unsigned nodeSize = gap_from_last_node >= memory_to_allocate
@@ -187,6 +197,7 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
 
             memory_to_allocate -= nodeSize;
 
+            //todo exclude
             struct MainMemoryNode* new_main_memory_node = malloc(sizeof(struct MainMemoryNode));
 
             new_main_memory_node->sizeInBytes = nodeSize;
@@ -195,26 +206,31 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
             new_main_memory_node->next = NULL;
             new_main_memory_node->previous = NULL;
 
-            if (current_main_memory_node)
-                insert_new_memory_node(current_main_memory_node, new_main_memory_node,
-                                       last_physical_address ? 0 : 1);//todo if before then replace root
-            else {
+            if (current_main_memory_node) {
+                insert_new_memory_node(current_main_memory_node, new_main_memory_node, 0);
+
+                autoFollow = 1;
+            } else {
                 if (last_physical_address)
                     //insert after everything
-                    insert_new_memory_node(last_main_memory_node, new_main_memory_node, 0);
+                    insert_new_memory_node(last_main_memory_node, new_main_memory_node, 1);
                 else
                     //the table is empty
                     _g_main_memory_table = new_main_memory_node;
             }
 
-            current_main_memory_node = new_main_memory_node;
-        }
+            if (!autoFollow)
+                current_main_memory_node = new_main_memory_node;
+        } else
+            autoFollow = 1;
 
         assert(current_main_memory_node != NULL);
         last_physical_address = current_main_memory_node->fromPhysicalAddress + current_main_memory_node->sizeInBytes;
 
         last_main_memory_node = current_main_memory_node;
-        current_main_memory_node = current_main_memory_node->next;
+
+        if (autoFollow)
+            current_main_memory_node = current_main_memory_node->next;
     }
 }
 
@@ -228,7 +244,7 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     //create new main memory id node
     struct MainMemoryIdNode* main_memory_id_node = malloc(sizeof(struct MainMemoryIdNode));
     main_memory_id_node->sizeInBytes = size_of_chunk;
-    main_memory_id_node->fromLinearAddressPointer = (char*)obtain_linear_address_for_chunk(size_of_chunk);
+    main_memory_id_node->fromVirtualAddressPointer = (char*)obtain_linear_address_for_chunk(size_of_chunk);
     main_memory_id_node->previous = NULL;
     main_memory_id_node->next = NULL;
 
@@ -246,23 +262,24 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     _g_used_memory_size += size_of_chunk;
 
     assert(main_memory_id_node != NULL);
-    return main_memory_id_node->fromLinearAddressPointer;
+    return main_memory_id_node->fromVirtualAddressPointer;
 }
 
 //if a chunk already was deallocated or even never existed, then E_INVALID_CHUNK will be thrown
 void m_free(m_id ptr, m_err_code* error) {
-    struct MainMemoryIdNode* current_main_memory_node = _g_main_memory_ids_table;
+    struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
 
-    while (current_main_memory_node) {
-        if (current_main_memory_node->fromLinearAddressPointer == ptr) {
-            free_segment(current_main_memory_node);
+    while (current_main_memory_id_node) {
+        if (current_main_memory_id_node->fromVirtualAddressPointer == (char*)ptr) {
+            free_segment(current_main_memory_id_node);
 
+            _g_used_memory_size -= current_main_memory_id_node->sizeInBytes;
             *error = M_ERR_OK;
 
             return;
         }
 
-        current_main_memory_node = current_main_memory_node->next;
+        current_main_memory_id_node = current_main_memory_id_node->previous;
     }
 
     *error = M_ERR_INVALID_CHUNK;
