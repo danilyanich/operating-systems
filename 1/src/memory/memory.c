@@ -102,7 +102,17 @@ void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
     }
 
     //main memory id node
+    if (main_memory_id_node->previous) {
+        main_memory_id_node->previous->next = main_memory_id_node->next;
 
+        if (main_memory_id_node->next)
+            main_memory_id_node->next->previous = main_memory_id_node->previous;
+    } else {
+        _g_main_memory_ids_table = main_memory_id_node->next;
+
+        if (main_memory_id_node->next)
+            main_memory_id_node->next->previous = NULL;
+    }
 }
 
 //inserts a new node into the main memory table
@@ -182,6 +192,8 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
             new_main_memory_node->sizeInBytes = nodeSize;
             new_main_memory_node->mainMemoryIdNode = main_memory_id_node;
             new_main_memory_node->fromPhysicalAddress = last_physical_address;
+            new_main_memory_node->next = NULL;
+            new_main_memory_node->previous = NULL;
 
             if (current_main_memory_node)
                 insert_new_memory_node(current_main_memory_node, new_main_memory_node,
@@ -217,9 +229,13 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     struct MainMemoryIdNode* main_memory_id_node = malloc(sizeof(struct MainMemoryIdNode));
     main_memory_id_node->sizeInBytes = size_of_chunk;
     main_memory_id_node->fromLinearAddressPointer = (char*)obtain_linear_address_for_chunk(size_of_chunk);
+    main_memory_id_node->previous = NULL;
+    main_memory_id_node->next = NULL;
 
-    if (_g_main_memory_ids_table)
+    if (_g_main_memory_ids_table) {
         main_memory_id_node->previous = _g_main_memory_ids_table;
+        _g_main_memory_ids_table->next = main_memory_id_node;
+    }
 
     _g_main_memory_ids_table = main_memory_id_node;
 
@@ -233,11 +249,26 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     return main_memory_id_node->fromLinearAddressPointer;
 }
 
+//if a chunk already was deallocated or even never existed, then E_INVALID_CHUNK will be thrown
 void m_free(m_id ptr, m_err_code* error) {
+    struct MainMemoryIdNode* current_main_memory_node = _g_main_memory_ids_table;
 
+    while (current_main_memory_node) {
+        if (current_main_memory_node->fromLinearAddressPointer == ptr) {
+            free_segment(current_main_memory_node);
+
+            *error = M_ERR_OK;
+
+            return;
+        }
+
+        current_main_memory_node = current_main_memory_node->next;
+    }
+
+    *error = M_ERR_INVALID_CHUNK;
 }
 
-void m_read(m_id read_from_id,void* read_to_buffer, int size_to_read, m_err_code* error) {
+void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
 
 }
 
