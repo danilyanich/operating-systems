@@ -10,6 +10,7 @@
 
 struct MainMemoryIdNode {
     struct MainMemoryIdNode* previous;
+    struct MainMemoryIdNode* next;
     char* fromLinearAddressPointer;
     unsigned sizeInBytes;
     struct CachedPage* cachedPages;
@@ -52,6 +53,58 @@ void flush_cache_where_required(struct CachedPage* cache_memory_table, unsigned 
 
 }
 
+void free_cache_page(unsigned cache_page_number) {
+    _g_cache_usage_table[cache_page_number / sizeof(char) + cache_page_number % sizeof(char)] = 0;
+}
+
+void free_cached_page(struct MainMemoryIdNode* main_memory_id_node, struct CachedPage* cached_page) {
+    if (main_memory_id_node->cachedPages == cached_page)
+        main_memory_id_node->cachedPages = cached_page->next;
+
+    free_cache_page(cached_page->cachePageNumber);
+    free(cached_page);
+}
+
+void free_main_memory_node(struct MainMemoryNode* main_memory_node) {
+    if (main_memory_node->previous) {
+        main_memory_node->previous->next = main_memory_node->next;
+
+        if (main_memory_node->next)
+            main_memory_node->next->previous = main_memory_node->previous;
+    } else {
+        _g_main_memory_table = main_memory_node->next;
+
+        if (main_memory_node->next)
+            main_memory_node->next->previous = NULL;
+    }
+
+    free(main_memory_node);
+}
+
+void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
+    //cache + cache pages
+    struct CachedPage* current_cached_page = main_memory_id_node->cachedPages;
+
+    while (current_cached_page) {
+        struct CachedPage* next_cached_page = current_cached_page->next;
+
+        free_cached_page(main_memory_id_node, current_cached_page);
+
+        current_cached_page = next_cached_page;
+    }
+
+    //main memory nodes
+    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+
+    while (current_main_memory_node) {
+        if (current_main_memory_node->mainMemoryIdNode == main_memory_id_node)
+            free_main_memory_node(current_main_memory_node);
+    }
+
+    //main memory id node
+
+}
+
 //inserts a new node into the main memory table
 void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
                             struct MainMemoryNode* main_memory_node_to_insert, char insertAfterAnchor) {
@@ -76,11 +129,6 @@ void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
 
         _g_main_memory_table = main_memory_node_to_insert;
     }
-}
-
-//removes a node from the main memory table
-void remove_main_memory_node(struct MainMemoryNode* main_memory_node_to_remove) {
-
 }
 
 unsigned obtain_linear_address_for_chunk(unsigned size_of_chunk) {
@@ -185,58 +233,26 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     return main_memory_id_node->fromLinearAddressPointer;
 }
 
-
 void m_free(m_id ptr, m_err_code* error) {
 
 }
-
 
 void m_read(m_id read_from_id,void* read_to_buffer, int size_to_read, m_err_code* error) {
 
 }
 
-
 void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error) {
 
 }
-
 
 void m_init(int number_of_pages, int size_of_page) {
     if (_g_main_memory) {
         //free the main memory
         free(_g_main_memory);
 
-        struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
-
-        //free the main memory nodes
-        while (current_main_memory_node) {
-            struct MainMemoryNode* next_main_memory_node = current_main_memory_node->next;
-
-            free(current_main_memory_node);
-
-            current_main_memory_node = next_main_memory_node;
-        }
-
-        struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
-
         //free ids' nodes
-        while (current_main_memory_id_node) {
-            struct MainMemoryIdNode* next_main_memory_id_node = current_main_memory_id_node->previous;
-
-            //free loaded into cache pages nodes
-            struct CachedPage* current_cache_memory_node = current_main_memory_id_node->cachedPages;
-
-            while (current_cache_memory_node) {
-                struct CachedPage* next_cache_memory_node = current_cache_memory_node->next;
-
-                free(current_cache_memory_node);
-
-                current_cache_memory_node = next_cache_memory_node;
-            }
-
-            free(current_main_memory_id_node);
-
-            current_main_memory_id_node = next_main_memory_id_node;
+        while (_g_main_memory_ids_table) {
+            free_segment(_g_main_memory_ids_table);
         }
     }
 
@@ -250,5 +266,5 @@ void m_init(int number_of_pages, int size_of_page) {
 
     //set all available cache pages free
     for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
-        _g_cache_usage_table[i / sizeof(char) + i % sizeof(char)] = 0;
+        free_cache_page(i);
 }
