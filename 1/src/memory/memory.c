@@ -8,6 +8,11 @@ char* _g_allocator_memory = NULL;
 int _g_allocator_memory_size = 0;
 int _g_bytes_allocated = 0;
 
+m_id find_free_segment(int);
+void defragmentation();
+
+struct virtual_memory memory;
+
 
 //-------------------------------------------------------------------------------------------------
 m_id m_malloc(
@@ -94,9 +99,27 @@ void m_free(
 }
 
 
-void m_read(m_id read_from_id,void* read_to_buffer, int size_to_read, m_err_code* error) {
-  memcpy(read_to_buffer, read_from_id, size_to_read);
-  *error = M_ERR_OK;
+//-------------------------------------------------------------------------------------------------
+void m_read(
+    m_id read_from_id,
+    void* read_to_buffer, 
+    int size_to_read, 
+    m_err_code* error
+){
+    read_from_id -> not_calling = 0;
+
+    memcpy(read_to_buffer, read_from_id->data, size_to_read);
+
+    *error = M_ERR_OK;
+    for (int i = 0; i < memory.number_of_pages; i++){
+        m_id current = (memory.pages+i) -> begin;
+        while(current != NULL){
+            if (current != read_from_id){
+                current -> not_calling++;
+            }
+            current = current -> next;
+        }
+    }
 }
 
 
