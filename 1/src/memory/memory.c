@@ -123,16 +123,83 @@ void m_read(
 }
 
 
-void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error) {
-  memcpy(write_to_id, write_from_buffer, size_to_write);
-  *error = M_ERR_OK;
+//-------------------------------------------------------------------------------------------------
+void m_write(
+    m_id write_to_id, 
+    void* write_from_buffer, 
+    int size_to_write, 
+    m_err_code* error
+){
+    memcpy(
+        write_to_id->data, 
+        write_from_buffer, 
+        size_to_write
+    );
+
+    *error = M_ERR_OK;
 }
 
 
-void m_init(int number_of_pages, int size_of_page) {
-  if (_g_allocator_memory != NULL) free(_g_allocator_memory);
+//-------------------------------------------------------------------------------------------------
+void m_init(
+    int number_of_pages, 
+    int size_of_page, 
+    int temporary_locality
+){
+    struct page_frame * pages;
 
-  _g_allocator_memory_size = number_of_pages * size_of_page;
-  _g_allocator_memory = malloc(_g_allocator_memory_size);
-  _g_bytes_allocated = 0;
+    pages = malloc(number_of_pages * sizeof(struct page_frame));
+    
+    for(int i = 0; i < number_of_pages; i++){
+        (pages + i) -> size = size_of_page;
+        (pages + i) -> begin = malloc(sizeof(m_id));
+        (pages + i) -> begin -> data = malloc(size_of_page);
+        (pages + i) -> begin -> size = size_of_page;
+        (pages + i) -> begin -> is_used = false;
+        (pages + i) -> begin -> next = NULL;
+    }
+    
+    memory.pages = pages;
+    memory.temporary_locality = temporary_locality;
+    memory.number_of_pages = number_of_pages;
+}
+
+//--------------------------------------------------------------------------------------------------
+void defragmentation(){
+    for(int i = 0; i < memory.number_of_pages; i++){
+        m_id current        = (memory.pages + i) -> begin;
+        m_id space_begin    = NULL;
+        m_id space_end      = NULL;
+        int common_size     = 0;
+
+        while(current != NULL){
+
+            if(!current -> is_used){
+                
+                common_size += current -> size;
+                if (space_begin == NULL){
+                    space_begin = current;
+                    space_end = current;
+                }else{
+                    space_end = current;
+                }
+
+                if (current -> next -> is_used){
+                    space_begin -> size = current -> next -> size;
+                    memcpy(
+                        space_begin -> data,
+                        current -> next -> data,
+                        current -> next -> size
+                    );
+                    space_begin -> is_used = true;
+                    current -> is_used = false;
+                    space_begin = space_begin -> next;
+                }
+            }
+            current = current -> next;
+        }
+        
+        space_begin -> next = NULL;
+        space_begin -> size = common_size;
+    }
 }
