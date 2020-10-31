@@ -1,6 +1,8 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#include <stdbool.h>
+
 #define M_ERR_OK 0 // Everything is ok
 #define M_ERR_ALLOCATION_OUT_OF_MEMORY 1 // Not enough memory for allocation
 #define M_ERR_ALREADY_DEALLOCATED 2 // The chunk was already deallocated
@@ -10,6 +12,15 @@
 
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
+
+
+struct memory_block {
+    m_id next;
+    size_t size;
+    bool is_used;
+    int not_calling;
+    char * data;
+};
 
 
 struct page_frame {
