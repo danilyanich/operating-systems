@@ -84,8 +84,13 @@ m_id find_free_segment(
 }
 
 
-void m_free(m_id ptr, m_err_code* error) {
-  *error = M_ERR_OK;
+//-------------------------------------------------------------------------------------------------
+void m_free(
+    m_id ptr, 
+    m_err_code* error
+){
+    ptr -> is_used = false;
+    *error = M_ERR_OK;
 }
 
 
