@@ -12,6 +12,21 @@ typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
 
 
+struct page_frame {
+    size_t size;
+    int number;
+    m_id begin;
+};
+
+
+struct virtual_memory{
+    struct page_frame * pages;
+    int number_of_pages;
+    int temporary_locality;
+};
+
+
+
 // Allocates a chunk in sandbox memory
 // @param size_of_chunk Desired size in bytes to be allocated in sandbox memory
 // @param error_code [out] M_ERR_OK, M_ERR_ALLOCATION_OUT_OF_MEMORY
