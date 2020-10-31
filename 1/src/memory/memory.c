@@ -30,6 +30,59 @@ m_id m_malloc(
 }
 
 
+//-------------------------------------------------------------------------------------------------
+/*This function allows to find free segment*/
+m_id find_free_segment(
+    int size_of_chunk
+){
+    int size = size_of_chunk;
+    for (int i = 0; i < memory.number_of_pages; i++){
+        bool is_oversize = false;
+
+        m_id current = (memory.pages + i) -> begin;
+
+        while(current->is_used || current->size < size){
+            current = current -> next;
+            if (current >=  ((memory.pages + i)->begin
+                            + (memory.pages + i)->size)) {
+                is_oversize = true;
+                break;
+            }
+            if (current -> not_calling > memory.temporary_locality){
+                current->is_used = false;
+                if (current->size >= size){
+                    break;
+                }
+            }
+        }
+
+        if (!is_oversize) {
+            if (current->next == NULL){
+                m_id next = current + 1;
+                next->is_used = false;
+                next -> next = NULL;
+                next -> size = current -> size - size;
+                next -> data = current -> data + size;
+                current -> next = next;
+            }else{
+                if (current -> size != size){
+                    m_id next = malloc(sizeof(m_id));
+                    next->is_used = false;
+                    next->size = current->size - size;
+                    next->data = current->data + size;
+                    next->next = current->next;
+                    current -> next = next;
+                }
+            }
+            current -> size = size;
+            current -> not_calling = 0;
+            current -> is_used = true;
+            return current;
+        }
+    }
+    return NULL;
+}
+
 
 void m_free(m_id ptr, m_err_code* error) {
   *error = M_ERR_OK;
