@@ -9,17 +9,26 @@ int _g_allocator_memory_size = 0;
 int _g_bytes_allocated = 0;
 
 
-m_id m_malloc(int size_of_chunk, m_err_code* error) {
-  if (_g_bytes_allocated + size_of_chunk > _g_allocator_memory_size) {
-    *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
-    return NULL;
-  }
+//-------------------------------------------------------------------------------------------------
+m_id m_malloc(
+    int size_of_chunk, 
+    m_err_code* error
+){
+    m_id segment = find_free_segment(size_of_chunk);
+    
+    if (segment == NULL){
+        //defragmentation();
+        segment = find_free_segment(size_of_chunk);
+    } 
 
-  _g_bytes_allocated += size_of_chunk;
+    if (segment == NULL){
+        *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
+        return NULL;
+    }
 
-  *error = M_ERR_OK;
-  return _g_allocator_memory + _g_bytes_allocated;
+    return segment;
 }
+
 
 
 void m_free(m_id ptr, m_err_code* error) {
