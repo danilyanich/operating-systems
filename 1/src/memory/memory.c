@@ -389,6 +389,9 @@ void m_init(int number_of_pages, int size_of_page) {
     //unnecessary
     for (unsigned i = 0; i < _g_main_memory_size; ++i)
         _g_main_memory[i] = 0;
+    for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES * PAGE_SIZE_IN_BYTES; ++i)
+        _g_cache_memory[i] = 0;
+    //end of unnecessary
 
     _g_used_memory_size = 0;
 
@@ -403,7 +406,8 @@ void dump() {
     printf("--MEMORY DUMP BEGINNING--\n");
 
     while (current_main_memory_node) {
-        printf("VRTF: %d, MMSZ: %d, SIZE: %d, PHSF: %d\n",
+        printf("MMID: %p, VRTF: %d, MMSZ: %d, SIZE: %d, PHSF: %d\n",
+               current_main_memory_node->mainMemoryIdNode,
                (unsigned)(current_main_memory_node->mainMemoryIdNode->fromVirtualAddressPointer - (char*)0),
                current_main_memory_node->mainMemoryIdNode->sizeInBytes, current_main_memory_node->sizeInBytes,
                current_main_memory_node->fromPhysicalAddress);
@@ -411,11 +415,27 @@ void dump() {
         printf("DATA: ");
 
         for (unsigned i = 0; i < current_main_memory_node->sizeInBytes; ++i)
-            printf("%d", *(_g_main_memory + i));
+            printf("%d", *(_g_main_memory + current_main_memory_node->fromPhysicalAddress + i));
 
         printf("\n");
 
         current_main_memory_node = current_main_memory_node->next;
+    }
+
+    printf("\nCACHE:\n");
+
+    for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i) {
+        struct CachePage* cache_page = _g_cache_table + i;
+
+        printf("MMID: %p, PAGE: %d, MMPG: %d, FLGS: %#x\n", cache_page->id, i,
+                cache_page->cachedPage ? cache_page->cachedPage->pageNumber : 0, cache_page->flags);
+
+        printf("DATA: ");
+
+        for (unsigned j = 0; j < PAGE_SIZE_IN_BYTES; ++j)
+            printf("%d", *(_g_cache_memory + (PAGE_SIZE_IN_BYTES * i) + j));
+
+        printf("\n");
     }
 
     printf("--MEMORY DUMP END--\n\n");
