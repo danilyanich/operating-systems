@@ -1,0 +1,1 @@
+/bin/c++  -g   CMakeFiles/bin.dir/src/random/main.cpp.o  -o bin 
