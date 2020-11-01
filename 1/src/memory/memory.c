@@ -117,7 +117,7 @@ void write_to_main_memory(struct MainMemoryIdNode* id, unsigned address, unsigne
                 unsigned write_size = memory_to_update > available ? available : memory_to_update;
 
                 write_directly(_g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub,
-                        from + (size - memory_to_update), write_size);
+                               from + (size - memory_to_update), write_size);
 
                 memory_to_update -= write_size;
             }
@@ -148,7 +148,7 @@ void unload_cache_page(unsigned cache_page_number) {
 
     if (id && (cache_page->flags & 0b1u)) {
         write_to_main_memory(id, cache_page_number * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
-                _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES);
+                             _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES);
         free_cached_page(id, cache_page->cachedPage);
     }
 }
@@ -213,26 +213,50 @@ unsigned calculate_to_address(struct MainMemoryIdNode* main_memory_id_node) {
     return main_memory_id_node->fromVirtualAddressPointer - (char*)0 + main_memory_id_node->sizeInBytes;
 }
 
-struct MainMemoryIdNode* obtain_id_node_for_new_node_to_be_inserted_after(unsigned size_of_chunk) {
+//returns from pointer
+char* place_id_node(struct MainMemoryIdNode* main_memory_id_node) {
     struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
+    unsigned size_of_chunk = main_memory_id_node->sizeInBytes;
 
-    if (!current_main_memory_id_node)
-        return NULL;
-    else {
+    if (!current_main_memory_id_node) {
+        //empty table
+        _g_main_memory_ids_table = main_memory_id_node;
+
+        return 0;
+    } else {
         struct MainMemoryIdNode* maximal_address_node = current_main_memory_id_node;
         unsigned last_from = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
+
+        current_main_memory_id_node = current_main_memory_id_node->previous;
 
         while (current_main_memory_id_node) {
             unsigned current_to = calculate_to_address(current_main_memory_id_node);
             long gap = (long)last_from - current_to;
 
-            if (gap > size_of_chunk)
-                return current_main_memory_id_node;
+            if (gap >= size_of_chunk) {
+                //after some node
+                insert_new_node(current_main_memory_id_node, main_memory_id_node, 0, &_g_main_memory_ids_table);
+                return (char*)calculate_to_address(current_main_memory_id_node);
+            }
+
+            last_from = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
+
+            if (!current_main_memory_id_node->previous && last_from >= size_of_chunk) {
+                //before everything
+                main_memory_id_node->next = current_main_memory_id_node;
+                main_memory_id_node->previous = NULL;
+
+                current_main_memory_id_node->previous = main_memory_id_node;
+
+                return (char*)calculate_to_address(current_main_memory_id_node);
+            }
 
             current_main_memory_id_node = current_main_memory_id_node->previous;
         }
 
-        return maximal_address_node;
+        //after everything
+        insert_new_node(maximal_address_node, main_memory_id_node, 0, &_g_main_memory_ids_table);
+        return (char*)calculate_to_address(maximal_address_node);
     }
 }
 
@@ -301,21 +325,10 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     }
 
     //create new main memory id node
-    struct MainMemoryIdNode* id_node_to_insert_after = obtain_id_node_for_new_node_to_be_inserted_after(size_of_chunk);
-
     struct MainMemoryIdNode* main_memory_id_node = malloc(sizeof(struct MainMemoryIdNode));
+
     main_memory_id_node->sizeInBytes = size_of_chunk;
-
-    if (id_node_to_insert_after) {
-        insert_new_node(id_node_to_insert_after, main_memory_id_node, 0, &_g_main_memory_ids_table);
-
-        main_memory_id_node->fromVirtualAddressPointer = id_node_to_insert_after->fromVirtualAddressPointer
-                                                         + id_node_to_insert_after->sizeInBytes;
-    } else {
-        _g_main_memory_ids_table = main_memory_id_node;
-
-        main_memory_id_node->fromVirtualAddressPointer = 0;
-    }
+    main_memory_id_node->fromVirtualAddressPointer = place_id_node(main_memory_id_node);
 
     allocate_chunk(size_of_chunk, main_memory_id_node);
 
