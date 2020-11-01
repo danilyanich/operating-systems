@@ -213,7 +213,7 @@ unsigned calculate_to_address(struct MainMemoryIdNode* main_memory_id_node) {
     return main_memory_id_node->fromVirtualAddressPointer - (char*)0 + main_memory_id_node->sizeInBytes;
 }
 
-//returns from pointer
+//returns from-pointer
 char* place_id_node(struct MainMemoryIdNode* main_memory_id_node) {
     struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
     unsigned size_of_chunk = main_memory_id_node->sizeInBytes;
@@ -248,7 +248,7 @@ char* place_id_node(struct MainMemoryIdNode* main_memory_id_node) {
 
                 current_main_memory_id_node->previous = main_memory_id_node;
 
-                return (char*)calculate_to_address(current_main_memory_id_node);
+                return 0;
             }
 
             current_main_memory_id_node = current_main_memory_id_node->previous;
