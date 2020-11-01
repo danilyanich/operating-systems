@@ -49,4 +49,6 @@ void m_init(int number_of_pages, int size_of_page);
 
 void dump();
 
+void print_binary(unsigned char data);
+
 #endif /* MEMORY_H */

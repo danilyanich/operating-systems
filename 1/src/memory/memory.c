@@ -6,7 +6,7 @@
 
 #include "memory.h"
 
-#define CACHE_SIZE_IN_PAGES 8
+#define CACHE_SIZE_IN_PAGES 2
 #define LOCALITY_SIZE 2
 #define PAGE_SIZE_IN_BYTES 2
 
@@ -110,7 +110,7 @@ void make_transit_with_main_memory(struct MainMemoryIdNode* id, unsigned virtual
             unsigned to_virtual_address = last_virtual_address + current_main_memory_node->sizeInBytes;
 
             if ((virtual_address >= from_virtual_address && virtual_address < to_virtual_address) || bytes_to_transit != size) {
-                unsigned address_stub = bytes_to_transit != size ? 0 : virtual_address;
+                unsigned address_stub = bytes_to_transit != size ? 0 : virtual_address - from_virtual_address;
 
                 unsigned available = to_virtual_address - from_virtual_address - address_stub;
                 unsigned bytes_to_transit_at_once = bytes_to_transit > available ? available : bytes_to_transit;
@@ -151,7 +151,8 @@ void unload_cache_page(unsigned cache_page_number) {
     struct MainMemoryIdNode* id = cache_page->id;
 
     if (id && (cache_page->flags & 0b1u)) {
-        make_transit_with_main_memory(id, cache_page_number * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
+        make_transit_with_main_memory(id, id->fromVirtualAddressPointer - (char*)0 +
+                                          cache_page->cachedPage->pageNumber * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
                                       _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES, 1);
         free_cached_page(id, cache_page->cachedPage);
     }
@@ -336,7 +337,7 @@ void load_cache_page(struct MainMemoryIdNode* main_memory_id_node, unsigned cach
 
     if (main_memory_id_node->cachedPages)
         insert_new_node(main_memory_id_node->cachedPages, cached_page, 0,
-                &main_memory_id_node->cachedPages);
+                        &main_memory_id_node->cachedPages);
     else
         main_memory_id_node->cachedPages = cached_page;
 
@@ -407,6 +408,8 @@ void make_transit_with_cache(unsigned virtual_address, unsigned size, char* buff
                         bcopy(cache_ptr, buffer_ptr, bytes_to_transit_at_once);
 
                     bytes_to_transit -= bytes_to_transit_at_once;
+
+                    offset = 0;
                 }
             }
         } else
@@ -515,7 +518,7 @@ void print_binary(unsigned char data) {
 void dump() {
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
-    printf("--MEMORY DUMP BEGINNING--\n");
+    printf("--MEMORY DUMP BEGINNING--\nMEMORY:\n");
 
     while (current_main_memory_node) {
         printf("MMID: %p, VRTF: %d, MMSZ: %d, SIZE: %d, PHSF: %d\n",

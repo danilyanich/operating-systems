@@ -20,7 +20,18 @@ int main(int argc, char **argv) {
 
     m_write(d + 1, buffer, 3, &error_code);
 
+    unsigned char buff2[3];
+
+    m_read(c, buff2, 3, &error_code);
+
     dump();
+
+    print_binary(buff2[0]);
+    printf("\n");
+    print_binary(buff2[1]);
+    printf("\n");
+    print_binary(buff2[2]);
+    fflush(stdout);
 /*  ;
 
   m_id chunk_1 = m_malloc(13, &error_code);
