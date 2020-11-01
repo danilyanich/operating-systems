@@ -8,6 +8,11 @@
 #define LOCALITY_SIZE 2
 #define PAGE_SIZE_IN_BYTES 16
 
+struct Node {
+    struct Node* previous;
+    struct Node* next;
+};
+
 struct MainMemoryIdNode {
     struct MainMemoryIdNode* previous;
     struct MainMemoryIdNode* next;
@@ -25,8 +30,8 @@ struct MainMemoryNode {
 };
 
 struct CachedPage {
-    struct CachedPage* next;
     struct CachedPage* previous;
+    struct CachedPage* next;
     unsigned cachePageNumber; //number of page in cache
     unsigned pageNumber; //number of page of the segment
 };
@@ -47,10 +52,18 @@ char* _g_main_memory = NULL;
 unsigned long _g_main_memory_size;
 unsigned long _g_used_memory_size;
 
-//flushes only one node of cache
-void flush_cache_memory_node(struct CachedPage* cache_memory_node, char* cache_memory,
-                             struct MainMemoryNode* main_memory_table, char* main_memory) {
+void remove_node(struct Node* node, struct Node** root) {
+    if (node->previous) {
+        node->previous->next = node->next;
 
+        if (node->next)
+            node->next->previous = node->previous;
+    } else {
+        *root = node->next;
+
+        if (node->next)
+            node->next->previous = NULL;
+    }
 }
 
 //checks every node of cache and flushes it if it's needed
@@ -108,9 +121,7 @@ void free_cache_page(unsigned cache_page_number) {
 
 //removes (and deallocates) cached page node from id node, frees cache page
 void free_cached_page(struct MainMemoryIdNode* main_memory_id_node, struct CachedPage* cached_page) {
-    //@fixme bidir lists
-    if (main_memory_id_node->cachedPages == cached_page)
-        main_memory_id_node->cachedPages = cached_page->next;
+    remove_node(cached_page, &main_memory_id_node->cachedPages);
 
     free_cache_page(cached_page->cachePageNumber);
     free(cached_page);
@@ -131,20 +142,11 @@ void load_context_into_cache(unsigned address, unsigned size) {
     //determine id
     //determine and load required pages (not more than cache_size at once)
     //when unloading cache pages, do it properly
+
 }
 
 void free_main_memory_node(struct MainMemoryNode* main_memory_node) {
-    if (main_memory_node->previous) {
-        main_memory_node->previous->next = main_memory_node->next;
-
-        if (main_memory_node->next)
-            main_memory_node->next->previous = main_memory_node->previous;
-    } else {
-        _g_main_memory_table = main_memory_node->next;
-
-        if (main_memory_node->next)
-            main_memory_node->next->previous = NULL;
-    }
+    remove_node(main_memory_node, &_g_main_memory_table);
 
     free(main_memory_node);
 }
@@ -172,17 +174,7 @@ void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
     }
 
     //main memory id node
-    if (main_memory_id_node->previous) {
-        main_memory_id_node->previous->next = main_memory_id_node->next;
-
-        if (main_memory_id_node->next)
-            main_memory_id_node->next->previous = main_memory_id_node->previous;
-    } else {
-        _g_main_memory_ids_table = main_memory_id_node->next;
-
-        if (main_memory_id_node->next)
-            main_memory_id_node->next->previous = NULL;
-    }
+    remove_node(main_memory_id_node, &_g_main_memory_ids_table);
 }
 
 //inserts a new node into the main memory table
@@ -190,18 +182,10 @@ void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
                             struct MainMemoryNode* main_memory_node_to_insert, char insertAfterAnchor) {
     struct MainMemoryNode* anotherSide;
 
-    if (insertAfterAnchor) {
-        //after
-        anotherSide = main_memory_anchor_node->next;
-
-        main_memory_anchor_node->next = main_memory_node_to_insert;
-
-        main_memory_node_to_insert->previous = main_memory_anchor_node;
-        main_memory_node_to_insert->next = anotherSide;
-
-        if (anotherSide)
-            anotherSide->previous = main_memory_node_to_insert;
-    } else {
+    if (insertAfterAnchor)
+        //insert before the next one
+        insert_new_memory_node(main_memory_anchor_node->next, main_memory_node_to_insert, 0);
+    else {
         //before
         anotherSide = main_memory_anchor_node->previous;
 
