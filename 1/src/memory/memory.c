@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 
 #include "memory.h"
 
@@ -14,8 +15,8 @@ struct Node {
 };
 
 struct MainMemoryIdNode {
-    struct MainMemoryIdNode* previous;
     struct MainMemoryIdNode* next;
+    struct MainMemoryIdNode* previous;
     char* fromVirtualAddressPointer;
     unsigned sizeInBytes;
     struct CachedPage* cachedPages;
@@ -66,10 +67,32 @@ void remove_node(struct Node* node, struct Node** root) {
     }
 }
 
-//checks every node of cache and flushes it if it's needed
-void flush_cache_where_required(struct CachedPage* cache_memory_table, unsigned cache_size_in_pages,
-                                char* cache_memory, struct MainMemoryNode* main_memory_table, char* main_memory) {
+void insert_new_node(struct Node* node_anchor,
+                     struct Node* node_to_insert, char insert_after_anchor, struct Node** root) {
+    if (insert_after_anchor) {
+        if (node_anchor->next)
+            insert_new_node(node_anchor->next, node_to_insert, 0, root);
+        else {
+            //after the last one
+            node_anchor->next = node_to_insert;
 
+            node_to_insert->previous = node_anchor;
+            node_to_insert->next = NULL;
+        }
+    } else {
+        //before
+        struct Node* another_side = node_anchor->previous;
+
+        node_anchor->previous = node_to_insert;
+
+        node_to_insert->previous = another_side;
+        node_to_insert->next = node_anchor;
+
+        if (another_side)
+            another_side->next = node_to_insert;
+        else
+            *root = node_to_insert;
+    }
 }
 
 void write_directly(char* to, char* from, unsigned size) {
@@ -90,7 +113,6 @@ void write_to_main_memory(struct MainMemoryIdNode* id, unsigned address, unsigne
             if ((address >= from_virtual_address && address <= to_virtual_address) || memory_to_update != size) {
                 unsigned address_stub = memory_to_update != size ? 0 : address;
 
-                //first node
                 unsigned available = to_virtual_address - from_virtual_address - address_stub;
                 unsigned write_size = memory_to_update > available ? available : memory_to_update;
 
@@ -133,9 +155,26 @@ void unload_cache_page(unsigned cache_page_number) {
 
 void load_context_into_cache(unsigned address, unsigned size) {
     //determine id
+    struct MainMemoryIdNode* id = NULL;
+    struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
+
+    while (current_main_memory_id_node) {
+        unsigned from_virtual_address = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
+
+        if (address >= from_virtual_address
+            && address <= from_virtual_address + current_main_memory_id_node->sizeInBytes) {
+            id = current_main_memory_id_node;
+
+            break;
+        }
+
+        current_main_memory_id_node = current_main_memory_id_node->next;
+    }
+
+    assert(id != NULL);
+
     //determine and load required pages (not more than cache_size at once)
     //when unloading cache pages, do it properly
-
 }
 
 void free_main_memory_node(struct MainMemoryNode* main_memory_node) {
@@ -170,52 +209,30 @@ void free_segment(struct MainMemoryIdNode* main_memory_id_node) {
     remove_node(main_memory_id_node, &_g_main_memory_ids_table);
 }
 
-//inserts a new node into the main memory table
-void insert_new_memory_node(struct MainMemoryNode* main_memory_anchor_node,
-                            struct MainMemoryNode* main_memory_node_to_insert, char insertAfterAnchor) {
-    struct MainMemoryNode* anotherSide;
-
-    if (insertAfterAnchor)
-        //insert before the next one
-        insert_new_memory_node(main_memory_anchor_node->next, main_memory_node_to_insert, 0);
-    else {
-        //before
-        anotherSide = main_memory_anchor_node->previous;
-
-        main_memory_anchor_node->previous = main_memory_node_to_insert;
-
-        main_memory_node_to_insert->previous = anotherSide;
-        main_memory_node_to_insert->next = main_memory_anchor_node;
-
-        if (anotherSide)
-            anotherSide->next = main_memory_node_to_insert;
-        else
-            _g_main_memory_table = main_memory_node_to_insert;
-    }
+unsigned calculate_to_address(struct MainMemoryIdNode* main_memory_id_node) {
+    return main_memory_id_node->fromVirtualAddressPointer - (char*)0 + main_memory_id_node->sizeInBytes;
 }
 
-unsigned obtain_linear_address_for_chunk(unsigned size_of_chunk) {
+struct MainMemoryIdNode* obtain_id_node_for_new_node_to_be_inserted_after(unsigned size_of_chunk) {
     struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
 
-    if (!current_main_memory_id_node) {
-        return 0;
-    } else {
-        unsigned maximalAddress =
-                current_main_memory_id_node->fromVirtualAddressPointer - (char*)0 + current_main_memory_id_node->sizeInBytes;
-        unsigned lastFrom = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
+    if (!current_main_memory_id_node)
+        return NULL;
+    else {
+        struct MainMemoryIdNode* maximal_address_node = current_main_memory_id_node;
+        unsigned last_from = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
 
         while (current_main_memory_id_node) {
-            unsigned currentTo = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
-            long gap =
-                    (long)lastFrom - (currentTo + current_main_memory_id_node->sizeInBytes);
+            unsigned current_to = calculate_to_address(current_main_memory_id_node);
+            long gap = (long)last_from - current_to;
 
             if (gap > size_of_chunk)
-                return currentTo;
+                return current_main_memory_id_node;
 
             current_main_memory_id_node = current_main_memory_id_node->previous;
         }
 
-        return maximalAddress;
+        return maximal_address_node;
     }
 }
 
@@ -247,17 +264,15 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
             new_main_memory_node->sizeInBytes = nodeSize;
             new_main_memory_node->mainMemoryIdNode = main_memory_id_node;
             new_main_memory_node->fromPhysicalAddress = last_physical_address;
-            new_main_memory_node->next = NULL;
-            new_main_memory_node->previous = NULL;
 
             if (current_main_memory_node) {
-                insert_new_memory_node(current_main_memory_node, new_main_memory_node, 0);
+                insert_new_node(current_main_memory_node, new_main_memory_node, 0, &_g_main_memory_table);
 
                 autoFollow = 1;
             } else {
                 if (last_physical_address)
                     //insert after everything
-                    insert_new_memory_node(last_main_memory_node, new_main_memory_node, 1);
+                    insert_new_node(last_main_memory_node, new_main_memory_node, 1, &_g_main_memory_table);
                 else
                     //the table is empty
                     _g_main_memory_table = new_main_memory_node;
@@ -286,18 +301,21 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
     }
 
     //create new main memory id node
+    struct MainMemoryIdNode* id_node_to_insert_after = obtain_id_node_for_new_node_to_be_inserted_after(size_of_chunk);
+
     struct MainMemoryIdNode* main_memory_id_node = malloc(sizeof(struct MainMemoryIdNode));
     main_memory_id_node->sizeInBytes = size_of_chunk;
-    main_memory_id_node->fromVirtualAddressPointer = (char*)obtain_linear_address_for_chunk(size_of_chunk);
-    main_memory_id_node->previous = NULL;
-    main_memory_id_node->next = NULL;
 
-    if (_g_main_memory_ids_table) {
-        main_memory_id_node->previous = _g_main_memory_ids_table;
-        _g_main_memory_ids_table->next = main_memory_id_node;
+    if (id_node_to_insert_after) {
+        insert_new_node(id_node_to_insert_after, main_memory_id_node, 0, &_g_main_memory_ids_table);
+
+        main_memory_id_node->fromVirtualAddressPointer = id_node_to_insert_after->fromVirtualAddressPointer
+                                                         + id_node_to_insert_after->sizeInBytes;
+    } else {
+        _g_main_memory_ids_table = main_memory_id_node;
+
+        main_memory_id_node->fromVirtualAddressPointer = 0;
     }
-
-    _g_main_memory_ids_table = main_memory_id_node;
 
     allocate_chunk(size_of_chunk, main_memory_id_node);
 
@@ -354,9 +372,38 @@ void m_init(int number_of_pages, int size_of_page) {
     _g_main_memory_table = NULL;
     _g_main_memory_ids_table = NULL;
     _g_main_memory = malloc(_g_main_memory_size);
+
+    //unnecessary
+    for (unsigned i = 0; i < _g_main_memory_size; ++i)
+        _g_main_memory[i] = 0;
+
     _g_used_memory_size = 0;
 
     //set all available cache pages free
     for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
         free_cache_page(i);
+}
+
+void dump() {
+    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+
+    printf("--MEMORY DUMP BEGINNING--\n");
+
+    while (current_main_memory_node) {
+        printf("VRTF: %d, MMSZ: %d, SIZE: %d, PHSF: %d\n",
+               (unsigned)(current_main_memory_node->mainMemoryIdNode->fromVirtualAddressPointer - (char*)0),
+               current_main_memory_node->mainMemoryIdNode->sizeInBytes, current_main_memory_node->sizeInBytes,
+               current_main_memory_node->fromPhysicalAddress);
+
+        printf("DATA: ");
+
+        for (unsigned i = 0; i < current_main_memory_node->sizeInBytes; ++i)
+            printf("%d", *(_g_main_memory + i));
+
+        printf("\n");
+
+        current_main_memory_node = current_main_memory_node->next;
+    }
+
+    printf("--MEMORY DUMP END--\n\n");
 }
