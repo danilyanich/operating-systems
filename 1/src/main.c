@@ -4,11 +4,50 @@
 #include "memory/memory.h"
 
 int main(int argc, char **argv) {
-  m_init(1, 500);
+    m_init(1, 500);
 
-  int error_code;
+    int error_code;
+    m_id a = m_malloc(2, &error_code);
+    m_id b = m_malloc(7, &error_code);
+    m_id c = m_malloc(6, &error_code);
+    m_free(a, &error_code);
+    m_id d = m_malloc(32, &error_code);
+    m_free(b, &error_code);
+    m_id e = m_malloc(32, &error_code);
 
-  m_id chunk_1 = m_malloc(13, &error_code);
+    unsigned char buffer[] = "hren kakaya-to";
+    unsigned char buffer2[] = "hren kakaya-to";
+
+    m_write(d, buffer, 15, &error_code);
+
+    dump();
+
+    m_write(e, buffer2, 15, &error_code);
+
+    dump();
+
+    unsigned char buff2[15];
+    unsigned char buff3[15];
+
+    m_read(d, buff2, 15, &error_code);
+
+    dump();
+
+    m_read(e, buff3, 15, &error_code);
+
+    dump();
+
+    printf("%s\n", buff2);
+    printf("%s", buff3);
+
+/*    print_binary(buff2[0]);
+    printf("\n");
+    print_binary(buff2[1]);
+    printf("\n");
+    print_binary(buff2[2]);
+    fflush(stdout);*/
+
+/*  m_id chunk_1 = m_malloc(13, &error_code);
   if (error_code != M_ERR_OK) abort();
 
   m_id chunk_2 = m_malloc(20, &error_code);
@@ -47,5 +86,5 @@ int main(int argc, char **argv) {
   if (error_code != M_ERR_OK) abort();
 
   m_free(chunk_3, &error_code);
-  if (error_code != M_ERR_OK) abort();
+  if (error_code != M_ERR_OK) abort();*/
 }
