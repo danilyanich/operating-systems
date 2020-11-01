@@ -47,4 +47,6 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 void m_init(int number_of_pages, int size_of_page);
 
 
+void dump();
+
 #endif /* MEMORY_H */

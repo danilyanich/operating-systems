@@ -8,7 +8,7 @@
 
 #define CACHE_SIZE_IN_PAGES 8
 #define LOCALITY_SIZE 2
-#define PAGE_SIZE_IN_BYTES 16
+#define PAGE_SIZE_IN_BYTES 2
 
 struct Node {
     struct Node* previous;
@@ -102,14 +102,14 @@ void make_transit_with_main_memory(struct MainMemoryIdNode* id, unsigned virtual
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
     unsigned bytes_to_transit = size;
-    unsigned last_virtual_address = 0;
+    unsigned last_virtual_address = id->fromVirtualAddressPointer - (char*)0;
 
     while (bytes_to_transit) {
         if (current_main_memory_node->mainMemoryIdNode == id) {
             unsigned from_virtual_address = last_virtual_address;
             unsigned to_virtual_address = last_virtual_address + current_main_memory_node->sizeInBytes;
 
-            if ((virtual_address >= from_virtual_address && virtual_address <= to_virtual_address) || bytes_to_transit != size) {
+            if ((virtual_address >= from_virtual_address && virtual_address < to_virtual_address) || bytes_to_transit != size) {
                 unsigned address_stub = bytes_to_transit != size ? 0 : virtual_address;
 
                 unsigned available = to_virtual_address - from_virtual_address - address_stub;
@@ -164,10 +164,10 @@ struct MainMemoryIdNode* determine_id_of_address(unsigned address) {
         unsigned from_virtual_address = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
 
         if (address >= from_virtual_address
-            && address <= from_virtual_address + current_main_memory_id_node->sizeInBytes)
+            && address < from_virtual_address + current_main_memory_id_node->sizeInBytes)
             return current_main_memory_id_node;
 
-        current_main_memory_id_node = current_main_memory_id_node->next;
+        current_main_memory_id_node = current_main_memory_id_node->previous;
     }
 
     return NULL;
@@ -364,6 +364,8 @@ struct CachePage* provide_cache_page(struct MainMemoryIdNode* main_memory_id_nod
             unload_cache_page(cache_page_number);
 
         load_cache_page(main_memory_id_node, cache_page_number, page_of_segment);
+
+        return cache_page;
     } else
         return _g_cache_table + target_page->cachePageNumber;
 }
@@ -373,41 +375,44 @@ void make_transit_with_cache(unsigned virtual_address, unsigned size, char* buff
     //1 - write
     struct MainMemoryIdNode* id = determine_id_of_address(virtual_address);
 
+    *error = M_ERR_OK;
+
     if (id) {
         unsigned local_address = virtual_address - (id->fromVirtualAddressPointer - (char*)0);
-        unsigned first_affected_page = local_address / PAGE_SIZE_IN_BYTES;
-        unsigned last_affected_page = (local_address + size - 1) / PAGE_SIZE_IN_BYTES;
-        unsigned pages_remain = id->sizeInBytes / PAGE_SIZE_IN_BYTES - last_affected_page - 1;
-        unsigned locality_pages_count = pages_remain > LOCALITY_SIZE ? LOCALITY_SIZE : pages_remain;
 
-        unsigned bytes_to_transit = size;
-        unsigned offset = local_address - first_affected_page * PAGE_SIZE_IN_BYTES;
+        if (id->sizeInBytes - local_address >= size) {
+            unsigned first_affected_page = local_address / PAGE_SIZE_IN_BYTES;
+            unsigned last_affected_page = (local_address + size - 1) / PAGE_SIZE_IN_BYTES;
+            unsigned pages_remain = id->sizeInBytes / PAGE_SIZE_IN_BYTES - last_affected_page - 1;
+            unsigned locality_pages_count = pages_remain > LOCALITY_SIZE ? LOCALITY_SIZE : pages_remain;
 
-        for (unsigned p = first_affected_page; p <= last_affected_page + locality_pages_count; ++p) {
-            struct CachePage* page = provide_cache_page(id, p);
+            unsigned bytes_to_transit = size;
+            unsigned offset = local_address - first_affected_page * PAGE_SIZE_IN_BYTES;
 
-            if (p <= last_affected_page) {
-                unsigned available = PAGE_SIZE_IN_BYTES - offset;
-                unsigned bytes_to_transit_at_once = available > bytes_to_transit ? bytes_to_transit : available;
+            for (unsigned p = first_affected_page; p <= last_affected_page + locality_pages_count; ++p) {
+                struct CachePage *page = provide_cache_page(id, p);
 
-                char *buffer_ptr = buffer + (size - bytes_to_transit);
-                char *cache_ptr = _g_cache_memory + page->cachedPage->cachePageNumber * PAGE_SIZE_IN_BYTES + offset;
+                if (p <= last_affected_page) {
+                    unsigned available = PAGE_SIZE_IN_BYTES - offset;
+                    unsigned bytes_to_transit_at_once = available > bytes_to_transit ? bytes_to_transit : available;
 
-                if (read_or_write)
-                    bcopy(buffer_ptr, cache_ptr, bytes_to_transit_at_once);
-                else
-                    bcopy(cache_ptr, buffer_ptr, bytes_to_transit_at_once);
+                    char *buffer_ptr = buffer + (size - bytes_to_transit);
+                    char *cache_ptr = _g_cache_memory + page->cachedPage->cachePageNumber * PAGE_SIZE_IN_BYTES + offset;
 
-                bytes_to_transit -= bytes_to_transit_at_once;
+                    if (read_or_write) {
+                        bcopy(buffer_ptr, cache_ptr, bytes_to_transit_at_once);
+
+                        page->flags |= 0b1u;
+                    } else
+                        bcopy(cache_ptr, buffer_ptr, bytes_to_transit_at_once);
+
+                    bytes_to_transit -= bytes_to_transit_at_once;
+                }
             }
-        }
-    } else {
-        *error = M_ERR_OUT_OF_BOUNDS;
-
-        return;
-    }
-
-    *error = M_ERR_OK;
+        } else
+            *error = M_ERR_OUT_OF_BOUNDS;
+    } else
+        *error = M_ERR_INVALID_CHUNK;
 }
 
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
@@ -495,6 +500,18 @@ void m_init(int number_of_pages, int size_of_page) {
         free_cache_page(i);
 }
 
+void print_binary(unsigned char data) {
+    unsigned char result[8];
+
+    for (unsigned i = 0; i < 8; ++i) {
+        result[7 - i] = '0' + data % 2;
+
+        data /= 2;
+    }
+
+    printf("%s", result);
+}
+
 void dump() {
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
@@ -510,7 +527,7 @@ void dump() {
         printf("DATA: ");
 
         for (unsigned i = 0; i < current_main_memory_node->sizeInBytes; ++i)
-            printf("%d", *(_g_main_memory + current_main_memory_node->fromPhysicalAddress + i));
+            print_binary(*(_g_main_memory + current_main_memory_node->fromPhysicalAddress + i));
 
         printf("\n");
 
@@ -522,13 +539,15 @@ void dump() {
     for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i) {
         struct CachePage* cache_page = _g_cache_table + i;
 
-        printf("MMID: %p, PAGE: %d, MMPG: %d, FLGS: %#x\n", cache_page->id, i,
-               cache_page->cachedPage ? cache_page->cachedPage->pageNumber : 0, cache_page->flags);
+        printf("MMID: %p, PAGE: %d, MMPG: %d, FLGS: ", cache_page->id, i,
+               cache_page->cachedPage ? cache_page->cachedPage->pageNumber : 0);
 
-        printf("DATA: ");
+        print_binary(cache_page->flags);
+
+        printf("\nDATA: ");
 
         for (unsigned j = 0; j < PAGE_SIZE_IN_BYTES; ++j)
-            printf("%d", *(_g_cache_memory + (PAGE_SIZE_IN_BYTES * i) + j));
+            print_binary(*(_g_cache_memory + (PAGE_SIZE_IN_BYTES * i) + j));
 
         printf("\n");
     }

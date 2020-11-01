@@ -8,13 +8,19 @@ int main(int argc, char **argv) {
 
     int error_code;
 
-    m_id a = m_malloc(50, &error_code);
-    m_id b = m_malloc(32, &error_code);
-    m_id c = m_malloc(32, &error_code);
+    m_id a = m_malloc(2, &error_code);
+    m_id b = m_malloc(7, &error_code);
+    m_id c = m_malloc(6, &error_code);
     m_free(a, &error_code);
-    m_malloc(100, &error_code);
+    m_id d = m_malloc(5, &error_code);
     m_free(b, &error_code);
-    m_malloc(40, &error_code);
+    m_malloc(10, &error_code);
+
+    unsigned char buffer[] = {0b10001111, 0b10101010, 0b11111111};
+
+    m_write(d + 1, buffer, 3, &error_code);
+
+    dump();
 /*  ;
 
   m_id chunk_1 = m_malloc(13, &error_code);
