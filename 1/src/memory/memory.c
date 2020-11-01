@@ -6,9 +6,9 @@
 
 #include "memory.h"
 
-#define CACHE_SIZE_IN_PAGES 8
+#define CACHE_SIZE_IN_PAGES 5
 #define LOCALITY_SIZE 2
-#define PAGE_SIZE_IN_BYTES 16
+#define PAGE_SIZE_IN_BYTES 8
 
 struct Node {
     struct Node* previous;
@@ -151,10 +151,11 @@ void unload_cache_page(unsigned cache_page_number) {
     struct CachePage* cache_page = _g_cache_table + cache_page_number;
     struct MainMemoryIdNode* id = cache_page->id;
 
-    if (id && (cache_page->flags & 0b1u)) {
-        make_transit_with_main_memory(id, id->fromVirtualAddressPointer - (char*)0 +
-                                          cache_page->cachedPage->pageNumber * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
-                                      _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES, 1);
+    if (id) {
+        if (cache_page->flags & 0b1u)
+            make_transit_with_main_memory(id, id->fromVirtualAddressPointer - (char*)0 +
+                                              cache_page->cachedPage->pageNumber * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
+                                          _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES, 1);
         free_cached_page(id, cache_page->cachedPage);
     }
 }
@@ -385,7 +386,8 @@ void make_transit_with_cache(unsigned virtual_address, unsigned size, char* buff
         if (id->sizeInBytes - local_address >= size) {
             unsigned first_affected_page = local_address / PAGE_SIZE_IN_BYTES;
             unsigned last_affected_page = (local_address + size - 1) / PAGE_SIZE_IN_BYTES;
-            unsigned pages_remain = id->sizeInBytes / PAGE_SIZE_IN_BYTES  + (id->sizeInBytes % PAGE_SIZE_IN_BYTES ? 1 : 0) - last_affected_page - 1;
+            unsigned pages_remain = id->sizeInBytes / PAGE_SIZE_IN_BYTES +
+                                    (id->sizeInBytes % PAGE_SIZE_IN_BYTES ? 1 : 0) - last_affected_page - 1;
             unsigned locality_pages_count = pages_remain > LOCALITY_SIZE ? LOCALITY_SIZE : pages_remain;
 
             unsigned bytes_to_transit = size;
@@ -460,6 +462,11 @@ void m_free(m_id ptr, m_err_code* error) {
     }
 
     *error = M_ERR_INVALID_CHUNK;
+}
+
+void unload_cache() {
+    for (unsigned i = 0; i < CACHE_SIZE_IN_PAGES; ++i)
+        unload_cache_page(i);
 }
 
 void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
