@@ -100,28 +100,29 @@ void make_one_page_transit_with_main_memory(struct MainMemoryIdNode* id, unsigne
     //1 - write, writes `size` bytes from `buffer` to `virtual_address`
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
-    unsigned memory_to_update = size;
+    unsigned bytes_to_transit = size;
     unsigned last_virtual_address = 0;
 
-    while (memory_to_update) {
+    while (bytes_to_transit) {
         if (current_main_memory_node->mainMemoryIdNode == id) {
             unsigned from_virtual_address = last_virtual_address;
             unsigned to_virtual_address = last_virtual_address + current_main_memory_node->sizeInBytes;
 
-            if ((virtual_address >= from_virtual_address && virtual_address <= to_virtual_address) || memory_to_update != size) {
-                unsigned address_stub = memory_to_update != size ? 0 : virtual_address;
+            if ((virtual_address >= from_virtual_address && virtual_address <= to_virtual_address) || bytes_to_transit != size) {
+                unsigned address_stub = bytes_to_transit != size ? 0 : virtual_address;
 
                 unsigned available = to_virtual_address - from_virtual_address - address_stub;
-                unsigned required_size = memory_to_update > available ? available : memory_to_update;
+                unsigned bytes_to_transit_at_once = bytes_to_transit > available ? available : bytes_to_transit;
+
+                char* buffer_ptr = buffer + (size - bytes_to_transit);
+                char* memory_ptr = _g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub;
 
                 if (read_or_write) //write to mem
-                    bcopy(buffer + (size - memory_to_update),
-                            _g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub, required_size);
-                else //read to cache
-                    bcopy(_g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub,
-                            buffer + (size - memory_to_update), required_size);
+                    bcopy(buffer_ptr, memory_ptr, bytes_to_transit_at_once);
+                else //read to buffer
+                    bcopy(memory_ptr, buffer_ptr, bytes_to_transit_at_once);
 
-                memory_to_update -= required_size;
+                bytes_to_transit -= bytes_to_transit_at_once;
             }
 
             last_virtual_address = to_virtual_address;
@@ -311,6 +312,52 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
     }
 }
 
+struct CachePage* provide_cache_page(struct MainMemoryIdNode* main_memory_id_node, unsigned page_of_segment) {
+
+}
+
+void make_transit_with_main_memory(unsigned virtual_address, unsigned size, char* buffer, char read_or_write, m_err_code* error) {
+    //0 - read
+    //1 - write
+    struct MainMemoryIdNode* id = determine_id_of_address(virtual_address);
+
+    if (id) {
+        unsigned local_address = virtual_address - (id->fromVirtualAddressPointer - (char*)0);
+        unsigned first_affected_page = local_address / PAGE_SIZE_IN_BYTES;
+        unsigned last_affected_page = (local_address + size - 1) / PAGE_SIZE_IN_BYTES;
+        unsigned pages_remain = id->sizeInBytes / PAGE_SIZE_IN_BYTES - last_affected_page - 1;
+        unsigned locality_pages_count = pages_remain > LOCALITY_SIZE ? LOCALITY_SIZE : pages_remain;
+
+        unsigned bytes_to_transit = size;
+        unsigned offset = local_address - first_affected_page * PAGE_SIZE_IN_BYTES;
+
+        for (unsigned p = first_affected_page; p <= last_affected_page + locality_pages_count; ++p) {
+            struct CachePage* page = provide_cache_page(id, p);
+
+            if (p <= last_affected_page) {
+                unsigned available = PAGE_SIZE_IN_BYTES - offset;
+                unsigned bytes_to_transit_at_once = available > bytes_to_transit ? bytes_to_transit : available;
+
+                char *buffer_ptr = buffer + (size - bytes_to_transit);
+                char *cache_ptr = _g_cache_memory + page->cachedPage->cachePageNumber * PAGE_SIZE_IN_BYTES + offset;
+
+                if (read_or_write)
+                    bcopy(buffer_ptr, cache_ptr, bytes_to_transit_at_once);
+                else
+                    bcopy(cache_ptr, buffer_ptr, bytes_to_transit_at_once);
+
+                bytes_to_transit -= bytes_to_transit_at_once;
+            }
+        }
+    } else {
+        *error = M_ERR_OUT_OF_BOUNDS;
+
+        return;
+    }
+
+    *error = M_ERR_OK;
+}
+
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
     if (_g_main_memory_size - _g_used_memory_size < size_of_chunk) {
         *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
@@ -355,11 +402,11 @@ void m_free(m_id ptr, m_err_code* error) {
 }
 
 void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
-
+    make_transit_with_main_memory(read_from_id - (void*)0, size_to_read, read_to_buffer, 0, error);
 }
 
 void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error) {
-
+    make_transit_with_main_memory(write_to_id - (void*)0, size_to_write, write_from_buffer, 1, error);
 }
 
 void m_init(int number_of_pages, int size_of_page) {
