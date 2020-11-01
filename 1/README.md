@@ -1,20 +1,11 @@
-# C/C++ starter
+#Марковец В.С., Веренич К.О.
 
-This project contains `C/C++` starter configuration.
-To start using it put source files and headers into `src` folder.
+Лабораторные работы по дисциплине "Операционные системы"
 
-## How to use
+3 Вариант
 
-### Generate Makefile:
-```bash
-cmake .
-```
-### Build project:
-```bash
-make
-```
-
-### Run project:
-```bash
-./bin
-```
+##Лабораторная работа №1
+#####Цель
+Изучить алгоритмы распределения памяти и особенности их реализации.
+#####Вариант задания
+Реализовать менеджер памяти со страничным разбиением.
