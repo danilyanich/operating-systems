@@ -2,6 +2,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "memory.h"
 
@@ -95,7 +96,7 @@ void insert_new_node(struct Node* node_anchor,
     }
 }
 
-void make_one_page_transit_with_main_memory(struct MainMemoryIdNode* id, unsigned virtual_address, unsigned size, char* buffer, char read_or_write) {
+void make_transit_with_main_memory(struct MainMemoryIdNode* id, unsigned virtual_address, unsigned size, char* buffer, char read_or_write) {
     //0 - read, reads `size` bytes beginning from `virtual_address` into buffer
     //1 - write, writes `size` bytes from `buffer` to `virtual_address`
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
@@ -150,8 +151,8 @@ void unload_cache_page(unsigned cache_page_number) {
     struct MainMemoryIdNode* id = cache_page->id;
 
     if (id && (cache_page->flags & 0b1u)) {
-        make_one_page_transit_with_main_memory(id, cache_page_number * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
-                                               _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES, 1);
+        make_transit_with_main_memory(id, cache_page_number * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
+                                      _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES, 1);
         free_cached_page(id, cache_page->cachedPage);
     }
 }
@@ -312,11 +313,62 @@ void allocate_chunk(unsigned size_of_chunk, struct MainMemoryIdNode* main_memory
     }
 }
 
-struct CachePage* provide_cache_page(struct MainMemoryIdNode* main_memory_id_node, unsigned page_of_segment) {
+unsigned select_cache_page_to_use() {
+    for (unsigned p = 0; p < CACHE_SIZE_IN_PAGES; ++p) {
+        if (!(_g_cache_table + p)->id)
+            return p;
+    }
 
+    return rand() % CACHE_SIZE_IN_PAGES;
 }
 
-void make_transit_with_main_memory(unsigned virtual_address, unsigned size, char* buffer, char read_or_write, m_err_code* error) {
+//it's assumed that page_of_segmentth page of main_memory_id_node isn't loaded yet
+void load_cache_page(struct MainMemoryIdNode* main_memory_id_node, unsigned cache_page_number, unsigned page_of_segment) {
+    struct CachedPage* cached_page = (struct CachedPage*)malloc(sizeof(struct CachedPage));
+
+    cached_page->cachePageNumber = cache_page_number;
+    cached_page->pageNumber = page_of_segment;
+
+    struct CachePage* cache_page = _g_cache_table + cache_page_number;
+
+    cache_page->id = main_memory_id_node;
+    cache_page->cachedPage = cached_page;
+
+    if (main_memory_id_node->cachedPages)
+        insert_new_node(main_memory_id_node->cachedPages, cached_page, 0,
+                &main_memory_id_node->cachedPages);
+    else
+        main_memory_id_node->cachedPages = cached_page;
+
+    make_transit_with_main_memory(main_memory_id_node,
+                                  main_memory_id_node->fromVirtualAddressPointer - (char *) 0 +
+                                  PAGE_SIZE_IN_BYTES * page_of_segment, PAGE_SIZE_IN_BYTES,
+                                  _g_cache_memory + PAGE_SIZE_IN_BYTES * cache_page_number, 0);
+}
+
+struct CachePage* provide_cache_page(struct MainMemoryIdNode* main_memory_id_node, unsigned page_of_segment) {
+    struct CachedPage* current_cached_page = main_memory_id_node->cachedPages, *target_page = NULL;
+
+    while (current_cached_page) {
+        if (current_cached_page->pageNumber == page_of_segment)
+            target_page = current_cached_page;
+
+        current_cached_page = current_cached_page->next;
+    }
+
+    if (!target_page) {
+        unsigned cache_page_number = select_cache_page_to_use();
+        struct CachePage* cache_page = _g_cache_table + cache_page_number;
+
+        if (cache_page->id)
+            unload_cache_page(cache_page_number);
+
+        load_cache_page(main_memory_id_node, cache_page_number, page_of_segment);
+    } else
+        return _g_cache_table + target_page->cachePageNumber;
+}
+
+void make_transit_with_cache(unsigned virtual_address, unsigned size, char* buffer, char read_or_write, m_err_code* error) {
     //0 - read
     //1 - write
     struct MainMemoryIdNode* id = determine_id_of_address(virtual_address);
@@ -402,14 +454,16 @@ void m_free(m_id ptr, m_err_code* error) {
 }
 
 void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error) {
-    make_transit_with_main_memory(read_from_id - (void*)0, size_to_read, read_to_buffer, 0, error);
+    make_transit_with_cache(read_from_id - (void *) 0, size_to_read, read_to_buffer, 0, error);
 }
 
 void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error) {
-    make_transit_with_main_memory(write_to_id - (void*)0, size_to_write, write_from_buffer, 1, error);
+    make_transit_with_cache(write_to_id - (void *) 0, size_to_write, write_from_buffer, 1, error);
 }
 
 void m_init(int number_of_pages, int size_of_page) {
+    srand(time(NULL));
+
     if (_g_main_memory) {
         //free the main memory
         free(_g_main_memory);
