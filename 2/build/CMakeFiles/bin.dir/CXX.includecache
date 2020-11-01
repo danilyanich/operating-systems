@@ -9,4 +9,8 @@
 /home/alexandr/files/git_hub/operating-systems/2/src/random/main.cpp
 iostream
 -
+fstream
+-
+unistd.h
+-
 
