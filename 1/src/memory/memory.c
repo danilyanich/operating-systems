@@ -95,11 +95,9 @@ void insert_new_node(struct Node* node_anchor,
     }
 }
 
-void write_directly(char* to, char* from, unsigned size) {
-    bcopy(from, to, size);
-}
-
-void write_to_main_memory(struct MainMemoryIdNode* id, unsigned address, unsigned size, char* from) {
+void make_one_page_transit_with_main_memory(struct MainMemoryIdNode* id, unsigned virtual_address, unsigned size, char* buffer, char read_or_write) {
+    //0 - read, reads `size` bytes beginning from `virtual_address` into buffer
+    //1 - write, writes `size` bytes from `buffer` to `virtual_address`
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
     unsigned memory_to_update = size;
@@ -110,16 +108,20 @@ void write_to_main_memory(struct MainMemoryIdNode* id, unsigned address, unsigne
             unsigned from_virtual_address = last_virtual_address;
             unsigned to_virtual_address = last_virtual_address + current_main_memory_node->sizeInBytes;
 
-            if ((address >= from_virtual_address && address <= to_virtual_address) || memory_to_update != size) {
-                unsigned address_stub = memory_to_update != size ? 0 : address;
+            if ((virtual_address >= from_virtual_address && virtual_address <= to_virtual_address) || memory_to_update != size) {
+                unsigned address_stub = memory_to_update != size ? 0 : virtual_address;
 
                 unsigned available = to_virtual_address - from_virtual_address - address_stub;
-                unsigned write_size = memory_to_update > available ? available : memory_to_update;
+                unsigned required_size = memory_to_update > available ? available : memory_to_update;
 
-                write_directly(_g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub,
-                               from + (size - memory_to_update), write_size);
+                if (read_or_write) //write to mem
+                    bcopy(buffer + (size - memory_to_update),
+                            _g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub, required_size);
+                else //read to cache
+                    bcopy(_g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub,
+                            buffer + (size - memory_to_update), required_size);
 
-                memory_to_update -= write_size;
+                memory_to_update -= required_size;
             }
 
             last_virtual_address = to_virtual_address;
@@ -147,34 +149,26 @@ void unload_cache_page(unsigned cache_page_number) {
     struct MainMemoryIdNode* id = cache_page->id;
 
     if (id && (cache_page->flags & 0b1u)) {
-        write_to_main_memory(id, cache_page_number * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
-                             _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES);
+        make_one_page_transit_with_main_memory(id, cache_page_number * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
+                                               _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES, 1);
         free_cached_page(id, cache_page->cachedPage);
     }
 }
 
-void load_context_into_cache(unsigned address, unsigned size) {
-    //determine id
-    struct MainMemoryIdNode* id = NULL;
+struct MainMemoryIdNode* determine_id_of_address(unsigned address) {
     struct MainMemoryIdNode* current_main_memory_id_node = _g_main_memory_ids_table;
 
     while (current_main_memory_id_node) {
         unsigned from_virtual_address = current_main_memory_id_node->fromVirtualAddressPointer - (char*)0;
 
         if (address >= from_virtual_address
-            && address <= from_virtual_address + current_main_memory_id_node->sizeInBytes) {
-            id = current_main_memory_id_node;
-
-            break;
-        }
+            && address <= from_virtual_address + current_main_memory_id_node->sizeInBytes)
+            return current_main_memory_id_node;
 
         current_main_memory_id_node = current_main_memory_id_node->next;
     }
 
-    assert(id != NULL);
-
-    //determine and load required pages (not more than cache_size at once)
-    //when unloading cache pages, do it properly
+    return NULL;
 }
 
 void free_main_memory_node(struct MainMemoryNode* main_memory_node) {
@@ -428,7 +422,7 @@ void dump() {
         struct CachePage* cache_page = _g_cache_table + i;
 
         printf("MMID: %p, PAGE: %d, MMPG: %d, FLGS: %#x\n", cache_page->id, i,
-                cache_page->cachedPage ? cache_page->cachedPage->pageNumber : 0, cache_page->flags);
+               cache_page->cachedPage ? cache_page->cachedPage->pageNumber : 0, cache_page->flags);
 
         printf("DATA: ");
 
