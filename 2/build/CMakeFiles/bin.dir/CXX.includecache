@@ -13,4 +13,16 @@ fstream
 -
 unistd.h
 -
+sys/wait.h
+-
+stdio.h
+-
+stdlib.h
+-
+errno.h
+-
+unistd.h
+-
+sys/types.h
+-
 

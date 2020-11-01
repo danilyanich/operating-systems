@@ -1,6 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 
 using namespace std;
@@ -12,18 +18,28 @@ void write_array(int[], int);
 
 
 int main(){
-    //pid_t fork();
 
+    pid_t pid;
+    int rv;
     int size;
     int *arr = new int[size];
-
     cout << "Enter size of the array: ";
     cin >> size;
-    
     enter_array(arr, size);
-    print_array(arr, size);
-    write_array(arr, size);
-
+    
+    switch(pid=fork()) {
+        case -1:
+            perror("fork");
+            exit(1);
+        case 0:
+            print_array(arr, size);
+            exit(rv);
+        default:
+            write_array(arr, size);
+            wait(0);
+            
+    }
+    
     return 0;
 }
 
