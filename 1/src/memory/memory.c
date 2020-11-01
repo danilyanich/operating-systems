@@ -87,22 +87,15 @@ void write_to_main_memory(struct MainMemoryIdNode* id, unsigned address, unsigne
             unsigned from_virtual_address = last_virtual_address;
             unsigned to_virtual_address = last_virtual_address + current_main_memory_node->sizeInBytes;
 
-            if (address >= from_virtual_address && address <= to_virtual_address) {
+            if ((address >= from_virtual_address && address <= to_virtual_address) || memory_to_update != size) {
+                unsigned address_stub = memory_to_update != size ? 0 : address;
+
                 //first node
-                unsigned available = to_virtual_address - address;
-                unsigned write_size = size > available ? available : size;
-
-                write_directly(_g_main_memory + current_main_memory_node->fromPhysicalAddress + address,
-                        from, write_size);
-
-                memory_to_update -= write_size;
-            } else if (memory_to_update != size) {
-                //next nodes
-                unsigned available = current_main_memory_node->sizeInBytes;
+                unsigned available = to_virtual_address - from_virtual_address - address_stub;
                 unsigned write_size = memory_to_update > available ? available : memory_to_update;
 
-                write_directly(_g_main_memory + current_main_memory_node->fromPhysicalAddress,
-                               from + (size - memory_to_update), write_size);
+                write_directly(_g_main_memory + current_main_memory_node->fromPhysicalAddress + address_stub,
+                        from + (size - memory_to_update), write_size);
 
                 memory_to_update -= write_size;
             }
