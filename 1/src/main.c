@@ -7,8 +7,7 @@ int main(int argc, char **argv) {
     m_init(1, 500);
 
     int error_code;
-
-    m_id a = m_malloc(2, &error_code);
+/*    m_id a = m_malloc(2, &error_code);
     m_id b = m_malloc(7, &error_code);
     m_id c = m_malloc(6, &error_code);
     m_free(a, &error_code);
@@ -32,7 +31,7 @@ int main(int argc, char **argv) {
     printf("\n");
     print_binary(buff2[2]);
     fflush(stdout);
-/*  ;
+  */
 
   m_id chunk_1 = m_malloc(13, &error_code);
   if (error_code != M_ERR_OK) abort();
@@ -73,5 +72,5 @@ int main(int argc, char **argv) {
   if (error_code != M_ERR_OK) abort();
 
   m_free(chunk_3, &error_code);
-  if (error_code != M_ERR_OK) abort();*/
+  if (error_code != M_ERR_OK) abort();
 }

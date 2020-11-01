@@ -6,9 +6,9 @@
 
 #include "memory.h"
 
-#define CACHE_SIZE_IN_PAGES 2
+#define CACHE_SIZE_IN_PAGES 8
 #define LOCALITY_SIZE 2
-#define PAGE_SIZE_IN_BYTES 2
+#define PAGE_SIZE_IN_BYTES 16
 
 struct Node {
     struct Node* previous;
@@ -101,8 +101,9 @@ void make_transit_with_main_memory(struct MainMemoryIdNode* id, unsigned virtual
     //1 - write, writes `size` bytes from `buffer` to `virtual_address`
     struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
 
-    unsigned bytes_to_transit = size;
     unsigned last_virtual_address = id->fromVirtualAddressPointer - (char*)0;
+    unsigned maximal_available_space = id->sizeInBytes - (virtual_address - last_virtual_address);
+    unsigned bytes_to_transit = size <= maximal_available_space ? size : maximal_available_space;
 
     while (bytes_to_transit) {
         if (current_main_memory_node->mainMemoryIdNode == id) {
@@ -384,7 +385,7 @@ void make_transit_with_cache(unsigned virtual_address, unsigned size, char* buff
         if (id->sizeInBytes - local_address >= size) {
             unsigned first_affected_page = local_address / PAGE_SIZE_IN_BYTES;
             unsigned last_affected_page = (local_address + size - 1) / PAGE_SIZE_IN_BYTES;
-            unsigned pages_remain = id->sizeInBytes / PAGE_SIZE_IN_BYTES - last_affected_page - 1;
+            unsigned pages_remain = id->sizeInBytes / PAGE_SIZE_IN_BYTES  + (id->sizeInBytes % PAGE_SIZE_IN_BYTES ? 1 : 0) - last_affected_page - 1;
             unsigned locality_pages_count = pages_remain > LOCALITY_SIZE ? LOCALITY_SIZE : pages_remain;
 
             unsigned bytes_to_transit = size;
