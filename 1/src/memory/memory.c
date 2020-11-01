@@ -26,14 +26,20 @@ struct MainMemoryNode {
 
 struct CachedPage {
     struct CachedPage* next;
+    struct CachedPage* previous;
     unsigned cachePageNumber; //number of page in cache
     unsigned pageNumber; //number of page of the segment
-    char flags; //XXXXXXXC, X - reserved for further standardization)), C - a flag which indicates whether the page was changed or not
+};
+
+struct CachePage {
+    struct MainMemoryIdNode* id;
+    struct CachedPage* cachedPage;
+    unsigned char flags; //XXXXXXXC, X - reserved for further standardization)), C - a flag which indicates whether the page was changed or not
 };
 
 struct MainMemoryIdNode* _g_main_memory_ids_table;
 
-char _g_cache_usage_table[CACHE_SIZE_IN_PAGES / sizeof(char)];
+struct CachePage _g_cache_table[CACHE_SIZE_IN_PAGES];
 struct MainMemoryNode* _g_main_memory_table = NULL;
 char _g_cache_memory[CACHE_SIZE_IN_PAGES * PAGE_SIZE_IN_BYTES];
 char* _g_main_memory = NULL;
@@ -53,16 +59,78 @@ void flush_cache_where_required(struct CachedPage* cache_memory_table, unsigned 
 
 }
 
-void free_cache_page(unsigned cache_page_number) {
-    _g_cache_usage_table[cache_page_number / sizeof(char) + cache_page_number % sizeof(char)] = 0;
+void write_directly(char* to, char* from, unsigned size) {
+    bcopy(from, to, size);
 }
 
+void write_to_main_memory(struct MainMemoryIdNode* id, unsigned address, unsigned size, char* from) {
+    struct MainMemoryNode* current_main_memory_node = _g_main_memory_table;
+
+    unsigned memory_to_update = size;
+    unsigned last_virtual_address = 0;
+
+    while (memory_to_update) {
+        if (current_main_memory_node->mainMemoryIdNode == id) {
+            unsigned from_virtual_address = last_virtual_address;
+            unsigned to_virtual_address = last_virtual_address + current_main_memory_node->sizeInBytes;
+
+            if (address >= from_virtual_address && address <= to_virtual_address) {
+                //first node
+                unsigned available = to_virtual_address - address;
+                unsigned write_size = size > available ? available : size;
+
+                write_directly(_g_main_memory + current_main_memory_node->fromPhysicalAddress + address,
+                        from, write_size);
+
+                memory_to_update -= write_size;
+            } else if (memory_to_update != size) {
+                //next nodes
+                unsigned available = current_main_memory_node->sizeInBytes;
+                unsigned write_size = memory_to_update > available ? available : memory_to_update;
+
+                write_directly(_g_main_memory + current_main_memory_node->fromPhysicalAddress,
+                               from + (size - memory_to_update), write_size);
+
+                memory_to_update -= write_size;
+            }
+
+            last_virtual_address = to_virtual_address;
+        }
+
+        current_main_memory_node = current_main_memory_node->next;
+    }
+}
+
+//makes cache page free
+void free_cache_page(unsigned cache_page_number) {
+    _g_cache_table[cache_page_number] = (struct CachePage){NULL, 0, 0};
+}
+
+//removes (and deallocates) cached page node from id node, frees cache page
 void free_cached_page(struct MainMemoryIdNode* main_memory_id_node, struct CachedPage* cached_page) {
+    //@fixme bidir lists
     if (main_memory_id_node->cachedPages == cached_page)
         main_memory_id_node->cachedPages = cached_page->next;
 
     free_cache_page(cached_page->cachePageNumber);
     free(cached_page);
+}
+
+void unload_cache_page(unsigned cache_page_number) {
+    struct CachePage* cache_page = _g_cache_table + cache_page_number;
+    struct MainMemoryIdNode* id = cache_page->id;
+
+    if (id && (cache_page->flags & 0b1u)) {
+        write_to_main_memory(id, cache_page_number * PAGE_SIZE_IN_BYTES, PAGE_SIZE_IN_BYTES,
+                _g_cache_memory + cache_page_number * PAGE_SIZE_IN_BYTES);
+        free_cached_page(id, cache_page->cachedPage);
+    }
+}
+
+void load_context_into_cache(unsigned address, unsigned size) {
+    //determine id
+    //determine and load required pages (not more than cache_size at once)
+    //when unloading cache pages, do it properly
 }
 
 void free_main_memory_node(struct MainMemoryNode* main_memory_node) {
