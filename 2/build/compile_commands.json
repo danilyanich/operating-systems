@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/alexandr/files/git_hub/operating-systems/2/build",
+  "command": "/bin/c++    -g   -o CMakeFiles/bin.dir/src/random/main.cpp.o -c /home/alexandr/files/git_hub/operating-systems/2/src/random/main.cpp",
+  "file": "/home/alexandr/files/git_hub/operating-systems/2/src/random/main.cpp"
+}
+]

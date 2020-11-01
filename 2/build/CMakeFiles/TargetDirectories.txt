@@ -1,0 +1,3 @@
+/home/alexandr/files/git_hub/operating-systems/2/build/CMakeFiles/rebuild_cache.dir
+/home/alexandr/files/git_hub/operating-systems/2/build/CMakeFiles/edit_cache.dir
+/home/alexandr/files/git_hub/operating-systems/2/build/CMakeFiles/bin.dir
