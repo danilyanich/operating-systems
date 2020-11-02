@@ -1,51 +1,39 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "memory/memory.h"
+#include <stdlib.h>
+#include "assert.h"
+#include <string.h>
 
-int main(int argc, char **argv) {
-  m_init(1, 500);
+void test_str_alloc(char* data) {
+    m_id ptr = NULL;
+    m_id* ptr2 = &ptr;
+    
+    m_malloc(ptr2, strlen(data));
+    m_write(*ptr2, data, strlen(data));
 
-  int error_code;
+    void* resData = malloc(strlen(data));
+    m_read(*ptr2, resData, strlen(data));
+    assert(strcmp((char*)resData, data));
 
-  m_id chunk_1 = m_malloc(13, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    m_free(*ptr2);
 
-  m_id chunk_2 = m_malloc(20, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    void* emptyData = malloc(strlen(data));
+    int res_code = m_read(*ptr2, emptyData, strlen(data));
+    assert(res_code == M_ERR_BAD_PARAMS);
+}
 
-  m_id chunk_3 = m_malloc(50, &error_code);
-  if (error_code != M_ERR_OK) abort();
+int main(int argc, char* argv[]) {
 
-  m_write(chunk_1, "Hello World!", 13, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    int res = m_init(3, 10);
+    assert(res == 0);
 
-  m_write(chunk_2, "Operating Systems", 18, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    test_str_alloc((char*)"Hello");
+    test_str_alloc((char*)"world!");
+    test_str_alloc((char*)"Test");
+    test_str_alloc((char*)"word");
 
-  m_write(chunk_3, "Super dumb memory allocator", 28, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    m_clean();
 
-  char buffer[50];
+    printf("I'm OK!");
 
-  m_read(chunk_1, buffer, 13, &error_code);
-  if (error_code != M_ERR_OK) abort();
-  printf("%s\n", buffer);
-
-  m_read(chunk_2, buffer, 18, &error_code);
-  if (error_code != M_ERR_OK) abort();
-  printf("%s\n", buffer);
-
-  m_read(chunk_3, buffer, 28, &error_code);
-  if (error_code != M_ERR_OK) abort();
-  printf("%s\n", buffer);
-
-  m_free(chunk_1, &error_code);
-  if (error_code != M_ERR_OK) abort();
-
-  m_free(chunk_2, &error_code);
-  if (error_code != M_ERR_OK) abort();
-
-  m_free(chunk_3, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    return 0;
 }
