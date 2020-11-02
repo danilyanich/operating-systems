@@ -84,10 +84,6 @@ page* init_segment_pages(segment* segment) {
 
 int m_malloc(m_id* chunk_id, int size_of_block) {
 
-    // случай когда блок в первой странице и есть место
-    // случай когда блоку не хватает место в первой странице и переходим на новый
-    // случай когда не хватает места в сегменте и создаем новый
-
     segment* temp_segment = mem->segment_table->segment;
     for (int i = 0; i < mem->segment_table->num_segments; i++) {
 
@@ -99,12 +95,12 @@ int m_malloc(m_id* chunk_id, int size_of_block) {
                 continue;
             }
 
-            if (temp_page->block == NULL) {                                 // когда block первый
+            if (temp_page->block == NULL) {                                
                 return add_first_block(chunk_id, temp_page, size_of_block);
             }
 
             block* temp_block = temp_page->block;
-            while (temp_block->next != NULL) {                              // Находим последний блок
+            while (temp_block->next != NULL) {                       
                 temp_block = temp_block->next;
             }
 
