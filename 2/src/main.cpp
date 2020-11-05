@@ -14,38 +14,35 @@ using namespace this_thread;
 TCHAR s[] = TEXT("C:\\Windows\\System32\\notepad.exe");
 vector<PROCESS_INFORMATION> process_info;
 
-int CreateMyProcess(int);
+int create_my_process(int);
 void stop_processes();
 
 int main(int argc, char* argv[])
 {
-   
- 
-   /* if (argc != 3 ) {
+    if (argc == 1) {
+        for (int i = 0; i < 10; i++) {
+        create_my_process(10000);
+        }
+    }
+    else  if (argc == 3 ) {
+        for (int i = 0; i < atoi(argv[1]); i++) {
+            create_my_process(atoi(argv[2]));
+        }
+    }
+    else {
         printf("Argument error");
         return -1;
     }
 
-    for (int i = 0; i < atoi(argv[1]); i++) {
-        CreateProcess(atoi(argv[2]));
-    }*/
-
-    for (int i = 0; i < 10; i++) {
-        CreateMyProcess(10000);
-    }
-
     atexit(stop_processes);
-    sleep_for(chrono::seconds(5));
-
+    sleep_for(chrono::seconds(20));
 }
 
 void stop_process_by_id(DWORD id) {
 
-
     HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, id);
     TerminateProcess(hProcess,0);
     CloseHandle(hProcess);
-
 }
 
 void stop_processes() {
@@ -55,22 +52,19 @@ void stop_processes() {
     }
 }
 
-
-void CALLBACK timer_callback(
-    _In_  PVOID lpParameter,
-    _In_  BOOLEAN timer_condition) {
+void CALLBACK timer_callback(_In_  PVOID lpParameter,_In_  BOOLEAN timer_condition) {
     
     if (timer_condition) {
         DWORD dwProcessID = reinterpret_cast<DWORD>(lpParameter);
-        cout << dwProcessID << endl;
+       // cout << dwProcessID << endl;
         stop_process_by_id(dwProcessID);
     }
     else {
-        cout << "is closed" << endl;
-        CreateMyProcess(5000);
+      //  cout << "is closed" << endl;
+        create_my_process(5000);
     }
-  
 }
+
 void run_timer(PROCESS_INFORMATION pi, int time) {
 
     HANDLE ph = OpenProcess(SYNCHRONIZE, FALSE, pi.dwProcessId);
@@ -86,7 +80,7 @@ void run_timer(PROCESS_INFORMATION pi, int time) {
     }
 }
 
-int CreateMyProcess(int time) {
+int create_my_process(int time) {
   
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
