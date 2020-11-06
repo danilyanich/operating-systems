@@ -1,20 +1,12 @@
-# C/C++ starter
+# Operating Systems
 
-This project contains `C/C++` starter configuration.
-To start using it put source files and headers into `src` folder.
 
-## How to use
+## 821701 group
+### 5 variant - Segmented Paging
+### Members:
+- Зубрицкая Валерия
+- Макарчук Егор
 
-### Generate Makefile:
-```bash
-cmake .
-```
-### Build project:
-```bash
-make
-```
-
-### Run project:
-```bash
-./bin
-```
+| Group | Link |
+| - | - |
+| 821701 | https://docs.google.com/spreadsheets/d/1lkrlj6_Uc5rimTXTRWXFzt8sqTXM5ALux0liqk4dTwQ |
