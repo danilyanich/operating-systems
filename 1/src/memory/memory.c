@@ -41,13 +41,13 @@ typedef struct {
 
 static memory* mem;
 
-void set_values_to_block(page* page, block* block, int size_of_chunk) {     //добавляем блок на страницу
+void set_values_to_block(page* page, block* block, int size_of_chunk) {         //РґРѕР±Р°РІР»СЏРµРј Р±Р»РѕРє РЅР° СЃС‚СЂР°РЅРёС†Сѓ
     block->size = size_of_chunk;
     page->reserved_size += size_of_chunk;
     page->num_blocks++;
 }
 
-m_id add_new_block(m_err_code* error, page* page, block* block, int size_of_chunk) {        //создание блока (выделение памяти + добавление на страницу)
+m_id add_new_block(m_err_code* error, page* page, block* block, int size_of_chunk) {        //СЃРѕР·РґР°РЅРёРµ Р±Р»РѕРєР° (РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё + РґРѕР±Р°РІР»РµРЅРёРµ РЅР° СЃС‚СЂР°РЅРёС†Сѓ)
     block = calloc(1, sizeof(struct block));       
     m_id ptr = (m_id)block;
     page->is_reserved = 1;
@@ -57,7 +57,7 @@ m_id add_new_block(m_err_code* error, page* page, block* block, int size_of_chun
 }
 
 
-m_id add_first_block(m_err_code* error, page* page, int size_of_chunk) {        //создание первого блока (выделение памяти + добавление на страницу)
+m_id add_first_block(m_err_code* error, page* page, int size_of_chunk) {        //СЃРѕР·РґР°РЅРёРµ РїРµСЂРІРѕРіРѕ Р±Р»РѕРєР° (РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё + РґРѕР±Р°РІР»РµРЅРёРµ РЅР° СЃС‚СЂР°РЅРёС†Сѓ)
     page->block = calloc(1, sizeof(block));
     m_id ptr = (m_id)page->block;
     page->is_reserved = 1;
@@ -66,7 +66,7 @@ m_id add_first_block(m_err_code* error, page* page, int size_of_chunk) {        
     return ptr;
 }
 
-page* init_segment_pages(segment* segment) {        //выделение памяти под страницы
+page* init_segment_pages(segment* segment) {        //РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РїРѕРґ СЃС‚СЂР°РЅРёС†С‹
     segment->first_page = calloc(1, sizeof(page));
     segment->num_pages++;
 
@@ -82,7 +82,7 @@ page* init_segment_pages(segment* segment) {        //выделение памяти под стран
     return segment->first_page;
 }
 
-page* find_page_with_block(m_id ptr) {      //поиск страницы по заданному блоку
+page* find_page_with_block(m_id ptr) {      //РїРѕРёСЃРє СЃС‚СЂР°РЅРёС†С‹ РїРѕ Р·Р°РґР°РЅРЅРѕРјСѓ Р±Р»РѕРєСѓ
     segment* temp_segment = mem->segment_table->segment;
     for (int i = 0; i < mem->segment_table->num_segments; ++i) {
         page* temp_page = temp_segment->first_page;
@@ -109,7 +109,7 @@ page* find_page_with_block(m_id ptr) {      //поиск страницы по заданному блоку
     return NULL;
 }
 
-block* find_block(m_id ptr) {       //поиск заданного блока
+block* find_block(m_id ptr) {       //РїРѕРёСЃРє Р·Р°РґР°РЅРЅРѕРіРѕ Р±Р»РѕРєР°
     page* page = find_page_with_block(ptr);
     if (page == NULL) {
         return NULL;
@@ -140,12 +140,12 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
                 continue;
             }
 
-            if (temp_page->block == NULL) {     // выделяем память под первый блок
+            if (temp_page->block == NULL) {     //РІС‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ РїРµСЂРІС‹Р№ Р±Р»РѕРє
                 return add_first_block(error, temp_page, size_of_chunk);
             }
 
             block* temp_block = temp_page->block;
-            while (temp_block->next != NULL) {      // доходим до последнего блока и создаем новый после него
+            while (temp_block->next != NULL) {      //РґРѕС…РѕРґРёРј РґРѕ РїРѕСЃР»РµРґРЅРµРіРѕ Р±Р»РѕРєР° Рё СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№ РїРѕСЃР»Рµ РЅРµРіРѕ
                 temp_block = temp_block->next;
             }
             return add_new_block(error, temp_page, temp_block->next, size_of_chunk);
@@ -154,24 +154,24 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
         temp_segment = temp_segment->next;
     }
 
-    segment* new_segment = calloc(1, sizeof(segment));      //если не хватает места на предыдущем сегменте создаем новый
+    segment* new_segment = calloc(1, sizeof(segment));      //РµСЃР»Рё РЅРµ С…РІР°С‚Р°РµС‚ РјРµСЃС‚Р° РЅР° РїСЂРµРґС‹РґСѓС‰РµРј СЃРµРіРјРµРЅС‚Рµ СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№
     prev_segment->next = new_segment;
     mem->segment_table->num_segments++;
 
     page* temp_page = init_segment_pages(new_segment);
-    return add_first_block(error, temp_page, size_of_chunk);        // выделяем память под первый блок
+    return add_first_block(error, temp_page, size_of_chunk);        //РІС‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ РїРµСЂРІС‹Р№ Р±Р»РѕРє
 }
 
 
 void m_free(m_id ptr, m_err_code* error) {
   page* page = find_page_with_block(ptr);
-  if (page == NULL) {       //проверка на наличие страницы
+  if (page == NULL) {       //РїСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ СЃС‚СЂР°РЅРёС†С‹
       *error = M_ERR_INVALID_CHUNK;
       return;
   }
 
   block* cur_block = page->block;
-  if (strcmp((char*)cur_block, (char*)ptr) == 0) {      //если текущий блок и блок ptr равны, то удаляем текущий блок
+  if (strcmp((char*)cur_block, (char*)ptr) == 0) {      //РµСЃР»Рё С‚РµРєСѓС‰РёР№ Р±Р»РѕРє Рё Р±Р»РѕРє ptr СЂР°РІРЅС‹, С‚Рѕ СѓРґР°Р»СЏРµРј С‚РµРєСѓС‰РёР№ Р±Р»РѕРє
       block* next_block = cur_block->next;
       page->block = next_block;
       page->reserved_size -= cur_block->size;
@@ -180,7 +180,7 @@ void m_free(m_id ptr, m_err_code* error) {
       return;
   }
 
-  block* prev_block = cur_block;        //проверка всех остальных блоков
+  block* prev_block = cur_block;        //РїСЂРѕРІРµСЂРєР° РІСЃРµС… РѕСЃС‚Р°Р»СЊРЅС‹С… Р±Р»РѕРєРѕРІ
   cur_block = cur_block->next;
   while (strcmp((char*)cur_block, (char*)ptr) != 0) {
       cur_block = cur_block->next;
@@ -197,15 +197,15 @@ void m_free(m_id ptr, m_err_code* error) {
 
 void m_read(m_id read_from_id,void* read_to_buffer, int size_to_read, m_err_code* error) {
   block* block = find_block(read_from_id);
-  if (block == NULL) {      //проверка на наличие блока
+  if (block == NULL) {      //РїСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ Р±Р»РѕРєР°
       *error = M_ERR_INVALID_CHUNK;
       return;
   }
-  if (block->size < size_to_read) {     //проверка блока на подходящий размер
+  if (block->size < size_to_read) {     //РїСЂРѕРІРµСЂРєР° Р±Р»РѕРєР° РЅР° РїРѕРґС…РѕРґСЏС‰РёР№ СЂР°Р·РјРµСЂ
       *error = M_ERR_INVALID_CHUNK;
       return;
   }
-  memcpy(read_to_buffer, block->data, size_to_read);        //запись данных в буфер из блока
+  memcpy(read_to_buffer, block->data, size_to_read);        //Р·Р°РїРёСЃСЊ РґР°РЅРЅС‹С… РІ Р±СѓС„РµСЂ РёР· Р±Р»РѕРєР°
   *error = M_ERR_OK;
 }
 
@@ -213,18 +213,18 @@ void m_read(m_id read_from_id,void* read_to_buffer, int size_to_read, m_err_code
 void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error) {
 
   block* block = find_block(write_to_id);
-  if (block == NULL) {      //проверка на наличие блока
+  if (block == NULL) {      //РїСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ Р±Р»РѕРєР°
       *error = M_ERR_INVALID_CHUNK;
       return;
   }
 
-  if (block->size < size_to_write) {        //проверка блока на подходящий размер
+  if (block->size < size_to_write) {        //РїСЂРѕРІРµСЂРєР° Р±Р»РѕРєР° РЅР° РїРѕРґС…РѕРґСЏС‰РёР№ СЂР°Р·РјРµСЂ
       *error = M_ERR_INVALID_CHUNK;
       return;
   }
 
-  void* data = malloc(size_to_write);       //выделение памяти для данных с буфера
-  memcpy(data, write_from_buffer, size_to_write);       //запись данных из буфера в data
+  void* data = malloc(size_to_write);       //РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РґР»СЏ РґР°РЅРЅС‹С… СЃ Р±СѓС„РµСЂР°
+  memcpy(data, write_from_buffer, size_to_write);       //Р·Р°РїРёСЃСЊ РґР°РЅРЅС‹С… РёР· Р±СѓС„РµСЂР° РІ data
   block->data = data;
   block->data_size = size_to_write;
   *error = M_ERR_OK;
@@ -238,12 +238,12 @@ void m_init(int number_of_pages, int size_of_page) {
   _g_allocator_memory = malloc(_g_allocator_memory_size);
   _g_bytes_allocated = 0;
 
-  mem = calloc(1, sizeof(memory));      //выделение общей памяти
-  mem->segment_table = calloc(1, sizeof(segment_table));        //выделение памяти под таблицу сегментов
-  mem->segment_table->segment = calloc(1, sizeof(segment));     //выделение памяти под сегмент
+  mem = calloc(1, sizeof(memory));      //РІС‹РґРµР»РµРЅРёРµ РѕР±С‰РµР№ РїР°РјСЏС‚Рё
+  mem->segment_table = calloc(1, sizeof(segment_table));        //РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РїРѕРґ С‚Р°Р±Р»РёС†Сѓ СЃРµРіРјРµРЅС‚РѕРІ
+  mem->segment_table->segment = calloc(1, sizeof(segment));     //РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РїРѕРґ СЃРµРіРјРµРЅС‚
   mem->segment_table->num_segments++;
   mem->page_size = size_of_page;
   mem->num_of_pages_per_segment = number_of_pages;
 
-  init_segment_pages(mem->segment_table->segment);        //выделение памяти под страницы
+  init_segment_pages(mem->segment_table->segment);        //РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РїРѕРґ СЃС‚СЂР°РЅРёС†С‹
 }
