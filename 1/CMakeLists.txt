@@ -17,4 +17,4 @@ include_directories("src/**/*.h")
 
 project(project)
 
-add_executable(bin ${SOURCE_FILES})
+add_executable(bin ${SOURCE_FILES} )
