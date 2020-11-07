@@ -87,6 +87,29 @@ bool delete_cache_el(){
     return true;
 }
 
+void delete_cache(int chunk_addr)
+{
+    cache* prev = NULL;
+    if (my_manager._cache == NULL) return;
+
+    for (cache* temp = my_manager._cache; temp != NULL; temp = temp->next){
+        if (temp->chunk_addr == chunk_addr)
+        {
+            if (prev != NULL)
+            {
+                prev->next = temp->next;
+                free(temp);
+                return;
+            } else
+            {
+                my_manager._cache = temp->next;
+                free(temp);
+                return;
+            }
+        }
+    }
+}
+
 void write_cache(chunk* to_write_chunk){
     cache* e = find_cache(to_write_chunk->start_pointer);
     if (e)return;
@@ -131,6 +154,15 @@ m_err_code read_cache(segment_addr addr, void* buffer, size_t read_size){
     return M_ERR_OUT_OF_BOUNDS;
 }
 
+void over_write_cache(int chunk_addr, chunk* ch)
+{
+    cache* temp = find_cache(chunk_addr);
+    if (temp)
+    {
+        memcpy(cache_memory + temp->start, my_manager.memory + ch->start_pointer, ch->size);
+    }
+}
+
 segment_addr m_malloc(int size_of_chunk, m_err_code *error) {
     if (my_manager.allocated_memory + size_of_chunk > my_manager.max_allocated) {
         *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
@@ -158,10 +190,11 @@ m_err_code m_free(segment_addr ptr) {
     if (*ptr == my_manager.DEALLOCATED)return M_ERR_ALREADY_DEALLOCATED;
     if(*ptr > my_manager.max_allocated)return M_ERR_INVALID_CHUNK;
     if (*ptr == my_manager.first_chunk->start_pointer && my_manager.first_chunk->next == NULL){
+        delete_cache(my_manager.first_chunk->start_pointer);
+        free(my_manager.first_chunk);
         my_manager.first_chunk = NULL;
         my_manager.last_chunk = NULL;
         my_manager.allocated_memory = 0;
-        free(my_manager.first_chunk);
         *ptr = my_manager.DEALLOCATED;
         return M_ERR_OK;
     }
@@ -195,6 +228,7 @@ m_err_code m_free(segment_addr ptr) {
     }
     if (is_find){
         my_manager.allocated_memory -= to_delete->size;
+        delete_cache(to_delete->start_pointer);
         free(to_delete);
         *ptr = my_manager.DEALLOCATED;
         return M_ERR_OK;
@@ -230,6 +264,7 @@ m_err_code m_write(segment_addr write_to_id, void *write_from_buffer, int size_t
     }
     if(temp == NULL)return M_ERR_INVALID_CHUNK;
     if(temp->size < size_to_write)return M_ERR_OUT_OF_BOUNDS;
+    over_write_cache(*write_to_id, temp);
     memcpy(my_manager.memory + temp->start_pointer, write_from_buffer, size_to_write);
     return M_ERR_OK;
 }
