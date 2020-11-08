@@ -1,6 +1,8 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#include <stdbool.h>
+
 #define M_ERR_OK 0 // Everything is ok
 #define M_ERR_ALLOCATION_OUT_OF_MEMORY 1 // Not enough memory for allocation
 #define M_ERR_ALREADY_DEALLOCATED 2 // The chunk was already deallocated
@@ -16,13 +18,16 @@ typedef struct _MEMORY memory;
 
 struct _SEGMENT {
     int size;
-    void* data;
+    char* data;
+    bool isFilled;
     segment* next;
     segment* prev;
 }; // Segment of a memory
 
 struct _MEMORY {
     segment* next;
+    char* memory;
+    int size;
 }; // Segmented memory
 
 typedef int m_err_code; // Error code of sandbox memory
@@ -59,9 +64,9 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 
 
 // Initializes sandbox memory allocator. Usually it is number_of_pages*size_of_page.
-// @param number_of_pages Number of pages to allocate
 // @param size_of_page Size of the page
-void m_init(int size_of_page);
+// @param error_code [out] M_ERR_OK, M_ERR_OUT_OF_BOUNDS, M_ERR_ALLOCATION_NOT_SUCCEED
+void m_init(int size_of_page, m_err_code* error_code);
 
 
 #endif /* MEMORY_H */
