@@ -9,16 +9,38 @@ int _g_allocator_memory_size = 0;
 int _g_bytes_allocated = 0;
 
 
+struct block* top = NULL;
+struct block* begin = NULL;
+
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
-  if (_g_bytes_allocated + size_of_chunk > _g_allocator_memory_size) {
-    *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
-    return NULL;
-  }
 
-  _g_bytes_allocated += size_of_chunk;
+    if (_g_bytes_allocated + size_of_chunk > _g_allocator_memory_size) {
+        *error = M_ERR_ALLOCATION_OUT_OF_MEMORY;
+        return NULL;
+    }
 
-  *error = M_ERR_OK;
-  return _g_allocator_memory + _g_bytes_allocated;
+    struct block* tmp = malloc(sizeof(*tmp));
+    struct block* current_block = begin;
+    int result = 0;
+
+    if (begin == NULL) {
+        begin = tmp;
+        tmp->memory = _g_allocator_memory + size_of_chunk;
+
+    }
+    else {
+        result = insertBlock(tmp, current_block, size_of_chunk);
+    }
+
+    if (result) {
+        printf("\n%d, %d ", (int)_g_allocator_memory, size_of_chunk);
+        printf("\n%d ", (int)tmp->memory);
+        *error = M_ERR_OK;
+        return (m_id)tmp;
+    }
+   
+    *error = M_ERR_OK;
+    return (m_id)tmp;
 }
 
 
