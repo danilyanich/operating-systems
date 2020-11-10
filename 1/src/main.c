@@ -4,52 +4,53 @@
 #include "memory/memory.h"
 
 int main(int argc, char **argv) {
-  m_init();
+    char buffer[50];
+    m_init();
 
-  int error_code;
-  m_malloc();
-//    m_write("alina", 5, &error_code);
+    int error_code;
+    m_malloc(&error_code);
+    m_write("1234", 4, &error_code);
+    if (error_code != M_ERR_OK) abort();
+
+    m_write("1234", 4, &error_code);
+    if (error_code != M_ERR_OK) abort();
+
     m_write("alinaliza", 9, &error_code);
-//    m_write("123456", 6, &error_code);
-//  m_id chunk_1 = m_malloc(13, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//
-//  m_id chunk_2 = m_malloc(20, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//
-//  m_id chunk_3 = m_malloc(50, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//
-//  m_write("lizaalina", 9, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//
-//  m_write(chunk_2, "Operating Systems", 18, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//
-//  m_write(chunk_3, "Super dumb memory allocator", 28, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//
-  char buffer[50];
-//
-//  m_read(1, buffer, 4, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//  printf("%s\n", buffer);
-//
-//  m_read(chunk_2, buffer, 18, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//  printf("%s\n", buffer);
-//
-//  m_read(chunk_3, buffer, 28, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//  printf("%s\n", buffer);
-//
-  m_free(1, &error_code);
-  if (error_code != M_ERR_OK) abort();
-//
-//  m_free(chunk_2, &error_code);
-//  if (error_code != M_ERR_OK) abort();
-//
-//  m_free(chunk_3, &error_code);
-//  if (error_code != M_ERR_OK) abort();
+    if (error_code != M_ERR_OK) abort();
+
+    m_free(2, &error_code);
+    if (error_code != M_ERR_OK) abort();
+
+    m_write("iloveyou", 8, &error_code);
+    if (error_code != M_ERR_OK) abort();
+
+    m_read(5, buffer, 5, &error_code);
+    if (error_code != M_ERR_OK) abort();
+    else printf("%s\n", buffer);
+
+    m_write("iloveoperations", 15, &error_code);
+    if (error_code != M_ERR_OK) abort();
+
+    m_write("hello", 5, &error_code);
+    if (error_code != M_ERR_OK) abort();
+
+//    m_read(4, buffer, 5, &error_code);
+//    if (error_code != M_ERR_OK) abort();
+//    else printf("%s\n", buffer);
+
+//    m_read(11, buffer, 5, &error_code);
+//    if (error_code != M_ERR_OK) abort();
+//    else printf("%s\n", buffer);
+
+//    m_free(2, &error_code);
+//    if (error_code != M_ERR_OK) abort();
+
+//    m_write("osi", 2, &error_code);
+//    if (error_code != M_ERR_OK) abort();
+
+//    m_read(4, buffer, 6, &error_code);
+//    if (error_code != M_ERR_OK) abort();
+//    else printf("%s\n", buffer);
+
     listAllBlocks();
 }

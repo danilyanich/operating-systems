@@ -12,18 +12,18 @@
 #define SIZE_OF_PAGE 5
 
 struct Chunk{
-    char* firstBitOfChunk;
+    char* first_bit_of_chunk;
     int size;
     char data[6];
 };
 
 struct Page{
-    bool isTaken;
-    char* firstBit;
+    bool is_taken;
+    char* first_bit;
     struct Chunk chunk;
 };
 
-struct Page pagesTable[10];
+struct Page pages_table[10];
 
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
@@ -33,7 +33,7 @@ typedef void* m_id; // Identifier of sandbox memory chunk
 // @param size_of_chunk Desired size in bytes to be allocated in sandbox memory
 // @param error_code [out] M_ERR_OK, M_ERR_ALLOCATION_OUT_OF_MEMORY
 // @return An identifier for newly allocated chunk
-void m_malloc();
+void m_malloc(m_err_code *error);
 void listAllBlocks();
 
 // Deallocates a chunk in sandbox memory
