@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "memory.h"
 
 
@@ -53,6 +52,10 @@ m_id m_malloc(int size_of_chunk, m_err_code *error) {
 
 
 void m_free(m_id ptr, int size_to_free, int page, m_err_code *error) {
+    if(ptr==NULL){
+        *error = M_ERR_ALREADY_DEALLOCATED;
+        return;
+    }
     int start = (int)(ptr - (int)g_allocator_memory.pages[page]);
     int end = start + size_to_free;
 
