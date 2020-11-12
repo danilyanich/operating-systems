@@ -38,14 +38,61 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
         *error = M_ERR_OK;
         return (m_id)tmp;
     }
-   
+    else {
+        tmp->size = size_of_chunk;
+        tmp->prev = top;
+        tmp->next = NULL;
+        tmp->isNextNull = 1;
+        if (tmp->prev != NULL) {
+            tmp->memory = (char*)top->memory + size_of_chunk;
+            tmp->prev->next = tmp;
+            tmp->prev->isNextNull = 0;
+        }
+        top = tmp;
+        printf("\n%d, %d ", (int)_g_allocator_memory, size_of_chunk);
+        printf("\n%d ", (int)tmp->memory);
+
+    }
+
     *error = M_ERR_OK;
     return (m_id)tmp;
 }
 
 
 void m_free(m_id ptr, m_err_code* error) {
-  *error = M_ERR_OK;
+    struct block* ptr_new = ptr;
+
+
+    if (ptr == NULL) {
+        *error = M_ERR_ALREADY_DEALLOCATED;
+        return;
+    }
+
+    struct block* tmp;
+    if (ptr_new->memory == top->memory)
+    {
+        tmp = top;
+        top = ptr_new->prev;
+        ptr_new->prev->isNextNull = 1;
+        free(tmp);
+
+    }
+    else if (ptr_new->memory == begin->memory)
+    {
+        tmp = begin;
+        begin = ptr_new->next;
+        free(tmp);
+    }
+
+    else
+    {
+        tmp = ptr_new;
+        ptr_new->prev->next = tmp->next;
+        ptr_new->next->prev = tmp->prev;
+        ptr_new->prev->isNextNull = 1;
+        free(ptr_new);
+    }
+    *error = M_ERR_OK;
 }
 
 
@@ -62,9 +109,13 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 
 
 void m_init(int number_of_pages, int size_of_page) {
-  if (_g_allocator_memory != NULL) free(_g_allocator_memory);
+    if (_g_allocator_memory != NULL) free(_g_allocator_memory);
 
-  _g_allocator_memory_size = number_of_pages * size_of_page;
-  _g_allocator_memory = malloc(_g_allocator_memory_size);
-  _g_bytes_allocated = 0;
+    _g_allocator_memory_size = number_of_pages * size_of_page;
+    _g_allocator_memory = malloc(_g_allocator_memory_size);
+    printf("--------------------------------------------------------------------------------------------");
+    printf(_g_allocator_memory);
+    printf("--------------------------------------------------------------------------------------------");
+    _g_bytes_allocated = 0;
+
 }
