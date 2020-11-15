@@ -18,7 +18,6 @@ int main(int argc, char** argv) {
 	if (error_code != M_ERR_OK) abort();
 
 
-
 	m_write(chunk_1, "Hello World!", 13, &error_code);
 	if (error_code != M_ERR_OK) abort();
 
@@ -28,7 +27,7 @@ int main(int argc, char** argv) {
 	m_write(chunk_3, "Super dumb memory allocator", 28, &error_code);
 	if (error_code != M_ERR_OK) abort();
 
-	char buffer[50];
+	char buffer[40];
 
 	m_read(chunk_1, buffer, 13, &error_code);
 	if (error_code != M_ERR_OK) abort();

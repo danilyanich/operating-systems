@@ -63,19 +63,6 @@ int insertBlock(struct block* tmp, struct block* current_block, int size_of_chun
 
     if ((char*)begin->memory - _g_allocator_memory > size_of_chunk) {
 
-
-
-        printf("\n--------------------------------------------\n");
-        //printf(q);
-        printf("\n--------------------------------------------\n");
-        /*printf("test start --------------------------------------------------\n");
-        printf(_g_allocator_memory);
-        printf("\nasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd\n");
-        printf((char*)begin->memory);
-        printf("\n");
-        printf("test end--------------------------------------------------------\n");*/
-
-
         tmp->memory = _g_allocator_memory + size_of_chunk;
         tmp->size = size_of_chunk;
         tmp->isNextNull = 1;
@@ -88,13 +75,6 @@ int insertBlock(struct block* tmp, struct block* current_block, int size_of_chun
 
     }
     else if ((char*)begin->memory - _g_allocator_memory == size_of_chunk) {
-
-        /*printf("-----------------------test if --------------------------------------------------\n");
-        printf(_g_allocator_memory);
-        printf("\nasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd\n");
-        printf((char*)begin->memory);
-        printf("\n");
-        printf("-----------------------test end- if-------------------------------------------------------\n");*/
 
 
         tmp->memory = _g_allocator_memory + size_of_chunk;
@@ -229,9 +209,7 @@ void  m_init(int number_of_pages, int size_of_page) {
 
     _g_allocator_memory_size = number_of_pages * size_of_page;
     _g_allocator_memory = malloc(_g_allocator_memory_size);
-    printf("--------------------------------------------------------------------------------------------");
     printf(_g_allocator_memory);
-    printf("--------------------------------------------------------------------------------------------");
     _g_bytes_allocated = 0;
 
 
