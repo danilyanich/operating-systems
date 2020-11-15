@@ -8,8 +8,8 @@
 #define M_ERR_OUT_OF_BOUNDS 4 // The read/write operation out of bounds
 
 
-typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
+typedef int m_err_code; // Error code of sandbox memory
 
 
 struct block {
@@ -20,6 +20,8 @@ struct block {
 	int isNextNull;
 
 };
+
+int insertBlock(struct block*, struct block*, int);
 
 // Allocates a chunk in sandbox memory
 // @param size_of_chunk Desired size in bytes to be allocated in sandbox memory

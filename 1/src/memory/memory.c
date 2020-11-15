@@ -8,7 +8,6 @@ char* _g_allocator_memory = NULL;
 int _g_allocator_memory_size = 0;
 int _g_bytes_allocated = 0;
 
-
 struct block* top = NULL;
 struct block* begin = NULL;
 
@@ -56,10 +55,103 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
 
     *error = M_ERR_OK;
     return (m_id)tmp;
+
+}
+
+int insertBlock(struct block* tmp, struct block* current_block, int size_of_chunk) {
+    int q = (char*)begin->memory - _g_allocator_memory;
+
+    if ((char*)begin->memory - _g_allocator_memory > size_of_chunk) {
+
+
+
+        printf("\n--------------------------------------------\n");
+        //printf(q);
+        printf("\n--------------------------------------------\n");
+        /*printf("test start --------------------------------------------------\n");
+        printf(_g_allocator_memory);
+        printf("\nasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd\n");
+        printf((char*)begin->memory);
+        printf("\n");
+        printf("test end--------------------------------------------------------\n");*/
+
+
+        tmp->memory = _g_allocator_memory + size_of_chunk;
+        tmp->size = size_of_chunk;
+        tmp->isNextNull = 1;
+        tmp->next = begin;
+        tmp->prev = NULL;
+
+        begin->prev = tmp;
+        begin = tmp;
+        return 1;
+
+    }
+    else if ((char*)begin->memory - _g_allocator_memory == size_of_chunk) {
+
+        /*printf("-----------------------test if --------------------------------------------------\n");
+        printf(_g_allocator_memory);
+        printf("\nasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd\n");
+        printf((char*)begin->memory);
+        printf("\n");
+        printf("-----------------------test end- if-------------------------------------------------------\n");*/
+
+
+        tmp->memory = _g_allocator_memory + size_of_chunk;
+        tmp->size = size_of_chunk;
+        tmp->isNextNull = 0;
+        tmp->next = begin;
+
+        tmp->prev = NULL;
+
+        begin->prev = tmp;
+        begin = tmp;
+        return 1;
+    }
+
+    while (current_block != top) {
+
+        if (current_block->isNextNull == 1 && current_block->next != NULL)
+        {
+            if ((int)current_block->next->memory - (int)current_block->memory - current_block->next->size > size_of_chunk)
+            {
+
+                tmp->memory = (char*)current_block->memory + size_of_chunk;
+                tmp->size = size_of_chunk;
+                tmp->isNextNull = 1;
+                tmp->next = current_block->next;
+                tmp->prev = current_block;
+
+                current_block->isNextNull = 0;
+                current_block->next->prev = tmp;
+                current_block->next = tmp;
+                return 1;
+            }
+            else if ((int)current_block->next->memory - (int)current_block->memory - current_block->next->size == size_of_chunk)
+            {
+                tmp->memory = (char*)current_block->memory + size_of_chunk;
+                tmp->size = size_of_chunk;
+                current_block->isNextNull = 0;
+                tmp->isNextNull = 0;
+                tmp->next = current_block->next;
+                tmp->prev = current_block;
+
+                current_block->next->prev = tmp;
+                current_block->next = tmp;
+                return 1;
+            }
+        }
+
+        current_block = current_block->next;
+
+    }
+    return 0;
 }
 
 
+
 void m_free(m_id ptr, m_err_code* error) {
+
     struct block* ptr_new = ptr;
 
 
@@ -107,7 +199,10 @@ void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_cod
     {
         memcpy(read_to_buffer, ptr_new->memory, size_to_read);
     }
-   
+    else {
+        *error = M_ERR_INVALID_CHUNK;
+        return;
+    }
     *error = M_ERR_OK;
 }
 
@@ -125,11 +220,11 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
         return;
     }
     memcpy(ptr_new->memory, write_from_buffer, size_to_write);
-    
+    *error = M_ERR_OK;
 }
 
 
-void m_init(int number_of_pages, int size_of_page) {
+void  m_init(int number_of_pages, int size_of_page) {
     if (_g_allocator_memory != NULL) free(_g_allocator_memory);
 
     _g_allocator_memory_size = number_of_pages * size_of_page;
@@ -138,5 +233,6 @@ void m_init(int number_of_pages, int size_of_page) {
     printf(_g_allocator_memory);
     printf("--------------------------------------------------------------------------------------------");
     _g_bytes_allocated = 0;
+
 
 }
