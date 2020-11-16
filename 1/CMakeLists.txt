@@ -1,20 +1,6 @@
-cmake_minimum_required (VERSION 3.12.1 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17)
+project(1)
 
-set(
-  CMAKE_CXX_FLAGS
-  "${CMAKE_CXX_FLAGS}"
-)
+set(CMAKE_CXX_STANDARD 14)
 
-file(
-  GLOB_RECURSE
-  SOURCE_FILES
-  CONFIGURE_DEPENDS
-  "src/*.c"
-  "src/*.cpp"
-)
-
-include_directories("src/**/*.h")
-
-project(project)
-
-add_executable(bin ${SOURCE_FILES} )
+add_executable(1 main.cpp)
