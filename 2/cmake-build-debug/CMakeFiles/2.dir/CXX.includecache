@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/alisa/Documents/os/2/main.cpp
+array
+-
+mutex
+-
+thread
+-
+atomic
+-
+chrono
+-
+iostream
+-
+random
+-
+iomanip
+-
+string_view
+-
+
