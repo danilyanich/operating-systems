@@ -1,17 +1,5 @@
-//
-//  main.c
-//  os1
-//
-//  Created by Алина Ненашева on 16.11.20.
-//
-
 #include <stdio.h>
-//#include "memory.h"
-//#include "memory.c"
-
 #include <stdbool.h>
-
-
 #include <stdlib.h>
 #include <string.h>
 #include <printf.h>
@@ -22,11 +10,19 @@
 #define M_ERR_INVALID_CHUNK 3 // The chunk is invalid, the operation did not succeed
 #define M_ERR_OUT_OF_BOUNDS 4 // The read/write operation out of bounds
 
+//-MARK:- Global variables and typedefs
+
 int size_of_page;
 int number_of_pages;
+void *_g_allocator_memory = NULL;
+int _g_allocator_memory_size = 0;
+int _g_bytes_allocated = 0;
+int current_chunk = 0;
 
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
+
+//-MARK:- Used structures
 
 typedef struct Chunks{
     void* first_bit_of_chunk;
@@ -40,6 +36,10 @@ typedef struct Pages{
     void* first_bit;
 }Pages;
 
+Pages pages_table[1000];
+Chunks chunks_table[1000];
+
+//-MARK:- Function inicialization
 
 void m_init(int number_of_pages, int size_of_page);
 
@@ -51,12 +51,12 @@ void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_cod
 
 void m_free(m_id chunk_id, m_err_code* error_code);
 
-void listAllBlocks(void);
+//-MARK:- Main
 
 int main(int argc, char **argv) {
     char buffer[50];
     m_init(10, 5);
-
+    
     int error_code;
     m_id chunk_1 = m_malloc(51, &error_code);
     printf("%d\n", error_code);
@@ -79,13 +79,7 @@ int main(int argc, char **argv) {
     printf("%d\n", error_code);
 }
 
-void *_g_allocator_memory = NULL;
-int _g_allocator_memory_size = 0;
- int _g_bytes_allocated = 0;
-int current_chunk = 0;
-Pages pages_table[1000];
-
-Chunks chunks_table[1000];
+//-MARK:- Supporting functions
 
 void read_from_chunk(m_id chunk_id, void* read_to_buffer, int size_to_read) {
     for(int i = 0; i < sizeof(chunks_table); i++){
@@ -120,7 +114,7 @@ void free_chunk(m_id chunk_to_free) {
         }
     }
     current_chunk--;
-    }
+}
 
 void fill_chunk(m_id chunk_id, void* write_from_buffer, int size_to_write) {
     for(int i = 0; i < current_chunk + 1; i++){
@@ -183,6 +177,8 @@ m_id get_first_bit_of_free_pages(int needed_number_of_pages){
     return NULL;
 }
 
+//-MARK:- Task functuions
+
 m_id m_malloc(int size_of_chunk, m_err_code* error_code) {
     int needed_number_of_pages;
     if (size_of_chunk % size_of_page == 0) needed_number_of_pages = size_of_chunk / size_of_page; else needed_number_of_pages = size_of_chunk / size_of_page + 1;
@@ -194,9 +190,8 @@ m_id m_malloc(int size_of_chunk, m_err_code* error_code) {
         *error_code = M_ERR_ALLOCATION_OUT_OF_MEMORY;
         return NULL;
     }
-
+    
 }
-
 
 void m_free(m_id chunk_id, m_err_code* error_code) {
     if (!is_chunk_exist(chunk_id)) {
@@ -249,15 +244,8 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
     *error_code = M_ERR_OK;
 }
 
-void listAllBlocks() {
-    for(int i = 0; i < sizeof(chunks_table); i++) {
-//        printf(*chunks_table[i].data);
-//        printf("\n");
-    }
-}
-
 void m_init(int num_of_pages, int s_of_page) {
-
+    
     if (_g_allocator_memory != NULL) free(_g_allocator_memory);
     number_of_pages =  num_of_pages;
     size_of_page = s_of_page;
@@ -271,5 +259,5 @@ void m_init(int num_of_pages, int s_of_page) {
         _g_allocator_memory += size_of_page;
         pages_table[i].first_bit = _g_allocator_memory;
     }
-
+    
 }

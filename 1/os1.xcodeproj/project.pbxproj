@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		48D507F82562DF3500115A52 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 48D507F72562DF3500115A52 /* main.c */; };
-		48D508052562DFA000115A52 /* memory.c in Sources */ = {isa = PBXBuildFile; fileRef = 48D508042562DFA000115A52 /* memory.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,8 +25,6 @@
 /* Begin PBXFileReference section */
 		48D507F42562DF3500115A52 /* os1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = os1; sourceTree = BUILT_PRODUCTS_DIR; };
 		48D507F72562DF3500115A52 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		48D508042562DFA000115A52 /* memory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = memory.c; path = ../../../Downloads/untitled/src/memory/memory.c; sourceTree = "<group>"; };
-		48D508072562DFA600115A52 /* memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = memory.h; path = ../../../Downloads/untitled/src/memory/memory.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,8 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				48D507F72562DF3500115A52 /* main.c */,
-				48D508072562DFA600115A52 /* memory.h */,
-				48D508042562DFA000115A52 /* memory.c */,
 			);
 			path = os1;
 			sourceTree = "<group>";
@@ -123,7 +118,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48D508052562DFA000115A52 /* memory.c in Sources */,
 				48D507F82562DF3500115A52 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
