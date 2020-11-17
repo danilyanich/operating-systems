@@ -8,6 +8,7 @@
 class Block{
 
 public:
+    int id;
     char cont;
     Block* next;
 

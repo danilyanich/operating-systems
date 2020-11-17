@@ -15,10 +15,9 @@ int PhMemory::getAllocatedMemory() const {
 PhMemory::PhMemory(int size)  {
     this->blocks.resize(size);
 
-    for(int i =0;i<blocks.size()-1;i++){
+    for(int i =0;i<blocks.size();i++){
         blocks[i] =new Block();
-        blocks[i+1] =new Block();
-        blocks[i]->next=blocks[i+1];
+       
     }
     this->size_of_memory=size;
     this->allocated_memory=0;
@@ -36,6 +35,6 @@ bool PhMemory::allocateValue(int idx, char v)
 
 }
 
-char PhMemory::getValueAt(int idx) {
-    return this->blocks[idx]->cont;
+Block* PhMemory::getValueAt(int idx) const {
+    return this->blocks[idx];
 }

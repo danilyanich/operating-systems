@@ -24,7 +24,7 @@ public:
 
     bool allocateValue(int idx, char v);
 
-    char getValueAt(int idx);
+    Block* getValueAt(int idx)const ;
 
     int getAllocatedMemory() const;
 
