@@ -8,6 +8,19 @@
 #define M_ERR_OUT_OF_BOUNDS 4 // The read/write operation out of bounds
 
 
+typedef struct segment {
+    char *va;
+    int size_of_segment;
+    int amount_of_uses;
+    struct segment *next;
+} segment;
+
+typedef struct {
+    char *physical_address;
+    int size_of_segment;
+    segment *first_segment;
+} memory_node;
+
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
 

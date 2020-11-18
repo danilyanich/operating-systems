@@ -1,0 +1,3 @@
+﻿  OC_3_server.cpp
+e:\c++\oc_3_server\oc_3_server\oc_3_server.cpp(77): warning C4101: msg: неиспользованная локальная переменная
+  OC_3_server.vcxproj -> E:\c++\OC_3_server\Debug\OC_3_server.exe
