@@ -7,6 +7,7 @@ int main(int argc, char **argv) {
     m_init(1, 500);
 
     int error_code;
+    /*//Мои ручные тесты
     m_id a = m_malloc(2, &error_code);
     m_id b = m_malloc(7, &error_code);
     m_id c = m_malloc(6, &error_code);
@@ -15,8 +16,8 @@ int main(int argc, char **argv) {
     m_free(b, &error_code);
     m_id e = m_malloc(32, &error_code);
 
-    unsigned char buffer[] = "hren kakaya-to";
-    unsigned char buffer2[] = "hren kakaya-to";
+    unsigned char buffer[] = "**** kakaya-to";
+    unsigned char buffer2[] = "**** kakaya-to";
 
     m_write(d, buffer, 15, &error_code);
 
@@ -38,16 +39,10 @@ int main(int argc, char **argv) {
     dump();
 
     printf("%s\n", buff2);
-    printf("%s", buff3);
+    printf("%s", buff3);*/
 
-/*    print_binary(buff2[0]);
-    printf("\n");
-    print_binary(buff2[1]);
-    printf("\n");
-    print_binary(buff2[2]);
-    fflush(stdout);*/
-
-/*  m_id chunk_1 = m_malloc(13, &error_code);
+ //Ваши ручные тесты
+  m_id chunk_1 = m_malloc(13, &error_code);
   if (error_code != M_ERR_OK) abort();
 
   m_id chunk_2 = m_malloc(20, &error_code);
@@ -64,7 +59,7 @@ int main(int argc, char **argv) {
 
   m_write(chunk_3, "Super dumb memory allocator", 28, &error_code);
   if (error_code != M_ERR_OK) abort();
-
+  
   char buffer[50];
 
   m_read(chunk_1, buffer, 13, &error_code);
@@ -86,5 +81,5 @@ int main(int argc, char **argv) {
   if (error_code != M_ERR_OK) abort();
 
   m_free(chunk_3, &error_code);
-  if (error_code != M_ERR_OK) abort();*/
+  if (error_code != M_ERR_OK) abort();
 }

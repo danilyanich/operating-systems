@@ -46,7 +46,7 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 // @param size_of_page Size of the page
 void m_init(int number_of_pages, int size_of_page);
 
-
+// Dumps memory in free form
 void dump();
 
 void print_binary(unsigned char data);
