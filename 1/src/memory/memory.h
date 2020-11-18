@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef MEMORY_H
 #define MEMORY_H
 
@@ -9,8 +11,6 @@
 
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
-
-#include <stdbool.h>
 
 struct block {
 	int size;

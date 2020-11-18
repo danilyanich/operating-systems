@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "memory.h"
 
@@ -50,6 +49,7 @@ m_id m_malloc(int size_of_chunk, m_err_code* error_code)
 		}
 		top = temp;		
 	}
+
 	*error_code = M_ERR_OK;
 	return (m_id)temp;
 }
@@ -80,18 +80,49 @@ void m_free(m_id ptr, m_err_code* error_code)
 		chunk->prev->is_next_null = true;
 		free(chunk);
 	}
+
 	*error_code = M_ERR_OK;
 	return;
 }
 
 void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error_code)
 {
-	return 0;
+	struct block* read_from = read_from_id;
+
+	if (size_to_read > read_from->size) {
+		*error_code = M_ERR_OUT_OF_BOUNDS;
+		return;
+	}
+
+	if (&read_from_id != NULL && read_from->memory != NULL) {
+		memcpy(read_to_buffer, read_from->memory, size_to_read);
+	} else {
+		*error_code = M_ERR_INVALID_CHUNK;
+		return;
+	}
+
+	*error_code = M_ERR_OK;
+	return;
 }
 
 void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error_code)
 {
-	return 0;
+	struct block* write_to = write_to_id;
+
+	if (write_to_id == NULL) {
+		*error_code = M_ERR_INVALID_CHUNK;
+		return;
+	}
+
+	if (size_to_write > write_to->size) {
+		*error_code = M_ERR_OUT_OF_BOUNDS;
+		return;
+	}
+
+	memcpy(write_to->memory, write_from_buffer, size_to_write);
+
+	*error_code = M_ERR_OK;
+	return;
 }
 
 bool insert_block(struct block* temp, struct block* current, int size_of_chunk) {
