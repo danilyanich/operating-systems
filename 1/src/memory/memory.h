@@ -10,6 +10,7 @@
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
 
+#include <stdbool.h>
 
 struct block {
 	int size;
@@ -53,6 +54,6 @@ void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_cod
 // @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
 void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error_code);
 
-bool insert_block (struct block* temp, int size_of_chunk);
+bool insert_block (struct block* temp, struct block* current, int size_of_chunk);
 
 #endif /* MEMORY_H */
