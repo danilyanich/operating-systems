@@ -10,13 +10,24 @@ int _g_bytes_allocated = 0;
 
 int page_size = 0;
 struct page *first_page;
+struct page *temporary_page = NULL;
 
 m_id m_malloc(int size_of_chunk, m_err_code* error) {
+  if(temporary_page != NULL){
+    if(temporary_page -> is_free == true && size_of_chunk <= page_size){
+      temporary_page -> is_free = false;
+      printf("Malloc complite\n");
+      *error = M_ERR_OK;
+      return temporary_page -> memory;
+    }
+  }
+
   struct page* page = first_page;
   while(page -> next != NULL){
     if(page -> is_free == true){
       if(size_of_chunk <= page_size){
         page -> is_free = false;
+        temporary_page = page;
         printf("Malloc complite\n");
         *error = M_ERR_OK;
         return page -> memory;
@@ -35,6 +46,7 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
               temp_page = page;
               page = page -> next;
             }
+            temporary_page = page;
             printf("Malloc complite\n");
             *error = M_ERR_OK;
             return page -> memory;
@@ -49,6 +61,20 @@ m_id m_malloc(int size_of_chunk, m_err_code* error) {
 }
 
 void m_free(m_id ptr, m_err_code* error) {
+  if(temporary_page != NULL){
+    if(temporary_page -> memory == ptr){
+      temporary_page -> is_free = true;
+      struct page* page = temporary_page;
+      while(page -> previous != NULL){
+        page = page -> previous;
+        page -> is_free = true;
+      }
+      printf("Deleted\n");
+      *error = M_ERR_OK;
+      return;
+    }
+  }
+
   struct page* page = first_page;
   while(page -> next != NULL){
     m_id t = page -> memory;
@@ -58,6 +84,7 @@ void m_free(m_id ptr, m_err_code* error) {
         page = page -> previous;
         page -> is_free = true;
       }
+      temporary_page = page;
       printf("Deleted\n");
       *error = M_ERR_OK;
       return;
