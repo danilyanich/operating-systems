@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef MEMORY_H
 #define MEMORY_H
 
@@ -10,6 +12,14 @@
 
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
+
+struct page{
+    m_id memory;
+    int size;
+    bool is_free;
+    struct page *next;
+    struct page *previous;
+};
 
 
 // Allocates a chunk in sandbox memory
