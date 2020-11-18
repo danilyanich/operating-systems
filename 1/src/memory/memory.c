@@ -29,36 +29,59 @@ m_id m_malloc(int size_of_chunk, m_err_code* error_code)
 
 	struct block* temp = malloc(sizeof(*temp));
 	struct block* current = begin;
-	bool result;
+	bool result = false;
 
 	if (begin != NULL) {
 		result = insert_block(temp, current, size_of_chunk);
-		if (result) 
-			*error_code = M_ERR_OK;
-		else {
-			temp->size = size_of_chunk;
-			temp->prev = top;
-			temp->next = NULL;
-			temp->is_next_null = 1;
-			if (temp->prev != NULL) {
-				temp->memory = (char*)top->memory + size_of_chunk;
-				temp->prev->next = temp;
-				temp->prev->is_next_null = 0;
-			}
-			top = temp;
-		}
 	} else {
 		begin = temp;
 		temp->memory = _g_allocator_memory + size_of_chunk;
 	}
 
+	if(!result) {
+		temp->size = size_of_chunk;
+		temp->prev = top;
+		temp->next = NULL;
+		temp->is_next_null = true;
+		if (temp->prev != NULL) {
+			temp->memory = (char*)top->memory + size_of_chunk;
+			temp->prev->next = temp;
+			temp->prev->is_next_null = false;
+		}
+		top = temp;		
+	}
 	*error_code = M_ERR_OK;
 	return (m_id)temp;
 }
 
-void m_free(m_id chunk_id, m_err_code* error_code)
+void m_free(m_id ptr, m_err_code* error_code)
 {
-	return 0;
+	if (ptr == NULL) {
+		*error_code = M_ERR_ALREADY_DEALLOCATED;
+		return;
+	}
+
+	struct block* chunk = ptr;
+	struct block* temp;
+
+	if (chunk->memory == top->memory) {
+		temp = top;
+		top = chunk->prev;
+		chunk->prev->is_next_null = true;
+		free(temp);
+	} else if (chunk->memory == begin->memory) {
+		temp = begin;
+		begin = chunk->next;
+		free(temp);
+	} else {
+		temp = chunk;
+		chunk->prev->next = temp->next;
+		chunk->next->prev = temp->prev;
+		chunk->prev->is_next_null = true;
+		free(chunk);
+	}
+	*error_code = M_ERR_OK;
+	return;
 }
 
 void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_code* error_code)
