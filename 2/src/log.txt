@@ -1,0 +1,18 @@
+result: 1 calculation time:1.089000 recording time:1.089000
+
+result: 4 calculation time:2.101000 recording time:2.104000
+
+result: 9 calculation time:3.110000 recording time:3.113000
+
+result: 16 calculation time:4.114000 recording time:4.117000
+
+result: 25 calculation time:5.123000 recording time:5.126000
+
+result: 36 calculation time:6.134000 recording time:6.138000
+
+result: 49 calculation time:7.142000 recording time:7.146000
+
+result: 64 calculation time:8.145000 recording time:8.149000
+
+result: 81 calculation time:9.155000 recording time:9.158000
+
