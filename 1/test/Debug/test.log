@@ -1,0 +1,3 @@
+﻿  memory.c
+C:\Users\fabis\OneDrive\Рабочий стол\new\test\memory.c(39,15): warning C4013: printf: нет определения; предполагается "extern" с возвратом типа "int"
+  test.vcxproj -> C:\Users\fabis\OneDrive\Рабочий стол\new\Debug\test.exe
