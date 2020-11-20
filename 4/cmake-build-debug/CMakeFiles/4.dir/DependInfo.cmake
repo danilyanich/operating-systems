@@ -4,7 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/alisa/Documents/os/untitled/main.cpp" "/Users/alisa/Documents/os/untitled/cmake-build-debug/CMakeFiles/untitled.dir/main.cpp.o"
+  "/Users/alisa/Documents/os/4/src/Cluster.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/Cluster.cpp.o"
+  "/Users/alisa/Documents/os/4/src/CustomFile.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/CustomFile.cpp.o"
+  "/Users/alisa/Documents/os/4/src/main.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

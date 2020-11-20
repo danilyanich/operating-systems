@@ -68,10 +68,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/alisa/Documents/os/untitled
+CMAKE_SOURCE_DIR = /Users/alisa/Documents/os/4
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/alisa/Documents/os/untitled/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/alisa/Documents/os/4/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -100,9 +100,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alisa/Documents/os/untitled/cmake-build-debug/CMakeFiles /Users/alisa/Documents/os/untitled/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles /Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alisa/Documents/os/untitled/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -131,44 +131,98 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named untitled
+# Target rules for targets named 4
 
 # Build rule for target.
-untitled: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 untitled
-.PHONY : untitled
+4 : cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 4
+.PHONY : 4
 
 # fast build rule for target.
-untitled/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/build
-.PHONY : untitled/fast
+4/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/build
+.PHONY : 4/fast
 
-main.o: main.cpp.o
+src/Cluster.o: src/Cluster.cpp.o
 
-.PHONY : main.o
+.PHONY : src/Cluster.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/Cluster.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/Cluster.cpp.o
+.PHONY : src/Cluster.cpp.o
 
-main.i: main.cpp.i
+src/Cluster.i: src/Cluster.cpp.i
 
-.PHONY : main.i
+.PHONY : src/Cluster.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/Cluster.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/Cluster.cpp.i
+.PHONY : src/Cluster.cpp.i
 
-main.s: main.cpp.s
+src/Cluster.s: src/Cluster.cpp.s
 
-.PHONY : main.s
+.PHONY : src/Cluster.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/Cluster.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/Cluster.cpp.s
+.PHONY : src/Cluster.cpp.s
+
+src/CustomFile.o: src/CustomFile.cpp.o
+
+.PHONY : src/CustomFile.o
+
+# target to build an object file
+src/CustomFile.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CustomFile.cpp.o
+.PHONY : src/CustomFile.cpp.o
+
+src/CustomFile.i: src/CustomFile.cpp.i
+
+.PHONY : src/CustomFile.i
+
+# target to preprocess a source file
+src/CustomFile.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CustomFile.cpp.i
+.PHONY : src/CustomFile.cpp.i
+
+src/CustomFile.s: src/CustomFile.cpp.s
+
+.PHONY : src/CustomFile.s
+
+# target to generate assembly for a file
+src/CustomFile.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CustomFile.cpp.s
+.PHONY : src/CustomFile.cpp.s
+
+src/main.o: src/main.cpp.o
+
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -178,10 +232,16 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... untitled"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... 4"
+	@echo "... src/Cluster.o"
+	@echo "... src/Cluster.i"
+	@echo "... src/Cluster.s"
+	@echo "... src/CustomFile.o"
+	@echo "... src/CustomFile.i"
+	@echo "... src/CustomFile.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 
