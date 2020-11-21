@@ -116,11 +116,53 @@ CMakeFiles/4.dir/src/Cluster.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/Cluster.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/Cluster.cpp -o CMakeFiles/4.dir/src/Cluster.cpp.s
 
+CMakeFiles/4.dir/src/InterfaceCluster.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/InterfaceCluster.cpp.o: ../src/InterfaceCluster.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/4.dir/src/InterfaceCluster.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/InterfaceCluster.cpp.o -c /Users/alisa/Documents/os/4/src/InterfaceCluster.cpp
+
+CMakeFiles/4.dir/src/InterfaceCluster.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/InterfaceCluster.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/InterfaceCluster.cpp > CMakeFiles/4.dir/src/InterfaceCluster.cpp.i
+
+CMakeFiles/4.dir/src/InterfaceCluster.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/InterfaceCluster.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/InterfaceCluster.cpp -o CMakeFiles/4.dir/src/InterfaceCluster.cpp.s
+
+CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o: ../src/InterfaceFileSystem.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o -c /Users/alisa/Documents/os/4/src/InterfaceFileSystem.cpp
+
+CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/InterfaceFileSystem.cpp > CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.i
+
+CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/InterfaceFileSystem.cpp -o CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.s
+
+CMakeFiles/4.dir/src/ReadWriteService.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/ReadWriteService.cpp.o: ../src/ReadWriteService.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/4.dir/src/ReadWriteService.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/ReadWriteService.cpp.o -c /Users/alisa/Documents/os/4/src/ReadWriteService.cpp
+
+CMakeFiles/4.dir/src/ReadWriteService.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/ReadWriteService.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/ReadWriteService.cpp > CMakeFiles/4.dir/src/ReadWriteService.cpp.i
+
+CMakeFiles/4.dir/src/ReadWriteService.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/ReadWriteService.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/ReadWriteService.cpp -o CMakeFiles/4.dir/src/ReadWriteService.cpp.s
+
 # Object files for target 4
 4_OBJECTS = \
 "CMakeFiles/4.dir/src/main.cpp.o" \
 "CMakeFiles/4.dir/src/CustomFile.cpp.o" \
-"CMakeFiles/4.dir/src/Cluster.cpp.o"
+"CMakeFiles/4.dir/src/Cluster.cpp.o" \
+"CMakeFiles/4.dir/src/InterfaceCluster.cpp.o" \
+"CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o" \
+"CMakeFiles/4.dir/src/ReadWriteService.cpp.o"
 
 # External object files for target 4
 4_EXTERNAL_OBJECTS =
@@ -128,9 +170,12 @@ CMakeFiles/4.dir/src/Cluster.cpp.s: cmake_force
 4 : CMakeFiles/4.dir/src/main.cpp.o
 4 : CMakeFiles/4.dir/src/CustomFile.cpp.o
 4 : CMakeFiles/4.dir/src/Cluster.cpp.o
+4 : CMakeFiles/4.dir/src/InterfaceCluster.cpp.o
+4 : CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o
+4 : CMakeFiles/4.dir/src/ReadWriteService.cpp.o
 4 : CMakeFiles/4.dir/build.make
 4 : CMakeFiles/4.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable 4"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable 4"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/4.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

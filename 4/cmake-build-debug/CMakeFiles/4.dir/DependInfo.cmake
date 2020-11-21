@@ -6,6 +6,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/alisa/Documents/os/4/src/Cluster.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/Cluster.cpp.o"
   "/Users/alisa/Documents/os/4/src/CustomFile.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/CustomFile.cpp.o"
+  "/Users/alisa/Documents/os/4/src/InterfaceCluster.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/InterfaceCluster.cpp.o"
+  "/Users/alisa/Documents/os/4/src/InterfaceFileSystem.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o"
+  "/Users/alisa/Documents/os/4/src/ReadWriteService.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/ReadWriteService.cpp.o"
   "/Users/alisa/Documents/os/4/src/main.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")

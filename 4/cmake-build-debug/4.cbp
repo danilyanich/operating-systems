@@ -86,6 +86,15 @@
 		<Unit filename="/Users/alisa/Documents/os/4/src/CustomFile.cpp">
 			<Option target="4"/>
 		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/InterfaceCluster.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/InterfaceFileSystem.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/ReadWriteService.cpp">
+			<Option target="4"/>
+		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/main.cpp">
 			<Option target="4"/>
 		</Unit>

@@ -197,6 +197,87 @@ src/CustomFile.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CustomFile.cpp.s
 .PHONY : src/CustomFile.cpp.s
 
+src/InterfaceCluster.o: src/InterfaceCluster.cpp.o
+
+.PHONY : src/InterfaceCluster.o
+
+# target to build an object file
+src/InterfaceCluster.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/InterfaceCluster.cpp.o
+.PHONY : src/InterfaceCluster.cpp.o
+
+src/InterfaceCluster.i: src/InterfaceCluster.cpp.i
+
+.PHONY : src/InterfaceCluster.i
+
+# target to preprocess a source file
+src/InterfaceCluster.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/InterfaceCluster.cpp.i
+.PHONY : src/InterfaceCluster.cpp.i
+
+src/InterfaceCluster.s: src/InterfaceCluster.cpp.s
+
+.PHONY : src/InterfaceCluster.s
+
+# target to generate assembly for a file
+src/InterfaceCluster.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/InterfaceCluster.cpp.s
+.PHONY : src/InterfaceCluster.cpp.s
+
+src/InterfaceFileSystem.o: src/InterfaceFileSystem.cpp.o
+
+.PHONY : src/InterfaceFileSystem.o
+
+# target to build an object file
+src/InterfaceFileSystem.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o
+.PHONY : src/InterfaceFileSystem.cpp.o
+
+src/InterfaceFileSystem.i: src/InterfaceFileSystem.cpp.i
+
+.PHONY : src/InterfaceFileSystem.i
+
+# target to preprocess a source file
+src/InterfaceFileSystem.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.i
+.PHONY : src/InterfaceFileSystem.cpp.i
+
+src/InterfaceFileSystem.s: src/InterfaceFileSystem.cpp.s
+
+.PHONY : src/InterfaceFileSystem.s
+
+# target to generate assembly for a file
+src/InterfaceFileSystem.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.s
+.PHONY : src/InterfaceFileSystem.cpp.s
+
+src/ReadWriteService.o: src/ReadWriteService.cpp.o
+
+.PHONY : src/ReadWriteService.o
+
+# target to build an object file
+src/ReadWriteService.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ReadWriteService.cpp.o
+.PHONY : src/ReadWriteService.cpp.o
+
+src/ReadWriteService.i: src/ReadWriteService.cpp.i
+
+.PHONY : src/ReadWriteService.i
+
+# target to preprocess a source file
+src/ReadWriteService.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ReadWriteService.cpp.i
+.PHONY : src/ReadWriteService.cpp.i
+
+src/ReadWriteService.s: src/ReadWriteService.cpp.s
+
+.PHONY : src/ReadWriteService.s
+
+# target to generate assembly for a file
+src/ReadWriteService.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ReadWriteService.cpp.s
+.PHONY : src/ReadWriteService.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -239,6 +320,15 @@ help:
 	@echo "... src/CustomFile.o"
 	@echo "... src/CustomFile.i"
 	@echo "... src/CustomFile.s"
+	@echo "... src/InterfaceCluster.o"
+	@echo "... src/InterfaceCluster.i"
+	@echo "... src/InterfaceCluster.s"
+	@echo "... src/InterfaceFileSystem.o"
+	@echo "... src/InterfaceFileSystem.i"
+	@echo "... src/InterfaceFileSystem.s"
+	@echo "... src/ReadWriteService.o"
+	@echo "... src/ReadWriteService.i"
+	@echo "... src/ReadWriteService.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
