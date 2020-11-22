@@ -5,22 +5,24 @@ using namespace std;
 
 class Memory{
     private:
+
         char data[1000];
         int last_end_index = 0;
 
     public:
-    
+
         int write(
             char writed_data[],
             int size
         ){
+            int begin = last_end_index;
             for(int i=0; i<size; i++, last_end_index++){
                 data[last_end_index] = writed_data[i];
             }
-            return 1;
+            return begin;
         }
 
-};
+}memory;
 
 class File{
 
@@ -28,31 +30,18 @@ class File{
 
         char content[200];
         string name;
-        string type;
         int begin;
         int size;
 
     public:
-
-        const string get_name(){
-            return name;
-        }
-
-        void set_name(
-            const string seted_name
+        File(
+            char conent[],
+            string name,
+            int size
         ){
-            name = seted_name;
+            
         }
 
-        const string get_type(){
-            return type;
-        }
-
-        void set_type(
-            const string seted_type
-        ){
-            type = seted_type;
-        }
 };
 
 class FileSystem{
