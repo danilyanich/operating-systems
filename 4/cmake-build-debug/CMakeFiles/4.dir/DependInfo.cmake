@@ -4,8 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/Users/alisa/Documents/os/4/src/Action.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/Action.cpp.o"
+  "/Users/alisa/Documents/os/4/src/ActionResult.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/ActionResult.cpp.o"
   "/Users/alisa/Documents/os/4/src/Cluster.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/Cluster.cpp.o"
   "/Users/alisa/Documents/os/4/src/CustomFile.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/CustomFile.cpp.o"
+  "/Users/alisa/Documents/os/4/src/DumpService.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/DumpService.cpp.o"
+  "/Users/alisa/Documents/os/4/src/FileSystemService.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/FileSystemService.cpp.o"
   "/Users/alisa/Documents/os/4/src/InterfaceCluster.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/InterfaceCluster.cpp.o"
   "/Users/alisa/Documents/os/4/src/InterfaceFileSystem.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o"
   "/Users/alisa/Documents/os/4/src/ReadWriteService.cpp" "/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles/4.dir/src/ReadWriteService.cpp.o"

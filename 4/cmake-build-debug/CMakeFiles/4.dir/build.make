@@ -155,6 +155,58 @@ CMakeFiles/4.dir/src/ReadWriteService.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/ReadWriteService.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/ReadWriteService.cpp -o CMakeFiles/4.dir/src/ReadWriteService.cpp.s
 
+CMakeFiles/4.dir/src/DumpService.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/DumpService.cpp.o: ../src/DumpService.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/4.dir/src/DumpService.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/DumpService.cpp.o -c /Users/alisa/Documents/os/4/src/DumpService.cpp
+
+CMakeFiles/4.dir/src/DumpService.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/DumpService.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/DumpService.cpp > CMakeFiles/4.dir/src/DumpService.cpp.i
+
+CMakeFiles/4.dir/src/DumpService.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/DumpService.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/DumpService.cpp -o CMakeFiles/4.dir/src/DumpService.cpp.s
+
+CMakeFiles/4.dir/src/Action.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/Action.cpp.o: ../src/Action.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/4.dir/src/Action.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/Action.cpp.o -c /Users/alisa/Documents/os/4/src/Action.cpp
+
+CMakeFiles/4.dir/src/Action.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/Action.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/Action.cpp > CMakeFiles/4.dir/src/Action.cpp.i
+
+CMakeFiles/4.dir/src/Action.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/Action.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/Action.cpp -o CMakeFiles/4.dir/src/Action.cpp.s
+
+CMakeFiles/4.dir/src/ActionResult.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/ActionResult.cpp.o: ../src/ActionResult.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/4.dir/src/ActionResult.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/ActionResult.cpp.o -c /Users/alisa/Documents/os/4/src/ActionResult.cpp
+
+CMakeFiles/4.dir/src/ActionResult.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/ActionResult.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/ActionResult.cpp > CMakeFiles/4.dir/src/ActionResult.cpp.i
+
+CMakeFiles/4.dir/src/ActionResult.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/ActionResult.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/ActionResult.cpp -o CMakeFiles/4.dir/src/ActionResult.cpp.s
+
+CMakeFiles/4.dir/src/FileSystemService.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/FileSystemService.cpp.o: ../src/FileSystemService.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/4.dir/src/FileSystemService.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/FileSystemService.cpp.o -c /Users/alisa/Documents/os/4/src/FileSystemService.cpp
+
+CMakeFiles/4.dir/src/FileSystemService.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/FileSystemService.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/FileSystemService.cpp > CMakeFiles/4.dir/src/FileSystemService.cpp.i
+
+CMakeFiles/4.dir/src/FileSystemService.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/FileSystemService.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/FileSystemService.cpp -o CMakeFiles/4.dir/src/FileSystemService.cpp.s
+
 # Object files for target 4
 4_OBJECTS = \
 "CMakeFiles/4.dir/src/main.cpp.o" \
@@ -162,7 +214,11 @@ CMakeFiles/4.dir/src/ReadWriteService.cpp.s: cmake_force
 "CMakeFiles/4.dir/src/Cluster.cpp.o" \
 "CMakeFiles/4.dir/src/InterfaceCluster.cpp.o" \
 "CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o" \
-"CMakeFiles/4.dir/src/ReadWriteService.cpp.o"
+"CMakeFiles/4.dir/src/ReadWriteService.cpp.o" \
+"CMakeFiles/4.dir/src/DumpService.cpp.o" \
+"CMakeFiles/4.dir/src/Action.cpp.o" \
+"CMakeFiles/4.dir/src/ActionResult.cpp.o" \
+"CMakeFiles/4.dir/src/FileSystemService.cpp.o"
 
 # External object files for target 4
 4_EXTERNAL_OBJECTS =
@@ -173,9 +229,13 @@ CMakeFiles/4.dir/src/ReadWriteService.cpp.s: cmake_force
 4 : CMakeFiles/4.dir/src/InterfaceCluster.cpp.o
 4 : CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.o
 4 : CMakeFiles/4.dir/src/ReadWriteService.cpp.o
+4 : CMakeFiles/4.dir/src/DumpService.cpp.o
+4 : CMakeFiles/4.dir/src/Action.cpp.o
+4 : CMakeFiles/4.dir/src/ActionResult.cpp.o
+4 : CMakeFiles/4.dir/src/FileSystemService.cpp.o
 4 : CMakeFiles/4.dir/build.make
 4 : CMakeFiles/4.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable 4"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable 4"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/4.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

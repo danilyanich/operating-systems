@@ -143,6 +143,60 @@ depend:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/build
 .PHONY : 4/fast
 
+src/Action.o: src/Action.cpp.o
+
+.PHONY : src/Action.o
+
+# target to build an object file
+src/Action.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/Action.cpp.o
+.PHONY : src/Action.cpp.o
+
+src/Action.i: src/Action.cpp.i
+
+.PHONY : src/Action.i
+
+# target to preprocess a source file
+src/Action.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/Action.cpp.i
+.PHONY : src/Action.cpp.i
+
+src/Action.s: src/Action.cpp.s
+
+.PHONY : src/Action.s
+
+# target to generate assembly for a file
+src/Action.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/Action.cpp.s
+.PHONY : src/Action.cpp.s
+
+src/ActionResult.o: src/ActionResult.cpp.o
+
+.PHONY : src/ActionResult.o
+
+# target to build an object file
+src/ActionResult.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ActionResult.cpp.o
+.PHONY : src/ActionResult.cpp.o
+
+src/ActionResult.i: src/ActionResult.cpp.i
+
+.PHONY : src/ActionResult.i
+
+# target to preprocess a source file
+src/ActionResult.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ActionResult.cpp.i
+.PHONY : src/ActionResult.cpp.i
+
+src/ActionResult.s: src/ActionResult.cpp.s
+
+.PHONY : src/ActionResult.s
+
+# target to generate assembly for a file
+src/ActionResult.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ActionResult.cpp.s
+.PHONY : src/ActionResult.cpp.s
+
 src/Cluster.o: src/Cluster.cpp.o
 
 .PHONY : src/Cluster.o
@@ -196,6 +250,60 @@ src/CustomFile.s: src/CustomFile.cpp.s
 src/CustomFile.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CustomFile.cpp.s
 .PHONY : src/CustomFile.cpp.s
+
+src/DumpService.o: src/DumpService.cpp.o
+
+.PHONY : src/DumpService.o
+
+# target to build an object file
+src/DumpService.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DumpService.cpp.o
+.PHONY : src/DumpService.cpp.o
+
+src/DumpService.i: src/DumpService.cpp.i
+
+.PHONY : src/DumpService.i
+
+# target to preprocess a source file
+src/DumpService.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DumpService.cpp.i
+.PHONY : src/DumpService.cpp.i
+
+src/DumpService.s: src/DumpService.cpp.s
+
+.PHONY : src/DumpService.s
+
+# target to generate assembly for a file
+src/DumpService.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DumpService.cpp.s
+.PHONY : src/DumpService.cpp.s
+
+src/FileSystemService.o: src/FileSystemService.cpp.o
+
+.PHONY : src/FileSystemService.o
+
+# target to build an object file
+src/FileSystemService.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/FileSystemService.cpp.o
+.PHONY : src/FileSystemService.cpp.o
+
+src/FileSystemService.i: src/FileSystemService.cpp.i
+
+.PHONY : src/FileSystemService.i
+
+# target to preprocess a source file
+src/FileSystemService.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/FileSystemService.cpp.i
+.PHONY : src/FileSystemService.cpp.i
+
+src/FileSystemService.s: src/FileSystemService.cpp.s
+
+.PHONY : src/FileSystemService.s
+
+# target to generate assembly for a file
+src/FileSystemService.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/FileSystemService.cpp.s
+.PHONY : src/FileSystemService.cpp.s
 
 src/InterfaceCluster.o: src/InterfaceCluster.cpp.o
 
@@ -314,12 +422,24 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... 4"
+	@echo "... src/Action.o"
+	@echo "... src/Action.i"
+	@echo "... src/Action.s"
+	@echo "... src/ActionResult.o"
+	@echo "... src/ActionResult.i"
+	@echo "... src/ActionResult.s"
 	@echo "... src/Cluster.o"
 	@echo "... src/Cluster.i"
 	@echo "... src/Cluster.s"
 	@echo "... src/CustomFile.o"
 	@echo "... src/CustomFile.i"
 	@echo "... src/CustomFile.s"
+	@echo "... src/DumpService.o"
+	@echo "... src/DumpService.i"
+	@echo "... src/DumpService.s"
+	@echo "... src/FileSystemService.o"
+	@echo "... src/FileSystemService.i"
+	@echo "... src/FileSystemService.s"
 	@echo "... src/InterfaceCluster.o"
 	@echo "... src/InterfaceCluster.i"
 	@echo "... src/InterfaceCluster.s"

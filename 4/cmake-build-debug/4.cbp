@@ -80,10 +80,22 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/alisa/Documents/os/4/src/Action.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/ActionResult.cpp">
+			<Option target="4"/>
+		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/Cluster.cpp">
 			<Option target="4"/>
 		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/CustomFile.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/DumpService.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/FileSystemService.cpp">
 			<Option target="4"/>
 		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/InterfaceCluster.cpp">
