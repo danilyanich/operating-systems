@@ -1,12 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #define DEFAULT_ADDRESSES_SIZE 0
 #define DEFAULT_SIZE 0
 #define DEFAULT_TOTAL_ADDRESSES 0
 
 using namespace std;
+
 
 class CustomFile {
 private:

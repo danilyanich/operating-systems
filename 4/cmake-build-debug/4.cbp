@@ -89,10 +89,25 @@
 		<Unit filename="/Users/alisa/Documents/os/4/src/Cluster.cpp">
 			<Option target="4"/>
 		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/CopyFileAction.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/CreateFileAction.cpp">
+			<Option target="4"/>
+		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/CustomFile.cpp">
 			<Option target="4"/>
 		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/DeleteFileAction.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/DumpAction.cpp">
+			<Option target="4"/>
+		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/DumpService.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/ExpressionResolver.cpp">
 			<Option target="4"/>
 		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/FileSystemService.cpp">
@@ -104,7 +119,22 @@
 		<Unit filename="/Users/alisa/Documents/os/4/src/InterfaceFileSystem.cpp">
 			<Option target="4"/>
 		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/ListFilesAction.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/MoveFileAction.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/ReadFileAction.cpp">
+			<Option target="4"/>
+		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/ReadWriteService.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/RewriteFileAction.cpp">
+			<Option target="4"/>
+		</Unit>
+		<Unit filename="/Users/alisa/Documents/os/4/src/WriteFileAction.cpp">
 			<Option target="4"/>
 		</Unit>
 		<Unit filename="/Users/alisa/Documents/os/4/src/main.cpp">

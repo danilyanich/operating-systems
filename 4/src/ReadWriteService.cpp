@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Cluster.cpp"
-#include "CustomFile.cpp"
 #include "InterfaceCluster.cpp"
 #include <vector>
 #include <cstring>
@@ -14,7 +12,7 @@ private:
     InterfaceCluster *interfaceCluster;
 public:
 
-    void setClusterDao(InterfaceCluster *clusterDao) {
+    void setInterfaceCluster(InterfaceCluster *clusterDao) {
         this->interfaceCluster = clusterDao;
     }
 

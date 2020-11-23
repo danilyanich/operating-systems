@@ -224,6 +224,60 @@ src/Cluster.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/Cluster.cpp.s
 .PHONY : src/Cluster.cpp.s
 
+src/CopyFileAction.o: src/CopyFileAction.cpp.o
+
+.PHONY : src/CopyFileAction.o
+
+# target to build an object file
+src/CopyFileAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CopyFileAction.cpp.o
+.PHONY : src/CopyFileAction.cpp.o
+
+src/CopyFileAction.i: src/CopyFileAction.cpp.i
+
+.PHONY : src/CopyFileAction.i
+
+# target to preprocess a source file
+src/CopyFileAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CopyFileAction.cpp.i
+.PHONY : src/CopyFileAction.cpp.i
+
+src/CopyFileAction.s: src/CopyFileAction.cpp.s
+
+.PHONY : src/CopyFileAction.s
+
+# target to generate assembly for a file
+src/CopyFileAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CopyFileAction.cpp.s
+.PHONY : src/CopyFileAction.cpp.s
+
+src/CreateFileAction.o: src/CreateFileAction.cpp.o
+
+.PHONY : src/CreateFileAction.o
+
+# target to build an object file
+src/CreateFileAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CreateFileAction.cpp.o
+.PHONY : src/CreateFileAction.cpp.o
+
+src/CreateFileAction.i: src/CreateFileAction.cpp.i
+
+.PHONY : src/CreateFileAction.i
+
+# target to preprocess a source file
+src/CreateFileAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CreateFileAction.cpp.i
+.PHONY : src/CreateFileAction.cpp.i
+
+src/CreateFileAction.s: src/CreateFileAction.cpp.s
+
+.PHONY : src/CreateFileAction.s
+
+# target to generate assembly for a file
+src/CreateFileAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CreateFileAction.cpp.s
+.PHONY : src/CreateFileAction.cpp.s
+
 src/CustomFile.o: src/CustomFile.cpp.o
 
 .PHONY : src/CustomFile.o
@@ -251,6 +305,60 @@ src/CustomFile.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/CustomFile.cpp.s
 .PHONY : src/CustomFile.cpp.s
 
+src/DeleteFileAction.o: src/DeleteFileAction.cpp.o
+
+.PHONY : src/DeleteFileAction.o
+
+# target to build an object file
+src/DeleteFileAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DeleteFileAction.cpp.o
+.PHONY : src/DeleteFileAction.cpp.o
+
+src/DeleteFileAction.i: src/DeleteFileAction.cpp.i
+
+.PHONY : src/DeleteFileAction.i
+
+# target to preprocess a source file
+src/DeleteFileAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DeleteFileAction.cpp.i
+.PHONY : src/DeleteFileAction.cpp.i
+
+src/DeleteFileAction.s: src/DeleteFileAction.cpp.s
+
+.PHONY : src/DeleteFileAction.s
+
+# target to generate assembly for a file
+src/DeleteFileAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DeleteFileAction.cpp.s
+.PHONY : src/DeleteFileAction.cpp.s
+
+src/DumpAction.o: src/DumpAction.cpp.o
+
+.PHONY : src/DumpAction.o
+
+# target to build an object file
+src/DumpAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DumpAction.cpp.o
+.PHONY : src/DumpAction.cpp.o
+
+src/DumpAction.i: src/DumpAction.cpp.i
+
+.PHONY : src/DumpAction.i
+
+# target to preprocess a source file
+src/DumpAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DumpAction.cpp.i
+.PHONY : src/DumpAction.cpp.i
+
+src/DumpAction.s: src/DumpAction.cpp.s
+
+.PHONY : src/DumpAction.s
+
+# target to generate assembly for a file
+src/DumpAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DumpAction.cpp.s
+.PHONY : src/DumpAction.cpp.s
+
 src/DumpService.o: src/DumpService.cpp.o
 
 .PHONY : src/DumpService.o
@@ -277,6 +385,33 @@ src/DumpService.s: src/DumpService.cpp.s
 src/DumpService.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/DumpService.cpp.s
 .PHONY : src/DumpService.cpp.s
+
+src/ExpressionResolver.o: src/ExpressionResolver.cpp.o
+
+.PHONY : src/ExpressionResolver.o
+
+# target to build an object file
+src/ExpressionResolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ExpressionResolver.cpp.o
+.PHONY : src/ExpressionResolver.cpp.o
+
+src/ExpressionResolver.i: src/ExpressionResolver.cpp.i
+
+.PHONY : src/ExpressionResolver.i
+
+# target to preprocess a source file
+src/ExpressionResolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ExpressionResolver.cpp.i
+.PHONY : src/ExpressionResolver.cpp.i
+
+src/ExpressionResolver.s: src/ExpressionResolver.cpp.s
+
+.PHONY : src/ExpressionResolver.s
+
+# target to generate assembly for a file
+src/ExpressionResolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ExpressionResolver.cpp.s
+.PHONY : src/ExpressionResolver.cpp.s
 
 src/FileSystemService.o: src/FileSystemService.cpp.o
 
@@ -359,6 +494,87 @@ src/InterfaceFileSystem.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/InterfaceFileSystem.cpp.s
 .PHONY : src/InterfaceFileSystem.cpp.s
 
+src/ListFilesAction.o: src/ListFilesAction.cpp.o
+
+.PHONY : src/ListFilesAction.o
+
+# target to build an object file
+src/ListFilesAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ListFilesAction.cpp.o
+.PHONY : src/ListFilesAction.cpp.o
+
+src/ListFilesAction.i: src/ListFilesAction.cpp.i
+
+.PHONY : src/ListFilesAction.i
+
+# target to preprocess a source file
+src/ListFilesAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ListFilesAction.cpp.i
+.PHONY : src/ListFilesAction.cpp.i
+
+src/ListFilesAction.s: src/ListFilesAction.cpp.s
+
+.PHONY : src/ListFilesAction.s
+
+# target to generate assembly for a file
+src/ListFilesAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ListFilesAction.cpp.s
+.PHONY : src/ListFilesAction.cpp.s
+
+src/MoveFileAction.o: src/MoveFileAction.cpp.o
+
+.PHONY : src/MoveFileAction.o
+
+# target to build an object file
+src/MoveFileAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/MoveFileAction.cpp.o
+.PHONY : src/MoveFileAction.cpp.o
+
+src/MoveFileAction.i: src/MoveFileAction.cpp.i
+
+.PHONY : src/MoveFileAction.i
+
+# target to preprocess a source file
+src/MoveFileAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/MoveFileAction.cpp.i
+.PHONY : src/MoveFileAction.cpp.i
+
+src/MoveFileAction.s: src/MoveFileAction.cpp.s
+
+.PHONY : src/MoveFileAction.s
+
+# target to generate assembly for a file
+src/MoveFileAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/MoveFileAction.cpp.s
+.PHONY : src/MoveFileAction.cpp.s
+
+src/ReadFileAction.o: src/ReadFileAction.cpp.o
+
+.PHONY : src/ReadFileAction.o
+
+# target to build an object file
+src/ReadFileAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ReadFileAction.cpp.o
+.PHONY : src/ReadFileAction.cpp.o
+
+src/ReadFileAction.i: src/ReadFileAction.cpp.i
+
+.PHONY : src/ReadFileAction.i
+
+# target to preprocess a source file
+src/ReadFileAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ReadFileAction.cpp.i
+.PHONY : src/ReadFileAction.cpp.i
+
+src/ReadFileAction.s: src/ReadFileAction.cpp.s
+
+.PHONY : src/ReadFileAction.s
+
+# target to generate assembly for a file
+src/ReadFileAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ReadFileAction.cpp.s
+.PHONY : src/ReadFileAction.cpp.s
+
 src/ReadWriteService.o: src/ReadWriteService.cpp.o
 
 .PHONY : src/ReadWriteService.o
@@ -385,6 +601,60 @@ src/ReadWriteService.s: src/ReadWriteService.cpp.s
 src/ReadWriteService.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/ReadWriteService.cpp.s
 .PHONY : src/ReadWriteService.cpp.s
+
+src/RewriteFileAction.o: src/RewriteFileAction.cpp.o
+
+.PHONY : src/RewriteFileAction.o
+
+# target to build an object file
+src/RewriteFileAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/RewriteFileAction.cpp.o
+.PHONY : src/RewriteFileAction.cpp.o
+
+src/RewriteFileAction.i: src/RewriteFileAction.cpp.i
+
+.PHONY : src/RewriteFileAction.i
+
+# target to preprocess a source file
+src/RewriteFileAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/RewriteFileAction.cpp.i
+.PHONY : src/RewriteFileAction.cpp.i
+
+src/RewriteFileAction.s: src/RewriteFileAction.cpp.s
+
+.PHONY : src/RewriteFileAction.s
+
+# target to generate assembly for a file
+src/RewriteFileAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/RewriteFileAction.cpp.s
+.PHONY : src/RewriteFileAction.cpp.s
+
+src/WriteFileAction.o: src/WriteFileAction.cpp.o
+
+.PHONY : src/WriteFileAction.o
+
+# target to build an object file
+src/WriteFileAction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/WriteFileAction.cpp.o
+.PHONY : src/WriteFileAction.cpp.o
+
+src/WriteFileAction.i: src/WriteFileAction.cpp.i
+
+.PHONY : src/WriteFileAction.i
+
+# target to preprocess a source file
+src/WriteFileAction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/WriteFileAction.cpp.i
+.PHONY : src/WriteFileAction.cpp.i
+
+src/WriteFileAction.s: src/WriteFileAction.cpp.s
+
+.PHONY : src/WriteFileAction.s
+
+# target to generate assembly for a file
+src/WriteFileAction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/4.dir/build.make CMakeFiles/4.dir/src/WriteFileAction.cpp.s
+.PHONY : src/WriteFileAction.cpp.s
 
 src/main.o: src/main.cpp.o
 
@@ -431,12 +701,27 @@ help:
 	@echo "... src/Cluster.o"
 	@echo "... src/Cluster.i"
 	@echo "... src/Cluster.s"
+	@echo "... src/CopyFileAction.o"
+	@echo "... src/CopyFileAction.i"
+	@echo "... src/CopyFileAction.s"
+	@echo "... src/CreateFileAction.o"
+	@echo "... src/CreateFileAction.i"
+	@echo "... src/CreateFileAction.s"
 	@echo "... src/CustomFile.o"
 	@echo "... src/CustomFile.i"
 	@echo "... src/CustomFile.s"
+	@echo "... src/DeleteFileAction.o"
+	@echo "... src/DeleteFileAction.i"
+	@echo "... src/DeleteFileAction.s"
+	@echo "... src/DumpAction.o"
+	@echo "... src/DumpAction.i"
+	@echo "... src/DumpAction.s"
 	@echo "... src/DumpService.o"
 	@echo "... src/DumpService.i"
 	@echo "... src/DumpService.s"
+	@echo "... src/ExpressionResolver.o"
+	@echo "... src/ExpressionResolver.i"
+	@echo "... src/ExpressionResolver.s"
 	@echo "... src/FileSystemService.o"
 	@echo "... src/FileSystemService.i"
 	@echo "... src/FileSystemService.s"
@@ -446,9 +731,24 @@ help:
 	@echo "... src/InterfaceFileSystem.o"
 	@echo "... src/InterfaceFileSystem.i"
 	@echo "... src/InterfaceFileSystem.s"
+	@echo "... src/ListFilesAction.o"
+	@echo "... src/ListFilesAction.i"
+	@echo "... src/ListFilesAction.s"
+	@echo "... src/MoveFileAction.o"
+	@echo "... src/MoveFileAction.i"
+	@echo "... src/MoveFileAction.s"
+	@echo "... src/ReadFileAction.o"
+	@echo "... src/ReadFileAction.i"
+	@echo "... src/ReadFileAction.s"
 	@echo "... src/ReadWriteService.o"
 	@echo "... src/ReadWriteService.i"
 	@echo "... src/ReadWriteService.s"
+	@echo "... src/RewriteFileAction.o"
+	@echo "... src/RewriteFileAction.i"
+	@echo "... src/RewriteFileAction.s"
+	@echo "... src/WriteFileAction.o"
+	@echo "... src/WriteFileAction.i"
+	@echo "... src/WriteFileAction.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

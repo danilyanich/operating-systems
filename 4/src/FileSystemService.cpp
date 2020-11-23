@@ -20,11 +20,11 @@ private:
     DumpService *dumpService;
 public:
 
-    void setFileSystemDao(InterfaceFileSystem *interfaceFileSystem) {
+    void setInterfaceFileSystem(InterfaceFileSystem *interfaceFileSystem) {
         this->interfaceFileSystem = interfaceFileSystem;
     }
 
-    void setClusterDao(InterfaceCluster *interfaceCluster) {
+    void setInterfaceCluster(InterfaceCluster *interfaceCluster) {
         this->interfaceCluster = interfaceCluster;
     }
 

@@ -207,6 +207,136 @@ CMakeFiles/4.dir/src/FileSystemService.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/FileSystemService.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/FileSystemService.cpp -o CMakeFiles/4.dir/src/FileSystemService.cpp.s
 
+CMakeFiles/4.dir/src/CopyFileAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/CopyFileAction.cpp.o: ../src/CopyFileAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/4.dir/src/CopyFileAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/CopyFileAction.cpp.o -c /Users/alisa/Documents/os/4/src/CopyFileAction.cpp
+
+CMakeFiles/4.dir/src/CopyFileAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/CopyFileAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/CopyFileAction.cpp > CMakeFiles/4.dir/src/CopyFileAction.cpp.i
+
+CMakeFiles/4.dir/src/CopyFileAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/CopyFileAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/CopyFileAction.cpp -o CMakeFiles/4.dir/src/CopyFileAction.cpp.s
+
+CMakeFiles/4.dir/src/CreateFileAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/CreateFileAction.cpp.o: ../src/CreateFileAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/4.dir/src/CreateFileAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/CreateFileAction.cpp.o -c /Users/alisa/Documents/os/4/src/CreateFileAction.cpp
+
+CMakeFiles/4.dir/src/CreateFileAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/CreateFileAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/CreateFileAction.cpp > CMakeFiles/4.dir/src/CreateFileAction.cpp.i
+
+CMakeFiles/4.dir/src/CreateFileAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/CreateFileAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/CreateFileAction.cpp -o CMakeFiles/4.dir/src/CreateFileAction.cpp.s
+
+CMakeFiles/4.dir/src/DeleteFileAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/DeleteFileAction.cpp.o: ../src/DeleteFileAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/4.dir/src/DeleteFileAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/DeleteFileAction.cpp.o -c /Users/alisa/Documents/os/4/src/DeleteFileAction.cpp
+
+CMakeFiles/4.dir/src/DeleteFileAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/DeleteFileAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/DeleteFileAction.cpp > CMakeFiles/4.dir/src/DeleteFileAction.cpp.i
+
+CMakeFiles/4.dir/src/DeleteFileAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/DeleteFileAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/DeleteFileAction.cpp -o CMakeFiles/4.dir/src/DeleteFileAction.cpp.s
+
+CMakeFiles/4.dir/src/DumpAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/DumpAction.cpp.o: ../src/DumpAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/4.dir/src/DumpAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/DumpAction.cpp.o -c /Users/alisa/Documents/os/4/src/DumpAction.cpp
+
+CMakeFiles/4.dir/src/DumpAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/DumpAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/DumpAction.cpp > CMakeFiles/4.dir/src/DumpAction.cpp.i
+
+CMakeFiles/4.dir/src/DumpAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/DumpAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/DumpAction.cpp -o CMakeFiles/4.dir/src/DumpAction.cpp.s
+
+CMakeFiles/4.dir/src/ListFilesAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/ListFilesAction.cpp.o: ../src/ListFilesAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/4.dir/src/ListFilesAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/ListFilesAction.cpp.o -c /Users/alisa/Documents/os/4/src/ListFilesAction.cpp
+
+CMakeFiles/4.dir/src/ListFilesAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/ListFilesAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/ListFilesAction.cpp > CMakeFiles/4.dir/src/ListFilesAction.cpp.i
+
+CMakeFiles/4.dir/src/ListFilesAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/ListFilesAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/ListFilesAction.cpp -o CMakeFiles/4.dir/src/ListFilesAction.cpp.s
+
+CMakeFiles/4.dir/src/MoveFileAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/MoveFileAction.cpp.o: ../src/MoveFileAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/4.dir/src/MoveFileAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/MoveFileAction.cpp.o -c /Users/alisa/Documents/os/4/src/MoveFileAction.cpp
+
+CMakeFiles/4.dir/src/MoveFileAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/MoveFileAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/MoveFileAction.cpp > CMakeFiles/4.dir/src/MoveFileAction.cpp.i
+
+CMakeFiles/4.dir/src/MoveFileAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/MoveFileAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/MoveFileAction.cpp -o CMakeFiles/4.dir/src/MoveFileAction.cpp.s
+
+CMakeFiles/4.dir/src/ReadFileAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/ReadFileAction.cpp.o: ../src/ReadFileAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/4.dir/src/ReadFileAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/ReadFileAction.cpp.o -c /Users/alisa/Documents/os/4/src/ReadFileAction.cpp
+
+CMakeFiles/4.dir/src/ReadFileAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/ReadFileAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/ReadFileAction.cpp > CMakeFiles/4.dir/src/ReadFileAction.cpp.i
+
+CMakeFiles/4.dir/src/ReadFileAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/ReadFileAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/ReadFileAction.cpp -o CMakeFiles/4.dir/src/ReadFileAction.cpp.s
+
+CMakeFiles/4.dir/src/RewriteFileAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/RewriteFileAction.cpp.o: ../src/RewriteFileAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/4.dir/src/RewriteFileAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/RewriteFileAction.cpp.o -c /Users/alisa/Documents/os/4/src/RewriteFileAction.cpp
+
+CMakeFiles/4.dir/src/RewriteFileAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/RewriteFileAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/RewriteFileAction.cpp > CMakeFiles/4.dir/src/RewriteFileAction.cpp.i
+
+CMakeFiles/4.dir/src/RewriteFileAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/RewriteFileAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/RewriteFileAction.cpp -o CMakeFiles/4.dir/src/RewriteFileAction.cpp.s
+
+CMakeFiles/4.dir/src/WriteFileAction.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/WriteFileAction.cpp.o: ../src/WriteFileAction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/4.dir/src/WriteFileAction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/WriteFileAction.cpp.o -c /Users/alisa/Documents/os/4/src/WriteFileAction.cpp
+
+CMakeFiles/4.dir/src/WriteFileAction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/WriteFileAction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/WriteFileAction.cpp > CMakeFiles/4.dir/src/WriteFileAction.cpp.i
+
+CMakeFiles/4.dir/src/WriteFileAction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/WriteFileAction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/WriteFileAction.cpp -o CMakeFiles/4.dir/src/WriteFileAction.cpp.s
+
+CMakeFiles/4.dir/src/ExpressionResolver.cpp.o: CMakeFiles/4.dir/flags.make
+CMakeFiles/4.dir/src/ExpressionResolver.cpp.o: ../src/ExpressionResolver.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/4.dir/src/ExpressionResolver.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/4.dir/src/ExpressionResolver.cpp.o -c /Users/alisa/Documents/os/4/src/ExpressionResolver.cpp
+
+CMakeFiles/4.dir/src/ExpressionResolver.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/4.dir/src/ExpressionResolver.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/alisa/Documents/os/4/src/ExpressionResolver.cpp > CMakeFiles/4.dir/src/ExpressionResolver.cpp.i
+
+CMakeFiles/4.dir/src/ExpressionResolver.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/4.dir/src/ExpressionResolver.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/alisa/Documents/os/4/src/ExpressionResolver.cpp -o CMakeFiles/4.dir/src/ExpressionResolver.cpp.s
+
 # Object files for target 4
 4_OBJECTS = \
 "CMakeFiles/4.dir/src/main.cpp.o" \
@@ -218,7 +348,17 @@ CMakeFiles/4.dir/src/FileSystemService.cpp.s: cmake_force
 "CMakeFiles/4.dir/src/DumpService.cpp.o" \
 "CMakeFiles/4.dir/src/Action.cpp.o" \
 "CMakeFiles/4.dir/src/ActionResult.cpp.o" \
-"CMakeFiles/4.dir/src/FileSystemService.cpp.o"
+"CMakeFiles/4.dir/src/FileSystemService.cpp.o" \
+"CMakeFiles/4.dir/src/CopyFileAction.cpp.o" \
+"CMakeFiles/4.dir/src/CreateFileAction.cpp.o" \
+"CMakeFiles/4.dir/src/DeleteFileAction.cpp.o" \
+"CMakeFiles/4.dir/src/DumpAction.cpp.o" \
+"CMakeFiles/4.dir/src/ListFilesAction.cpp.o" \
+"CMakeFiles/4.dir/src/MoveFileAction.cpp.o" \
+"CMakeFiles/4.dir/src/ReadFileAction.cpp.o" \
+"CMakeFiles/4.dir/src/RewriteFileAction.cpp.o" \
+"CMakeFiles/4.dir/src/WriteFileAction.cpp.o" \
+"CMakeFiles/4.dir/src/ExpressionResolver.cpp.o"
 
 # External object files for target 4
 4_EXTERNAL_OBJECTS =
@@ -233,9 +373,19 @@ CMakeFiles/4.dir/src/FileSystemService.cpp.s: cmake_force
 4 : CMakeFiles/4.dir/src/Action.cpp.o
 4 : CMakeFiles/4.dir/src/ActionResult.cpp.o
 4 : CMakeFiles/4.dir/src/FileSystemService.cpp.o
+4 : CMakeFiles/4.dir/src/CopyFileAction.cpp.o
+4 : CMakeFiles/4.dir/src/CreateFileAction.cpp.o
+4 : CMakeFiles/4.dir/src/DeleteFileAction.cpp.o
+4 : CMakeFiles/4.dir/src/DumpAction.cpp.o
+4 : CMakeFiles/4.dir/src/ListFilesAction.cpp.o
+4 : CMakeFiles/4.dir/src/MoveFileAction.cpp.o
+4 : CMakeFiles/4.dir/src/ReadFileAction.cpp.o
+4 : CMakeFiles/4.dir/src/RewriteFileAction.cpp.o
+4 : CMakeFiles/4.dir/src/WriteFileAction.cpp.o
+4 : CMakeFiles/4.dir/src/ExpressionResolver.cpp.o
 4 : CMakeFiles/4.dir/build.make
 4 : CMakeFiles/4.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable 4"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alisa/Documents/os/4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Linking CXX executable 4"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/4.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

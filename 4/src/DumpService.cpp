@@ -12,7 +12,7 @@ private:
     InterfaceCluster *interfaceCluster;
 public:
 
-    void setClusterDao(InterfaceCluster *interfaceCluster) {
+    void setInterfaceCluster(InterfaceCluster *interfaceCluster) {
         this->interfaceCluster = interfaceCluster;
     }
 
