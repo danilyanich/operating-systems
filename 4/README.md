@@ -18,7 +18,7 @@ First, build project with Visual Studio
 ```
 fcreate name - create file
 fcopy name - copy file
-fcut name - cut file
+fcut name - cut  file
 fpaste - paste file
 filedelete name - delete file
 write name info - write info
