@@ -18,7 +18,7 @@ if(NOT catch2_POPULATED)   # name is lowercased
 endif()
 
 add_executable(file-system src/main.cpp src/PhysicalMemory.h src/Block.h src/FileSystemEntity.h src/File.h src/Directory.h src/FileSystem.h)
-add_executable(tests test/TetsPhysicalMemory.cpp)
+add_executable(tests test/TetsPhysicalMemory.cpp test/TestFileSystem.cpp)
 
 enable_testing()
 add_test(NAME tests COMMAND test_suite1)

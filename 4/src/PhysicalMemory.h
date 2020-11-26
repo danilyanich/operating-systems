@@ -13,12 +13,12 @@ class PhysicalMemory {
 public:
     PhysicalMemory(std::string &&mem_data) : data(mem_data) {}
 
-    size_t Add(std::string &&str) {
+    std::pair<size_t, size_t> Add(std::string &&str) {
         size_t len = str.size();
         data.insert(last_index * BLOCK_SIZE, str);
         size_t prev_index = last_index;
         last_index += (len + BLOCK_SIZE - 1) / BLOCK_SIZE;
-        return prev_index;
+        return {prev_index, last_index};
     }
 
     void Delete(size_t from, size_t to) {
@@ -27,7 +27,7 @@ public:
         }
     }
 
-    std::string_view Read(size_t from, size_t to) {
+    std::string_view Read(size_t from, size_t to) const {
         return std::string_view(data).substr(from * BLOCK_SIZE, to * BLOCK_SIZE);
     }
 
