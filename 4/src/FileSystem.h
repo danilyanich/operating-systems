@@ -64,7 +64,12 @@ public:
     }
 
     std::shared_ptr<File> ReadFromFile(const std::string &name) {
-        auto entity = current_dir->GetEntity(name);
+        std::shared_ptr<FileSystemEntity> entity;
+        try {
+            entity = current_dir->GetEntity(name);
+        } catch (const std::exception &ex) {
+            throw std::invalid_argument("not found");
+        }
         auto file = std::dynamic_pointer_cast<File>(entity);
         auto[from, to] = file->GetMemoryRange();
         std::string_view body = memory.Read(from, to);
@@ -83,25 +88,19 @@ public:
         current_dir->Delete(name);
     }
 
-    std::string Dump() const {
-        for (auto it:*root.get()) {
-            std::cout << it->GetName();
-            if (it->GetType() == FileSystemEntities::FILE) {
-                continue;
-            }
-            auto dir = std::dynamic_pointer_cast<Directory>(it);
-            dump(dir);
-        }
+    std::string Dump(std::ostream &os = std::cout) const {
+        os << std::string(0, '\t') << root->GetName() << "\n";
+        dump(os, root, 1);
     }
 
-    void dump(const std::shared_ptr<Directory> dir) const {
-        for (auto it:*dir.get()) {
-            std::cout << it->GetName();
+    void dump(std::ostream &os, const std::shared_ptr<Directory> dir, int level) const {
+        for (const auto &it:*dir) {
+            os << std::string(level, '\t') << it->GetName() << "\n";
             if (it->GetType() == FileSystemEntities::FILE) {
                 continue;
             }
             auto newDir = std::dynamic_pointer_cast<Directory>(it);
-            dump(newDir);
+            dump(os, newDir, level + 1);
         }
     }
 
