@@ -17,7 +17,7 @@ if(NOT catch2_POPULATED)   # name is lowercased
     add_subdirectory(${catch2_SOURCE_DIR} ${catch2_BINARY_DIR}) # name is lowercased
 endif()
 
-add_executable(file-system src/main.cpp src/PhysicalMemory.h src/Block.h src/FileSystemEntity.h src/File.h src/Directory.h src/FileSystem.h)
+add_executable(file-system src/main.cpp src/file-system/PhysicalMemory.h src/file-system/Block.h src/file-system/FileSystemEntity.h src/file-system/File.h src/file-system/Directory.h src/file-system/FileSystem.h)
 add_executable(tests test/TetsPhysicalMemory.cpp test/TestFileSystem.cpp)
 
 enable_testing()

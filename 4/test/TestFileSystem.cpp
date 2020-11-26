@@ -5,8 +5,8 @@
 #include <catch2/catch.hpp>
 #include <iostream>
 #include <sstream>
-#include "../src/PhysicalMemory.h"
-#include "../src/FileSystem.h"
+#include "../src/file-system/PhysicalMemory.h"
+#include "../src/file-system/FileSystem.h"
 
 TEST_CASE("test file CRUD") {
     PhysicalMemory mem(std::string(100, ' '));
