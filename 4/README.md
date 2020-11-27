@@ -6,8 +6,8 @@
 ## Author
  Ilya Hontarau, Maria Zhirko
 ## Description
-Implemented a file system with a tree hierarchy and continuous file allocation. Used File entity as abstrcion above file and dicectory.
-Used c++17 with string_view and move sematic(not good example of using move sematin:)).
+Implemented a file system with a tree hierarchy and continuous file allocation. Used File entity as abstraction above file and directory.
+Used c++17 with string_view and move semantic(not good example of using move sematic:)).
 Mostly covered with tests, for test framework was used Catch, installed using cmake fetch content.
 
 
