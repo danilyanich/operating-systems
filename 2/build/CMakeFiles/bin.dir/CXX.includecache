@@ -21,8 +21,6 @@ stdlib.h
 -
 errno.h
 -
-unistd.h
--
 sys/types.h
 -
 

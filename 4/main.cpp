@@ -1,6 +1,5 @@
-#include "filesystem.h"
 #include <string>
-
+#include <iostream>
 using namespace std;
 
 class Memory{
@@ -55,7 +54,7 @@ private:
 }memory;
 
 
-class File{
+class File {
 
         string name;
         int * blocks;
@@ -99,20 +98,76 @@ class File{
         int get_size(){
             return size;
         }
+
+        string get_name(){
+            return name;
+        }
 };
 
 class FileSystem{
+
     File files[100];
-    int numer_of_files = 0;
+    int number_of_files;
 
 public:
-    
-    void show_files(){
 
+    FileSystem(){
+        number_of_files = 0;
+    }
+
+    void start(){
+        bool loop = true;
+        while (loop){
+            int number;
+            interface();
+            cout << "Enter the number: ";
+            cin >> number;
+            switch (number)
+            {
+            case 1:
+                show_files();
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 0:
+                loop = false;
+            }
+        }
+    }
+
+    void interface(){
+        cout << "1 - Show files" << endl;
+        cout << "2 - Delete a file" << endl;
+        cout << "3 - Add a file" << endl;
+        cout << "4 - Write in a file" << endl;
+        cout << "5 - Copy a file" << endl;
+        cout << "0 - Exit" << endl;
+    }
+
+    void show_files(){
+        for(int i=0; i < number_of_files; i++){
+            cout << files[i].get_name() << endl;
+        }
     }
     
-    void add_file(){
+    void add_file(string name){
+        files[number_of_files] = File(name);
+        number_of_files++;
+    }
 
+    void show_content_of_file(string name){
+        int index = _find_file(name);
+        char * content = files[index].read();
+        for(int i=0; i < files[index].get_size(); i++){
+            cout << content[i];
+        }
+        cout << endl;
     }
 
     void delete_file(){
@@ -121,28 +176,17 @@ public:
 
 private:
 
-    void _find_file(){
-
+    int _find_file(string name){
+        for (int i = 0; i < number_of_files; i++){
+            if (files[i].get_name() == name){
+                return i;
+            }
+        }
     }
 
 }filesystem;
 
-void print_char_array(char [], int);
 
 int main(){
-    File file = File("file_1");
-    file.write("This is first file", 18);
-    char * buffer = file.read();
-    print_char_array(buffer, file.get_size());
-
-}
-
-
-void print_char_array(char array[], int size){
-
-    for (int i=0; 0 < size; i++){
-        cout << array[i];
-    }
-
-    cout << endl;
+    filesystem.start();
 }
