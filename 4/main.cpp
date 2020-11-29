@@ -1,26 +1,34 @@
 #include "filesystem.h"
 #include <string>
 
-using namespace std;
 
+using namespace std;
 class Memory{
     private:
 
         char data[1000];
-        int last_end_index = 0;
+        int free_blocks[1000];
 
     public:
-
-        int write(
-            char writed_data[],
-            int size
-        ){
-            int begin = last_end_index;
-            for(int i=0; i<size; i++, last_end_index++){
-                data[last_end_index] = writed_data[i];
-            }
-            return begin;
+    
+    Memory(){
+        for (int i = 0; i < 1000; i++){
+            free_blocks[i] = i;
         }
+    }
+
+    char * get_blocks(int numbers[], int size){
+        char returnned_blocks[100];
+        for (int i = 0; i < size;i ++){
+            returnned_blocks[i] = data[numbers[i]];
+        }
+        return returnned_blocks;
+    }
+
+    void write(){
+        
+    }
+        
 
 }memory;
 
