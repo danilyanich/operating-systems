@@ -60,31 +60,29 @@ class File{
     private:
 
         string name;
-        int blocks[100];
+        int * blocks;
         int size;
 
     public:
+
         File(string file_name, int size ){
             name = file_name;
         }
 
-        void delete_file(){
-            return;
-        }
-
-        void copy(){
-            return;
-        }
-
         void write(char data[], int size){
+            blocks = memory.write(data, size);   
+        }
+
+        void delete_file(){
+        }
+
+        void copy(string name_of_copy){
             return;
         }
 
         char * read(){
 
         }
-
-
 };
 
 
