@@ -2,6 +2,7 @@
 #include <string>
 
 using namespace std;
+
 class Memory{
 
         char data[1000];
@@ -17,8 +18,8 @@ public:
         free_size = 1000;
     }
 
-    char * get_blocks(int numbers[], int size){
-        char returnned_blocks[100];
+    char * read(int numbers[], int size){
+        static char returnned_blocks[100];
         for (int i = 0; i < size;i ++){
             returnned_blocks[i] = data[numbers[i]];
         }
@@ -26,7 +27,7 @@ public:
     }
 
     int * write(char write_data[], int size){
-        int numbers[100];
+        static int numbers[100];
         for (int i = 0; i < size; i++){
             data[free_blocks[i]] = write_data[i];
             numbers[i] = free_blocks[i];
@@ -35,7 +36,7 @@ public:
         return numbers;
     }
 
-    void delete_file(int numbers[], int size){
+    void free(int numbers[], int size){
         for (int i = i; i < size; i++){
             free_blocks[free_size+i] = numbers[i];
         }
@@ -53,30 +54,49 @@ private:
 
 }memory;
 
+
 class File{
 
     private:
 
-        char content[200];
         string name;
-        int begin;
+        int blocks[100];
         int size;
 
     public:
-        File(
-            char conent[],
-            string name,
-            int size
-        ){
-            
+        File(string file_name, int size ){
+            name = file_name;
         }
 
+        void delete_file(){
+            return;
+        }
+
+        void copy(){
+            return;
+        }
+
+        void write(char data[], int size){
+            return;
+        }
+
+        char * read(){
+
+        }
+
+
 };
 
-class FileSystem{
-    
-};
 
 int main(){
+    int * a;
+    a = memory.write("this is record", 14);
+    char * c;
+    c = memory.read(a, 14);
+    for (int i = 0; i < 14; i++){
+        cout << c[i];
+    }
+
+    cout << endl;
 
 }
