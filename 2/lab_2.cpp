@@ -1,8 +1,11 @@
 ﻿#include "pch.h"
 #include <iostream>
 #include <windows.h>
+#include <vector>
 
 using namespace std;
+
+vector <DWORD> processesID;
 
 int createProcess(LPWSTR path, time_t time) {
 	STARTUPINFO startInfo;
@@ -14,12 +17,21 @@ int createProcess(LPWSTR path, time_t time) {
 
 	if (!CreateProcess(nullptr, path, nullptr, nullptr, 0, 0, nullptr, nullptr, &startInfo, &processInfo))
 		return 0;
+
+	processesID.push_back(processInfo.dwProcessId);
 	
 	return 1;
 }
 
-void stopProcess() {
+void stopProcess(DWORD id) {
+	HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, id);
+	TerminateProcess(hProcess, 0);
+	CloseHandle(hProcess);
+}
 
+void stopAll() {
+	for (int i = 0; i < processesID.size(); i++)
+		stopProcess(processesID[i]);
 }
 
 
@@ -31,6 +43,8 @@ int main()
 
 	for (int i = 0; i < copies; i++) 
 		createProcess(path, time);
+
+	stopAll();
 	
 }
 
