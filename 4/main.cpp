@@ -101,6 +101,32 @@ class File{
         }
 };
 
+class FileSystem{
+    File files[100];
+    int numer_of_files = 0;
+
+public:
+    
+    void show_files(){
+
+    }
+    
+    void add_file(){
+
+    }
+
+    void delete_file(){
+
+    }
+
+private:
+
+    void _find_file(){
+
+    }
+
+}filesystem;
+
 void print_char_array(char [], int);
 
 int main(){
@@ -108,7 +134,7 @@ int main(){
     file.write("This is first file", 18);
     char * buffer = file.read();
     print_char_array(buffer, file.get_size());
-    
+
 }
 
 
