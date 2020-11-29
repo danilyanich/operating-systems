@@ -154,6 +154,7 @@ public:
                     int size;
                     cin >> size;
                     write_in_file(name, content, size);
+                    break;
                 }
             case 5:{
                 string name;
@@ -163,6 +164,13 @@ public:
                 string copy;
                 cin >> copy;
                 copy_file(name, copy);
+                break;
+            }
+            case 6:{
+                string name;
+                cout << "Enter a name of a file: ";
+                cin >> name;
+                show_content_of_file(name);
                 break;
             }
             case 0:
@@ -178,6 +186,7 @@ public:
         cout << "3 - Add a file" << endl;
         cout << "4 - Write in a file" << endl;
         cout << "5 - Copy a file" << endl;
+        cout << "6 - Read a file" << endl;
         cout << "0 - Exit" << endl;
     }
 
