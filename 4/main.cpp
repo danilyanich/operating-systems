@@ -75,7 +75,7 @@ class File {
             memory.free(blocks, size);
         }
 
-        void copy(string name_of_copy){
+        File copy(string name_of_copy){
             if (name_of_copy == name){
                 cout << "Wrong name" << endl;
             }
@@ -85,6 +85,7 @@ class File {
                     this->read(),
                     this->size
                 );
+                return copy_of_file;
             }
         }
 
@@ -142,10 +143,28 @@ public:
                     add_file(name);
                     break;
                 }
-            case 4:
+            case 4:{
+                    string name;
+                    cout << "Enter a name of a file: ";
+                    cin >> name;
+                    cout << "Enter content: ";
+                    char content[100];
+                    cin >> content;
+                    cout << "Enter size: ";
+                    int size;
+                    cin >> size;
+                    write_in_file(name, content, size);
+                }
+            case 5:{
+                string name;
+                cout << "Enter a name of a file: ";
+                cin >> name;
+                cout << "Enter a name of a copy: ";
+                string copy;
+                cin >> copy;
+                copy_file(name, copy);
                 break;
-            case 5:
-                break;
+            }
             case 0:
                 loop = false;
             }
@@ -188,6 +207,16 @@ public:
             files[i] = files[i+1];
         }
         number_of_files --;
+    }
+
+    void write_in_file(string name ,char content[], int size){
+        int index = _find_file(name);
+        files[index].write(content, size);
+    }
+
+    void copy_file(string name_of_file, string name_of_copy){
+        files[number_of_files] = files[_find_file(name_of_file)].copy(name_of_copy);
+        number_of_files++;
     }
 
 private:
