@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   char message_3[] = "GB sucks";
   int message_3_len = sizeof(message_3) / sizeof(char);
 
-  m_id chunk_1 = m_malloc(message1_len, &error_code);
+  m_id chunk_1 = m_malloc(message_1_len, &error_code);
   if (error_code != M_ERR_OK) panic(error_code);
 
   m_id chunk_2 = m_malloc(message_2_len, &error_code);
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
   char buffer[50];
 
-  m_read(chunk_1, buffer, message1_len, &error_code);
+  m_read(chunk_1, buffer, message_1_len, &error_code);
   if (error_code != M_ERR_OK) panic(error_code);
 
   printf("%s\n", buffer);
