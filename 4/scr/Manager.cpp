@@ -5,8 +5,9 @@
 #include "Manager.h"
 #include <iostream>
 
-Manager::Manager(ControlM control) : control(control) {
-	fileCount = 0;
+Manager::Manager(ControlM control) :control(std::move(control))
+{
+    this->fileCount = 0;
 }
 
 bool Manager::allocateFile(const string& name) {
@@ -26,10 +27,10 @@ bool Manager::allocateFile(const string& name) {
 
 string Manager::readFile(const string& name) const {
     if (files.find(name) != files.end()) {
-   
+
         return  control.readFile(files.at(name)->getFirst());
     }
-            return "";
+    return "";
 }
 
 void Manager::writeToFile(const string& name, char v) {
@@ -52,6 +53,8 @@ void Manager::copyFile(const string& from, const string& to) {
         }
     }
 }
+
+
 
 void Manager::deleteFile(const string& name) {
     if (files.find(name) != files.end()) {

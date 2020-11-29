@@ -4,8 +4,11 @@
 
 #ifndef OS4_CONTROLM_H
 #define OS4_CONTROLM_H
-
 #include "PhMemory.h"
+#include <string>
+
+using namespace std;
+
 class ControlM {
 public:
     PhMemory memory;

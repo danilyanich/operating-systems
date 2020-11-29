@@ -16,6 +16,7 @@ public:
     int fileCount;
     ControlM control;
     map<string, File*> files;
+
     explicit Manager(ControlM control);
     bool allocateFile(const string& name);
     string readFile(const string& path) const;
@@ -23,9 +24,6 @@ public:
     void copyFile(const string& from, const string& to);
     void deleteFile(const string& path);
     void moveFile(const string& from, const string& to);
-    void linkFIle(const string& file, const string& link);
-    void createDump(const string& path);
-    void loadDump(const string& path);
     void listAllFiles();
 };
 

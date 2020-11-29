@@ -6,7 +6,6 @@
 
 ControlM::ControlM(PhMemory memory) : memory(memory) {
 
-
 }
 
 Block* ControlM::allocateFile() {
@@ -28,13 +27,15 @@ Block* ControlM::findFreeIdx() {
 
 bool ControlM::appendValueTo(Block* first, char v) {
 
-    if (memory.getValueAt(first->id) == '\0') {
+    
+    if (memory.getValueAt(first->id)->cont== '\0') {
         memory.allocateValue(first->id, v);
         return  true;
     }
     Block* next = findFreeIdx();
     if (next != nullptr) {
         first->next = next;
+        memory.allocateValue(next->id, v);
         return true;
     }
     return false;
