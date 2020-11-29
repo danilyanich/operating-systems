@@ -57,20 +57,19 @@ private:
 
 class File{
 
-    private:
-
         string name;
         int * blocks;
         int size;
 
     public:
 
-        File(string file_name, int size ){
+        File(string file_name){
             name = file_name;
         }
 
         void write(char data[], int size){
-            blocks = memory.write(data, size);   
+            this->size = size;
+            blocks = memory.write(data, size);
         }
 
         void delete_file(){
@@ -78,7 +77,16 @@ class File{
         }
 
         void copy(string name_of_copy){
-            return;
+            if (name_of_copy == name){
+                cout << "Wrong name" << endl;
+            }
+            else{
+                File copy_of_file = File(name_of_copy);
+                copy_of_file.write(
+                    this->read(),
+                    this->size
+                );
+            }
         }
 
         char * read(){
@@ -87,9 +95,28 @@ class File{
                 size
             );
         }
+
+        int get_size(){
+            return size;
+        }
 };
 
+void print_char_array(char [], int);
 
 int main(){
+    File file = File("file_1");
+    file.write("This is first file", 18);
+    char * buffer = file.read();
+    print_char_array(buffer, file.get_size());
     
+}
+
+
+void print_char_array(char array[], int size){
+
+    for (int i=0; 0 < size; i++){
+        cout << array[i];
+    }
+
+    cout << endl;
 }
