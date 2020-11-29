@@ -62,7 +62,7 @@ class File {
 
     public:
 
-        File(string file_name){
+        File(string file_name=""){
             name = file_name;
         }
 
@@ -122,15 +122,26 @@ public:
             interface();
             cout << "Enter the number: ";
             cin >> number;
+            
             switch (number)
             {
             case 1:
                 show_files();
                 break;
-            case 2:
-                break;
-            case 3:
-                break;
+            case 2:{
+                    string name;
+                    cout << "Enter a name of a file: ";
+                    cin >> name;
+                    delete_file(name);
+                    break;
+                }
+            case 3:{
+                    string name;
+                    cout << "Enter a name of a file: ";
+                    cin >> name;
+                    add_file(name);
+                    break;
+                }
             case 4:
                 break;
             case 5:
@@ -138,6 +149,7 @@ public:
             case 0:
                 loop = false;
             }
+            cout << "\n\n";
         }
     }
 
@@ -170,8 +182,12 @@ public:
         cout << endl;
     }
 
-    void delete_file(){
-
+    void delete_file(string name){
+        int index = _find_file(name);
+        for (int i=index; i < number_of_files; i++){
+            files[i] = files[i+1];
+        }
+        number_of_files --;
     }
 
 private:
