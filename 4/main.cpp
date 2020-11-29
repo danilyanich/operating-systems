@@ -74,6 +74,7 @@ class File{
         }
 
         void delete_file(){
+            memory.free(blocks, size);
         }
 
         void copy(string name_of_copy){
@@ -81,20 +82,14 @@ class File{
         }
 
         char * read(){
-
+            return memory.read(
+                blocks,
+                size
+            );
         }
 };
 
 
 int main(){
-    int * a;
-    a = memory.write("this is record", 14);
-    char * c;
-    c = memory.read(a, 14);
-    for (int i = 0; i < 14; i++){
-        cout << c[i];
-    }
-
-    cout << endl;
-
+    
 }
