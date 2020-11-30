@@ -77,6 +77,7 @@ int main(int argc, char **argv) {
     printf("%d\n", error_code);
     m_free(chunk_2, &error_code);
     printf("%d\n", error_code);
+
 }
 
 //-MARK:- Supporting functions

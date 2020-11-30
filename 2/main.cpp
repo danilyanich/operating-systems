@@ -50,8 +50,8 @@ public:
     }
 
     void print(std::string_view text) {
-        lock_guard<std::mutex> cout_lock(g_lockprint);
-        cout << left << setw(10) << setfill(' ') << name << text << endl;
+        lock_guard<mutex> cout_lock(g_lockprint);
+        cout  << name << text << endl;
     }
 
     void eat() {
@@ -95,3 +95,4 @@ int main() {
     dine();
     return 0;
 }
+

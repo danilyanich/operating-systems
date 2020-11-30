@@ -1,0 +1,3 @@
+C:/Users/Gimpe/5-term-3-OS/os3-master/Client/cmake-build-debug/CMakeFiles/Client.dir
+C:/Users/Gimpe/5-term-3-OS/os3-master/Client/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Gimpe/5-term-3-OS/os3-master/Client/cmake-build-debug/CMakeFiles/rebuild_cache.dir
