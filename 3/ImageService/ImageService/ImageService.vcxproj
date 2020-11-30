@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClCompile Include="ImageLink.cpp" />
     <ClCompile Include="ImageService.cpp" />
+    <ClCompile Include="Quene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageLink.h" />
+    <ClInclude Include="Quene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

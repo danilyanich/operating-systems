@@ -21,9 +21,15 @@
     <ClCompile Include="ImageLink.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Quene.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageLink.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Quene.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

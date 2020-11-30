@@ -1,0 +1,6 @@
+﻿  Quene.cpp
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\ImageService\Quene.cpp(5,5): error C2059: синтаксическая ошибка: :
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\ImageService\Quene.cpp(6,5): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\ImageService\Quene.cpp(7,24): error C2065: pElement: необъявленный идентификатор
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\ImageService\Quene.cpp(8,13): error C2146: синтаксическая ошибка: отсутствие ";" перед идентификатором "HeapAlloc"
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\ImageService\Quene.cpp(16,27): error C2059: синтаксическая ошибка: ;
