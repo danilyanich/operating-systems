@@ -10,11 +10,11 @@ namespace quene {
 		class Element {
 			public:
 			int threadNum;
-			unsigned int nLink;
+			unsigned int numberLink;
 		};
 		typedef Element* pElement;
 
-		Quene(int maxElements);
+		Quene(int numElements);
 		~Quene();
 		BOOL put(pElement element, DWORD milliseseconds);
 		BOOL pull(pElement element);

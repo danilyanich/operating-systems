@@ -1,12 +1,12 @@
 #include "Quene.h"
 
-quene::Quene::Quene(int maxElements):mutex(mutex_semaphore[0]), semaphore(mutex_semaphore[1])
+quene::Quene::Quene(int numElements):mutex(mutex_semaphore[0]), semaphore(mutex_semaphore[1])
 {
 	arrElements = (pElement)
-		HeapAlloc(GetProcessHeap(), 0, sizeof(Element) * maxElements);
-	this->maxElements = maxElements;
+		HeapAlloc(GetProcessHeap(), 0, sizeof(Element) * numElements);
+	this->maxElements = numElements;
 	mutex = CreateMutex(NULL, FALSE, NULL);
-	semaphore = CreateSemaphore(NULL, 0, maxElements, NULL);
+	semaphore = CreateSemaphore(NULL, 0, numElements, NULL);
 }
 
 quene::Quene::~Quene()

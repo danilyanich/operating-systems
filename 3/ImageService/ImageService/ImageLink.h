@@ -9,7 +9,7 @@ using namespace std;
 		string path;
 
 		ImageLink(string hostName, string path);
-		ImageLink* convertToImageLink(std::string url, int* socketAddressNumber, std::string* imageNameArr);
+		ImageLink* convertToImageLink(string url, int* socketAddressNumber, string* imageNameArr);
 	};
 
 

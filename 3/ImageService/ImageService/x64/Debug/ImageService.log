@@ -1,0 +1,9 @@
+﻿  ImageLink.cpp
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\ImageService\ImageLink.cpp(4,30): warning C4129: /: неизвестная escape-последовательность
+  ImageService.cpp
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\ImageService\ImageLink.cpp(4,30): warning C4129: /: неизвестная escape-последовательность
+  Создание кода...
+ImageService.obj : error LNK2005: "public: __cdecl ImageLink::ImageLink(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0ImageLink@@QEAA@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z) уже определен в ImageLink.obj
+ImageService.obj : error LNK2005: "public: class ImageLink * __cdecl ImageLink::convertToImageLink(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,int *,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > *)" (?convertToImageLink@ImageLink@@QEAAPEAV1@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PEAHPEAV23@@Z) уже определен в ImageLink.obj
+ImageService.obj : error LNK2005: "char const * const pathImageRegex" (?pathImageRegex@@3PEBDEB) уже определен в ImageLink.obj
+C:\Учёба\ОС\Новая папка\operating-systems\3\ImageService\x64\Debug\ImageService.exe : fatal error LNK1169: обнаружен многократно определенный символ - один или более

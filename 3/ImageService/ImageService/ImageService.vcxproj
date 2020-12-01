@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageLink.h" />
+    <ClInclude Include="ImageService.h" />
     <ClInclude Include="Quene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
