@@ -1,0 +1,2 @@
+D:\C++\TCP\TCP Server\Debug\TCPServer.exe
+D:\C++\TCP\TCP Server\Debug\TCPServer.pdb

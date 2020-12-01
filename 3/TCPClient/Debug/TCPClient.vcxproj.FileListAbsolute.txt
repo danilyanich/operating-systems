@@ -1,0 +1,2 @@
+D:\C++\TCP\TCPClient\Debug\TCPClient.exe
+D:\C++\TCP\TCPClient\Debug\TCPClient.pdb
