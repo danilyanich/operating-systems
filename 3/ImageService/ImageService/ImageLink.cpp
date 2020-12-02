@@ -37,3 +37,4 @@ ImageLink* ImageLink::convertToImageLink(std::string url, int* socketAddressNumb
 	}
 	return new ImageLink(hostName,path);
 }
+
