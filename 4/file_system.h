@@ -8,9 +8,13 @@
 #include <string>
 #include <vector>
 #include <ostream>
+#include <fstream>
 #include <iostream>
 #include <ctime>
 #include <utility>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 #define SIZE_OF_BLOCK 20
 using namespace std;
@@ -112,7 +116,7 @@ public:
 
     int move_file(User *user, File *file_to_move, Folder *destination_folder);
 
-    int read_file(User *user, File *file);
+    string read_file(User *user, File *file);
 
     int write_file(User *user, File *file, string &new_data);
 
@@ -145,6 +149,9 @@ public:
         return res;
     };
 
+    void dump(User *user);
+
+    void dump_dir(User* user, Folder* curr_folder);
 };
 
 #endif //FILE_SYSTEM_FILE_SYSTEM_H

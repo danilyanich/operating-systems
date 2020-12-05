@@ -64,6 +64,7 @@ int file_system::create_folder(User *user, string &folder_name) {
     cout << "User: " << user->name << " successfully created folder " << to_string(*new_folder) << endl;
     return (int) code_error::OK;
 }
+
 //check situations when two same dir loc in diff dir and one of them delete
 int file_system::delete_folder(User *user, Folder *folder_to_delete) {
     if ((int) (user->chmode[0]) < 2)
@@ -204,7 +205,7 @@ int file_system::copy_file(User *user, File *file_to_copy, Folder *destination_f
             currentDateTime(),
             file_to_copy->size,
             (int) blocks.size(),
-            (int)file_to_copy->offset,
+            (int) file_to_copy->offset,
             destination_folder->prev_folder + '/' + destination_folder->name,
             destination_folder->attr
     );
@@ -243,15 +244,15 @@ int file_system::move_file(User *user, File *file_to_move, Folder *destination_f
     return (int) code_error::OK;
 }
 
-void file_system::write_to_blocks(const string& data, int count_of_blocks, int first_block) {
+void file_system::write_to_blocks(const string &data, int count_of_blocks, int first_block) {
 
     if (count_of_blocks == 0) {
         block new_block{data, SIZE_OF_BLOCK};
-        blocks.emplace(blocks.begin() + first_block,new_block);
+        blocks.emplace(blocks.begin() + first_block, new_block);
         return;
     }
     vector<block> new_blocks;
-    string tail = data.substr(count_of_blocks*SIZE_OF_BLOCK);
+    string tail = data.substr(count_of_blocks * SIZE_OF_BLOCK);
     for (int i = first_block; i < first_block + count_of_blocks; ++i) {
         block new_block{data.substr((i - first_block) * SIZE_OF_BLOCK, SIZE_OF_BLOCK), SIZE_OF_BLOCK};
         new_blocks.push_back(new_block);
@@ -271,20 +272,20 @@ int file_system::write_file(User *user, File *file, string &new_data) {
     }
     data += new_data;
     file->size = (int) data.size();
-    file->first_block = find_block(0, (int)file->size);
+    file->first_block = find_block(0, (int) file->size);
     file->offset = (file->size % SIZE_OF_BLOCK) ? (file->size / SIZE_OF_BLOCK) : file->size / SIZE_OF_BLOCK + 1;
     if (file->first_block == -1)
         file->first_block = blocks.size();
-    write_to_blocks(data, (int)file->offset, file->first_block);
+    write_to_blocks(data, (int) file->offset, file->first_block);
     return (int) code_error::OK;
 }
 
-int file_system::read_file(User *user, File *file) {
+string file_system::read_file(User *user, File *file) {
+    string res="";
     for (int i = file->first_block; i < file->first_block + file->offset + 1; ++i) {
-        cout << blocks[i].memory;
+        res += blocks[i].memory;
     }
-    cout<<endl;
-    return (int) code_error::OK;
+    return res;
 }
 
 //READY
@@ -368,6 +369,39 @@ void file_system::print_folder(Folder *folder, int level) {
         cout << file->name + '.' + file->extension << endl;
     }
 
+}
+
+void file_system::dump_dir(User* user, Folder* curr_folder){
+    for (auto folder: curr_folder->folders) {
+        auto folderName = folder->prev_folder + '/' + folder->name;
+        folderName = folderName.substr(folderName.find_first_of('/') + 1);
+        fs::create_directory(folderName);
+    }
+    for (auto file: curr_folder->files) {
+        auto folderName = file->file_folder_path;
+        folderName = folderName.substr(folderName.find_first_of('/') + 1);
+        ofstream fout(folderName + "/" + file->name + "." + file->extension);
+        fout << read_file(user,file);
+        fout.close();
+    }
+}
+
+void file_system::dump(User* user) {
+    fs::remove_all("root");
+    fs::create_directory("root");
+    for (auto folder: this->root->folders) {
+        auto folderName = folder->prev_folder + '/' + folder->name;
+        folderName = folderName.substr(folderName.find_first_of('/') + 1);
+        fs::create_directory(folderName);
+    }
+    for(auto folder: this->root->folders){
+        dump_dir(user,folder);
+    }
+    for (auto file: this->root->files) {
+        ofstream fout("root/" + file->name + "." + file->extension);
+        fout << read_file(user,file);
+        fout.close();
+    }
 }
 
 
