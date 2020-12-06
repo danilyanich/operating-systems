@@ -1,10 +1,20 @@
-# Operating Systems
+# C/C++ starter
 
+This project contains `C/C++` starter configuration.
+To start using it put source files and headers into `src` folder.
 
-## 821701 group
-### 5 variant - Segmented Paging
-### Members:
-- Холупко Александр
-- Никипелов Алексей
+## How to use
 
-Link: https://github.com/Alex27Khalupka/operating-systems
+### Generate Makefile:
+```bash
+cmake .
+```
+### Build project:
+```bash
+make
+```
+
+### Run project:
+```bash
+./bin
+```
