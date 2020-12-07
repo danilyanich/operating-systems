@@ -1,0 +1,12 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\users\\asus-pc\\desktop\\labi\\operating-systems\\1\\os\\memory.h",
+        "ProvidedModule": "",
+        "Includes": [
+            "c:\\program files (x86)\\microsoft visual studio\\2019\\community\\vc\\tools\\msvc\\14.28.29333\\include\\stdbool.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

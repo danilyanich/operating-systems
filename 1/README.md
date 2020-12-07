@@ -1,20 +1,6 @@
-# C/C++ starter
+# Первая лабораторная работа по ОС
+# Филиппов Никита и Пузиков Никита 
+# группа: 821703
+# Вариант: 3
 
-This project contains `C/C++` starter configuration.
-To start using it put source files and headers into `src` folder.
-
-## How to use
-
-### Generate Makefile:
-```bash
-cmake .
-```
-### Build project:
-```bash
-make
-```
-
-### Run project:
-```bash
-./bin
-```
+Задание: Реализовать менеджер памяти со страничным разбиением.
