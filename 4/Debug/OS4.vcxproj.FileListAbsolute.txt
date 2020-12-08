@@ -1,0 +1,2 @@
+C:\Users\hasdw\Desktop\OS4-master\Debug\OS4.exe
+C:\Users\hasdw\Desktop\OS4-master\Debug\OS4.pdb
