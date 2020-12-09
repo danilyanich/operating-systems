@@ -4,7 +4,7 @@ This project contains `C/C++` starter configuration.
 To start using it put source files and headers into `src` folder.
 
 ## Authors
-Клевцевич Александр и Тимофеенко Денис
+Клевцевич А.В. & Тимофеенко Д.А., гр. 821701
 
 Вариант -- 1
 
