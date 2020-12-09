@@ -3,6 +3,11 @@
 This project contains `C/C++` starter configuration.
 To start using it put source files and headers into `src` folder.
 
+## Authors
+Клевцевич Александр и Тимофеенко Денис
+
+Вариант -- 1
+
 ## How to use
 
 ### Generate Makefile:
