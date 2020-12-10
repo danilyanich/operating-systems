@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/elizabeth/OS-3/Server/main.c
+sys/types.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+stdio.h
+-
+arpa/inet.h
+-
+pthread.h
+-
+stdlib.h
+-
+zconf.h
+-
+signal.h
+-
+string.h
+-
+
