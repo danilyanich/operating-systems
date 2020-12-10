@@ -23,15 +23,15 @@ This project contains C/C++ starter configuration.
 ## How to use
 
 ### Generate Makefile:
-'''bash
+```bash
 cmake .
-'''
+```
 ### Build project:
-'''bash
+```bash
 make
-'''
+```
 
 ### Run project:
-'''bash
+```bash
 ./Server  or ./Client
-'''
+```
