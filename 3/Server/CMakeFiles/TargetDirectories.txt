@@ -1,3 +1,0 @@
-/home/elizabeth/OS-3/Server/CMakeFiles/rebuild_cache.dir
-/home/elizabeth/OS-3/Server/CMakeFiles/Server.dir
-/home/elizabeth/OS-3/Server/CMakeFiles/edit_cache.dir
