@@ -1,3 +1,21 @@
+# 4 Task
+
+#### 821701
+
+##### Vlad Pashkevich
+
+##### Vadim Titko
+
+##### Kirill Kozlov
+
+
+
+### How to use
+
+First, build project with Visual Studio
+
+### Use this commands
+```
 fcreate name - create file
 fcopy name - copy file
 fcut name - cut file
@@ -17,3 +35,4 @@ cd name - change current directory (cd .. - previous directory)
 help - show all commands
 dump - show dump
 exit - exit
+``
