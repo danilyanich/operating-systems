@@ -1,0 +1,3 @@
+/home/elizabeth/OS-4/CMakeFiles/rebuild_cache.dir
+/home/elizabeth/OS-4/CMakeFiles/FileSystem.dir
+/home/elizabeth/OS-4/CMakeFiles/edit_cache.dir
