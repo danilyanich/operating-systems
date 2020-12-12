@@ -1,8 +1,12 @@
 //
 // Created by anton on 12.11.2020.
 //
+//
+// Created by anton on 12.11.2020.
+//
 
 #include "Manager.h"
+#include <set>
 #include <iostream>
 
 Manager::Manager(ControlM control) :control(std::move(control))
@@ -74,4 +78,61 @@ void Manager::listAllFiles() {
     auto it = files.begin();
     for (it; it != files.end(); ++it)
         cout << it->first << '\n';
+}
+
+ostream& operator<<(ostream& os, Manager& manager) {
+    os << manager.files.size() << "  "
+        << manager.control.memory.getSizeOfMemory() << "  ";
+    auto it = manager.files.begin();
+    
+    for (; it != manager.files.end(); ++it) {
+        os << it->first << " "
+            << manager.control.readFile(it->second->getFirst()) << " "
+            << it->second->getId()<< " ";
+    }
+    return os;
+}
+
+void Manager::linkFIle(const string& file, const string& link) {
+    if (files.find(file) != files.end() &&
+        files.find(link) == files.end()) {
+        this->files.
+            insert(pair<string, File*>(
+                link,
+                files.find(file)->second));
+    }
+}
+
+istream& operator>>(istream& is, Manager& manager) {
+    int size, links;
+    is >> links >> size;
+    auto* memory = new PhMemory(size);
+    auto* control = new ControlM(*memory);
+    manager.control = *control;
+    manager.files.clear();
+    manager.fileCount = 0;
+    set<int> usedIds;
+    map<int, string> fileToPath;
+    for (int i = 0; i < links; i++) {
+        string link, content;
+        int id;
+        is >> link >> content >> id;
+        if (usedIds.find(id) == usedIds.end()) {
+            manager.allocateFile(link);
+            for (char v : content) {
+                manager.writeToFile(link, v);
+            }
+            usedIds.insert(id);
+        }
+        else {
+            auto it = manager.files.begin();
+            for (; it != manager.files.end(); ++it) {
+                if (it->second->getId() == id) {
+                    manager.linkFIle(it->first, link);
+                    break;
+                }
+            }
+        }
+    }
+    return is;
 }

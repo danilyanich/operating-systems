@@ -13,3 +13,7 @@ const std::string &File::getName() const {
 Block *File::getFirst() const {
     return first;
 }
+
+int File::getId() const {
+    return id;
+}

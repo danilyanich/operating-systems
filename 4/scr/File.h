@@ -21,6 +21,8 @@ public:
     const std::string &getName() const;
 
     Block *getFirst() const;
+	
+    int getId() const;
 };
 
 

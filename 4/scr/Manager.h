@@ -25,6 +25,10 @@ public:
     void deleteFile(const string& path);
     void moveFile(const string& from, const string& to);
     void listAllFiles();
+    void linkFIle(const string& file, const string& link);
+
+    friend istream& operator>>(istream& is, Manager& manager);
+    friend ostream& operator<<(ostream& os, Manager& manager);
 };
 
 
