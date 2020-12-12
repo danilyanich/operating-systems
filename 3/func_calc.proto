@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package func_calc;
+
+service FuncCalc {
+  rpc CalculateFactorialFunc (CalculateRequest) returns (CalculateReply) {}
+}
+
+message CalculateRequest {
+  double x = 1;
+}
+
+message CalculateReply {
+  double y = 1;
+}
