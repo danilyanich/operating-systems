@@ -1,20 +1,13 @@
-# C/C++ starter
+# LAB 1 OS
 
-This project contains `C/C++` starter configuration.
-To start using it put source files and headers into `src` folder.
+№10\
+*Реализовать менеджер памяти сегментным разбиением, использующий
+принципы пространственной локальности (см. раздел кэш-памяти) для
+загрузки виртуальных сегментов в физическую память.*
 
-## How to use
 
-### Generate Makefile:
-```bash
-cmake .
-```
-### Build project:
-```bash
-make
-```
+### Creators
+Latysh M. 821703\
+Morozov A. 821703
 
-### Run project:
-```bash
-./bin
-```
+
