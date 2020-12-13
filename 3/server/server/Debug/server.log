@@ -1,0 +1,3 @@
+﻿  Server.cpp
+C:\Users\ASUS-PC\Desktop\labi\operating-systems\3\server\server\Server.cpp(71,18): warning C4101: msg: неиспользованная локальная переменная
+  server.vcxproj -> C:\Users\ASUS-PC\Desktop\labi\operating-systems\3\server\Debug\server.exe

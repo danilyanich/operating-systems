@@ -86,7 +86,12 @@ void m_write(char write_from_buffer[], int size_to_write, m_err_code* error) {
         *error = M_ERR_INVALID_CHUNK;
         return;
     }
-    if (size_to_write % SIZE_OF_PAGE == 0) number_of_pages = size_to_write / SIZE_OF_PAGE; else number_of_pages = size_to_write / SIZE_OF_PAGE + 1;
+
+    if (size_to_write % SIZE_OF_PAGE == 0) 
+        number_of_pages = size_to_write / SIZE_OF_PAGE; 
+    else 
+        number_of_pages = size_to_write / SIZE_OF_PAGE + 1;
+
     int counter = number_of_pages;
     if (number_of_pages > NUMBER_OF_PAGES) {
         *error = M_ERR_OUT_OF_BOUNDS;
@@ -104,7 +109,12 @@ void m_write(char write_from_buffer[], int size_to_write, m_err_code* error) {
     }
     else {
         for (int i = 0; i < NUMBER_OF_PAGES; i++) {
-            if (!pages_table[i].is_taken) counter--; else counter = number_of_pages;
+
+            if (!pages_table[i].is_taken) 
+                counter--; 
+            else 
+                counter = number_of_pages;
+
             if (counter == 0) {
                 char* first_bit_of_first_page = pages_table[i - number_of_pages + 1].first_bit;
                 fillSeveralPages(write_from_buffer, &size_to_write, first_bit_of_first_page, number_of_pages);
