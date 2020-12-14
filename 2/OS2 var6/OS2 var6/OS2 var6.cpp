@@ -41,7 +41,7 @@ public:
     }
 
     void revolt() {
-        while (!russia.ready);
+        //while (!russia.ready);
         do
         {
             establishCommunism();
