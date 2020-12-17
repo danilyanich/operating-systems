@@ -1,0 +1,3 @@
+﻿  server.cpp
+D:\лабы\3_1\ос\33\server\server\server\server.cpp(68,14): warning C4101: msg: неиспользованная локальная переменная
+  server.vcxproj -> D:\лабы\3_1\ос\33\server\server\Debug\server.exe
