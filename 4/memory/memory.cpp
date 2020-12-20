@@ -178,4 +178,5 @@ file* touch(string filename) {
 	_filesystem->files.push_back(new_file);
 	cout << "Successfully created new file " << filename << endl;
 	return new_file;
+\\return
 }

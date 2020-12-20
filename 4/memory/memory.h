@@ -9,7 +9,7 @@ struct block {
     string data;
     int count;
     bool isFilled;
-}; // block of a memory
+}; // block of a  memory
 
 struct file {
     string name;
