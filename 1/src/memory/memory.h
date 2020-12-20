@@ -1,15 +1,37 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#include <stdbool.h>
+
 #define M_ERR_OK 0 // Everything is ok
 #define M_ERR_ALLOCATION_OUT_OF_MEMORY 1 // Not enough memory for allocation
 #define M_ERR_ALREADY_DEALLOCATED 2 // The chunk was already deallocated
 #define M_ERR_INVALID_CHUNK 3 // The chunk is invalid, the operation did not succeed
 #define M_ERR_OUT_OF_BOUNDS 4 // The read/write operation out of bounds
+#define M_ERR_ALLOCATION_NOT_SUCCEED 5 // The allocation process did not succeed due to unknown error
 
+
+struct _SEGMENT;
+typedef struct _SEGMENT segment;
+struct memory;
+typedef struct _MEMORY memory;
+
+struct _SEGMENT {
+    int size;
+    char* data;
+    bool isFilled;
+    segment* next;
+    segment* prev;
+}; // Segment of a memory
+
+struct _MEMORY {
+    segment* next;
+    char* memory;
+    int size;
+}; // Segmented memory
 
 typedef int m_err_code; // Error code of sandbox memory
-typedef void* m_id; // Identifier of sandbox memory chunk
+typedef segment* m_id; // Identifier of sandbox memory segment
 
 
 // Allocates a chunk in sandbox memory
@@ -42,9 +64,9 @@ void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err
 
 
 // Initializes sandbox memory allocator. Usually it is number_of_pages*size_of_page.
-// @param number_of_pages Number of pages to allocate
 // @param size_of_page Size of the page
-void m_init(int number_of_pages, int size_of_page);
+// @param error_code [out] M_ERR_OK, M_ERR_OUT_OF_BOUNDS, M_ERR_ALLOCATION_NOT_SUCCEED
+void m_init(int size_of_page, m_err_code* error_code);
 
 
 #endif /* MEMORY_H */
