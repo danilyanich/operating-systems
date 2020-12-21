@@ -1,25 +1,17 @@
 #include "File.h"
+#include "Block.h"
+#include "Memory.h"
 
 using namespace std;
 
 File::File()
 {
 	name = "";
-	content = "";
-	size = 0;
 }
 
 File::File(string name)
 {
 	this->name = name;
-	size = 0;
-}
-
-File::File(string name, string content)
-{
-	this->name = name;
-	this->content = content;
-	this->size = content.size();
 }
 
 void File::setName(string name)
@@ -34,18 +26,31 @@ string File::getName()
 
 void File::setContent(string content)
 {
-	this->content = content;
-	this->size = content.size();
+	blocks = content.size();
+	first = new Block(content[0]);
+	for (int i = 1; i < blocks; i++) {
+		new Block(content[i]);
+	}
+
 }
 
 string File::getContent()
 {
-	return content;
+	string retValue;
+	int id = first->getId();
+	for (int i = id; i < id + blocks; i++) {
+		retValue += Memory::getValueAt(i);
+	}
+
+	return retValue;
 }
 
-int File::getSize()
+void File::clearMemory()
 {
-	return size;
+	int id = first->getId();
+	for (int i = id; i < id + blocks; i++) {
+		Memory::clearValueAt(i);
+	}
 }
 
 File & File::operator=(const File & right)
@@ -55,8 +60,13 @@ File & File::operator=(const File & right)
 	}
 
 	name = right.name;
-	content = right.content;
-	size = right.size;
+	blocks = right.blocks;
+	first = new Block(right.first->getContent());
+	for (int i = 1; i < blocks; i++) {
+		int index = right.first->getId() + i;
+		new Block(Memory::getValueAt(index));
+	}
+
 	return *this;
 }
 

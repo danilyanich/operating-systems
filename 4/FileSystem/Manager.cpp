@@ -37,6 +37,7 @@ void Manager::deleteFile(string name)
 	for (int i = 0; files.size(); i++) {
 		File file = files[i];
 		if (file.getName() == name) {
+			file.clearMemory();
 			files.erase(files.begin() + i);
 			return;
 		}
@@ -64,6 +65,7 @@ string Manager::readFile(string name)
 			return file.getContent();
 		}
 	}
+	return "";
 }
 
 void Manager::writeFile(string name, string content)
@@ -79,6 +81,6 @@ void Manager::writeFile(string name, string content)
 void Manager::printAllFiles()
 {
 	for (File &file : files) {
-		std::cout << file.getName() << "  [" << file.getSize() << "]" << endl;
+		std::cout << file.getName() << endl;
 	}
 }

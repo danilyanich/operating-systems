@@ -2,23 +2,25 @@
 
 #include <iostream>
 
+#include "Block.h"
+
 using namespace std;
 
 
 class File {
 private:
 	string name;
-	string content;
-	int size;
+	Block *first;
+	//string content;
+	int blocks;
 public:
 	File();
 	File(string);
-	File(string, string);
 	void setName(string);
 	string getName();
 	void setContent(string);
 	string getContent();
-	int getSize();
+	void clearMemory();
 
 	File & operator=(const File& right);
 };

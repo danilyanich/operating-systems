@@ -6,7 +6,6 @@
 #include "File.h"
 
 
-
 class Manager{
 private:
 	vector<File> files;
