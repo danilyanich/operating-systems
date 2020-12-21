@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/file_system.dir/main.cpp.o CMakeFiles/file_system.dir/file_system.cpp.o  -o file_system  -lstdc++fs 

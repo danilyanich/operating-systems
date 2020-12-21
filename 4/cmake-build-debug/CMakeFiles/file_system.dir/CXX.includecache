@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/vita/Загрузки/Telegram Desktop/file_system/file_system.h
+string
+-
+vector
+-
+ostream
+-
+fstream
+-
+iostream
+-
+ctime
+-
+utility
+-
+experimental/filesystem
+-
+
+/home/vita/Загрузки/Telegram Desktop/file_system/main.cpp
+iostream
+-
+string
+/home/vita/Загрузки/Telegram Desktop/file_system/string
+file_system.h
+/home/vita/Загрузки/Telegram Desktop/file_system/file_system.h
+
