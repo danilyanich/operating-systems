@@ -39,11 +39,11 @@ public:
         delete logger;
     }
 
-    void launch(const string &ipAddress, const u_short ipPort) {
+    void start(const string &ipAddress, const u_short ipPort) {
         if (!bindSocket(ipAddress, ipPort)) {
             return;
         }
-        string message = getThreadHandle() + " : server is running on " + getServerAddress();
+        string message = getThreadHandle() + ": server is running on " + getServerAddress();
         updateBuffer(message);
         logger->info(message);
         if (!configureListening()) {

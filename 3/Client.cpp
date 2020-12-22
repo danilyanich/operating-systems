@@ -25,7 +25,7 @@ public:
         delete logger;
     }
 
-    bool connectToServer(const string &address, const u_short port) {
+    bool connectTo(const string &address, const u_short port) {
         sockaddr_in socketAddress{};
         socketAddress.sin_family = AF_INET;
         socketAddress.sin_addr.S_un.S_addr = inet_addr(address.c_str());
@@ -47,7 +47,7 @@ public:
         Sleep(seconds);
     }
 
-    void sendRequest() {
+    void sendMessage() {
         int requestLength = lengthOfLine + 1;
         if (send(clientSocket, generatedLine.c_str(), requestLength, 0) != SOCKET_ERROR) {
             logger->info("Send line: " + generatedLine);
@@ -56,7 +56,7 @@ public:
         }
     }
 
-    void receiveResponse() {
+    void getResponse() {
         string response;
         do {
             const int bufferSize = 1024;

@@ -2,14 +2,12 @@
 
 int main() {
     Client client;
-    string address = "127.0.0.1";
-    u_short port = 5223;
-    if (client.connectToServer(address, port)) {
+
+    if (client.connectTo("127.0.0.1", 5223)) {
         client.sleep();
-        client.sendRequest();
-        client.receiveResponse();
+        client.sendMessage();
+        client.getResponse();
         client.sleep();
         client.disconnect();
     }
-    return 0;
 }

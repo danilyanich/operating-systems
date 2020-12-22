@@ -11,7 +11,7 @@ using namespace std;
 
 class Logger {
 public:
-    explicit Logger(const string &pathToLogFile, bool useConsole) {
+    Logger(const string &pathToLogFile, bool useConsole) {
         fileStream = ofstream(pathToLogFile);
         this->useConsole = useConsole;
         InitializeCriticalSection(&section);
@@ -23,21 +23,24 @@ public:
     }
 
     void info(const string &message) {
-        string formattedMessage = "INFO  " + getTime() + " : " + message;
+        string formattedMessage = getTime() + " [info]" + " - " + message;
+        SetConsoleTextAttribute(hConsole, 15);  // white log text
         log(formattedMessage);
     }
 
     void warn(const string &message) {
-        string formattedMessage = "WARN  " + getTime() + " : " + message;
+        string formattedMessage = getTime() + " [warn]" + " - " + message;
+        SetConsoleTextAttribute(hConsole, 14);  // yellow warning
         log(formattedMessage);
     }
 
     void error(const string &message) {
-        string formattedMessage = "ERROR " + getTime() + " : " + message;
+        string formattedMessage = getTime() + " [error]" + " - " + message;
+        SetConsoleTextAttribute(hConsole, 12);  // red error
         log(formattedMessage);
     }
 private:
-
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     bool useConsole;
 
     ofstream fileStream;
