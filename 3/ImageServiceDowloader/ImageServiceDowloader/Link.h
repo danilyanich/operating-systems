@@ -9,6 +9,7 @@ public:
 	  string path;
 
 	  Link(string hostName, string path);
+
 };
 
-Link* convertToImageLink(std::string url, int* socketAddressNumber, std::string* imageNameArr);
+Link* convertToImageLink(string url, int* socketAddressNumber, string* imageNameArr);

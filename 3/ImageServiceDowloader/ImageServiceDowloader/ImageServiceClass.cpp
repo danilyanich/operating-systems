@@ -1,27 +1,24 @@
+//ignoring errors
 #define _CRT_SECURE_NO_WARNINGS   
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_NO_VA_START_VALIDATION
-#pragma comment(lib, "ws2_32.lib")
 
-#include <cstdio>
+#pragma comment(lib, "ws2_32.lib")
+//global libraries
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cstring>
 #include <winsock2.h>
 #include <thread>
 #include <vector>
-#include <Windows.h>
-#include <regex>
+
+//local libraries
 #include "Queue.h"
 #include "Link.h"
+#include "ImageServiceClass.h"
 using namespace std;
 
-const int BUFF_SIZE = 1024;
-const int FILE_NAME_LENGTH = 80;
-const char* IMAGE_DIRECTORY = "./img/";
 const char* START_DOWNOLOAD_IMAGE_MESSAGE = "%s [INFO] - Thread: %d start downnoload image %s";
-const char* LOG_FILE_PATTERN = "%Y-%m-%d %H.%M.log";
 const char* ADD_ELEMENT_IN_QUEUE_EXCEPTION_MESSAGE = "Failed to add new element to sync queue";
 const char* WSDATA_LOAD_EXCEPTION_MESSAGE = "Can't load WSDATA library";
 const char* SOCKET_INITIALIZATION_EXCEPTION_MESSAGE = "Can't initialize socket";
@@ -38,48 +35,51 @@ const char* IMAGE_DOWNLOAD_SUCCESSFULLY_MESSAGE = "%s[INFO] - Image: %s downoloa
 const char* SOCKER_DATA_READ_EXCEPTION_MESSAGE = "Failed to read socket data";
 const char* TEST_FILE = "test.txt";
 const char* TEST_MODE = "test";
-const char* START_PROGRAM_MESSAGE = "Program is starting\n";
 const char* N;
 
-SOCKET socketArr[BUFF_SIZE];
-string imageNameArr[BUFF_SIZE];
-fstream image[BUFF_SIZE];
 fd_set readfds;
-int socketAddressNumber = -1;
-char logFileName[FILE_NAME_LENGTH];
+char logFileName[80];
 CRITICAL_SECTION console;
 CRITICAL_SECTION file;
-Queue queue(5);
-vector<HANDLE> activeHandles;
 
-SOCKET establishConnection(string*, string*);
-unsigned __stdcall downloadImg(void* pArg);
-string format(const string& format, ...);
 unsigned __stdcall runThreadPool(void* pArg);
-void writeToConsole(CRITICAL_SECTION* section, string message, ostream* target);
-void writeToLogFile(string stringToWrite);
-void start();
-void runTests();
-void logInfo(const char* messageToWrite);
-void startDownoloadProcess(string* url, int* numlink);
+unsigned __stdcall downloadImage(void* pArg);
 
-int main(int argc, char* argv[]) {
-	printf(START_PROGRAM_MESSAGE);
-	time_t t = time(0);
-	struct tm* now = localtime(&t);
-	strftime(logFileName, 80, LOG_FILE_PATTERN, now);
-	CreateDirectoryA(IMAGE_DIRECTORY, 0);
-	InitializeCriticalSection(&console);
-	InitializeCriticalSection(&file);
-	unsigned int qThreadID = 0;
-	HANDLE threadsHandler = (HANDLE)_beginthreadex(NULL, 0, runThreadPool, NULL, 0, &qThreadID);
-	start();
-	system("pause");
 
+int main() {
+	bool workMode = true;
+	int choose;
+	while (workMode == true) {
+		ImageServiceClass imageService;
+		printf("The program`s now start working");
+		time_t t = time(0);
+		struct tm* now = localtime(&t);
+		strftime(logFileName, 80, "%Y-%m-%d %H.%M.log", now);
+		CreateDirectoryA("./image/", 0);
+		InitializeCriticalSection(&console);
+		InitializeCriticalSection(&file);
+		unsigned int qThreadID = 0;
+		HANDLE threadsHandler = (HANDLE)_beginthreadex(NULL, 0, runThreadPool, NULL, 0, &qThreadID);
+		cout << "Select the operating mode\n1-Test work\n2-Main work" <<  endl;
+		cin >> choose;
+		if (choose == 1) {
+			imageService.runWorkTest();
+			workMode = false;
+		}
+		else if (choose == 2)
+		{
+			imageService.start();
+			workMode = false;
+		}
+		else {
+			printf("Repeat operation");
+		}
+	}
 	return 0;
 }
 
-void start() {
+void ImageServiceClass::start()
+{
 	string url;
 	int numLink = -1;
 	while (true) {
@@ -88,9 +88,15 @@ void start() {
 	}
 }
 
+void ImageServiceClass::runWorkTest()
+{
+}
 
-void startDownoloadProcess(string* url, int* numlink) {
-
+void ImageServiceClass::startDownoloadProcess(string* url, int* numlink)
+{
+	Queue queue(5);
+	SOCKET socketArr[1024];
+	string imageNameArr[1024];
 	Link* link = convertToImageLink(*url, &socketAddressNumber, imageNameArr);
 	socketArr[socketAddressNumber] = establishConnection(&link->hostName, &link->path);
 	FD_SET(socketArr[socketAddressNumber], &readfds);
@@ -103,23 +109,7 @@ void startDownoloadProcess(string* url, int* numlink) {
 }
 
 
-unsigned __stdcall runThreadPool(void* pArg)
-{
-	while (true)
-	{
-		Queue::Element element = {};
-		if (queue.pull(&element)) {
-			unsigned int* arg;
-			arg = (unsigned int*)malloc(sizeof(unsigned int));
-			*arg = element.numberLink;
-			HANDLE handle = (HANDLE)_beginthreadex(NULL, 1000, downloadImg, (void*)arg, 0, &element.numberLink);
-			activeHandles.push_back(handle);
-		}
-	}
-	return 0;
-}
-
-SOCKET establishConnection(string* host, string* imagePath)
+SOCKET ImageServiceClass::establishConnection(string* host, string* path)
 {
 	WSADATA wd;
 	SOCKET sock;
@@ -154,8 +144,8 @@ SOCKET establishConnection(string* host, string* imagePath)
 		return sock;
 	}
 
-	char* requestMessage = new char[sizeof(imagePath) + sizeof(host) + REQUEST_MESSAGE_LENGTH];
-	sprintf(requestMessage, REQUEST_MESSAGE, (*imagePath).c_str(), (*host).c_str());
+	char* requestMessage = new char[sizeof(path) + sizeof(host) + REQUEST_MESSAGE_LENGTH];
+	sprintf(requestMessage, REQUEST_MESSAGE, (*path).c_str(), (*host).c_str());
 	int sendInfo = send(sock, requestMessage, strlen(requestMessage), 0);
 	if (SOCKET_ERROR == sendInfo) {
 		logInfo(SEND_REQUEST_EXCEPTION_MESSAGE);
@@ -166,7 +156,8 @@ SOCKET establishConnection(string* host, string* imagePath)
 	return sock;
 }
 
-string getCurrentTImeString() {
+string ImageServiceClass::getCurrentTimeString()
+{
 	time_t seconds = time(NULL);
 	tm* timeinfo = localtime(&seconds);
 	char timeForAnswer[100];
@@ -174,8 +165,9 @@ string getCurrentTImeString() {
 	return timeForAnswer;
 }
 
-string generateMessageOfImageDownoloading(string image, int bites) {
-	string timeForAnswer = getCurrentTImeString();
+string ImageServiceClass::generateMessageOfImageDownoloading(string image, int bites)
+{
+	string timeForAnswer = getCurrentTimeString();
 	char answer_char[200];
 	string answer;
 
@@ -203,64 +195,14 @@ string generateMessageOfImageDownoloading(string image, int bites) {
 	return answer_char;
 }
 
-unsigned __stdcall downloadImg(void* pArg)
+void ImageServiceClass::writeToConsole(CRITICAL_SECTION* section, string message, ostream* target)
 {
-	unsigned int numPtr = *((int*)pArg);
-	unsigned int numLink = numPtr;
-	string timeForAnswer = getCurrentTImeString();
-	int threadId = std::hash<std::thread::id>{}(std::this_thread::get_id());
-	string message = format(START_DOWNOLOAD_IMAGE_MESSAGE, timeForAnswer.c_str(), threadId, imageNameArr[numLink].c_str());
-	logInfo(message.c_str());
-	char buf[10240];
-	image[numLink].open(IMAGE_DIRECTORY + imageNameArr[numLink], ios::out | ios::binary);
-	memset(buf, 0, sizeof(buf));
-	int n = recv(socketArr[numLink], buf, sizeof(buf) - 1, 0);
-	if (n == -1) {
-		logInfo(SOCKER_DATA_READ_EXCEPTION_MESSAGE);
-		free(pArg);
-		_endthreadex(0);
-		return 0;
-	}
-	else {
-		char* cpos = strstr(buf, RESPONSE_DELIMETER);
-		image[numLink].write(cpos + strlen(RESPONSE_DELIMETER), n - (cpos - buf) - strlen(RESPONSE_DELIMETER));
-		string message = generateMessageOfImageDownoloading(imageNameArr[numLink], n);
-		writeToLogFile(message);
-	}
-
-	while (true) {
-		if (FD_ISSET(socketArr[numLink], &readfds)) {
-			memset(buf, 0, sizeof(buf));
-			n = recv(socketArr[numLink], buf, sizeof(buf) - 1, 0);
-			if (n > 0) {
-				image[numLink].write(buf, n);
-				string message = generateMessageOfImageDownoloading(imageNameArr[numLink], n);
-				writeToLogFile(message);
-			}
-			else if (n == 0) {
-				FD_CLR(socketArr[numLink], &readfds);
-				image[numLink].close();
-				string message = generateMessageOfImageDownoloading(imageNameArr[numLink], n);
-				logInfo(message.c_str());
-				break;
-			}
-			else if (n == -1) {
-				logInfo(SOCKER_DATA_READ_EXCEPTION_MESSAGE);
-			}
-		}
-	}
-	free(pArg);
-	_endthreadex(0);
-	return(0);
-}
-
-void writeToConsole(CRITICAL_SECTION* section, string message, ostream* target) {
 	EnterCriticalSection(section);
 	*target << message << endl;
 	LeaveCriticalSection(section);
 }
 
-void writeToLogFile(string stringToWrite)
+void ImageServiceClass::writeToLogFile(string stringToWrite)
 {
 	EnterCriticalSection(&file);
 	FILE* fileToSave = fopen(logFileName, "a");
@@ -270,12 +212,13 @@ void writeToLogFile(string stringToWrite)
 	LeaveCriticalSection(&file);
 }
 
-void logInfo(const char* messageToWrite) {
+void ImageServiceClass::logInfo(const char* messageToWrite)
+{
 	writeToLogFile(messageToWrite);
 	writeToConsole(&console, messageToWrite, &cout);
 }
 
-string format(const string& format, ...)
+string ImageServiceClass::format(const string& format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -286,4 +229,77 @@ string format(const string& format, ...)
 	std::vsnprintf(&vec[0], len + 1, format.c_str(), args);
 	va_end(args);
 	return &vec[0];
+}
+
+unsigned __stdcall runThreadPool(void* pArg)
+{
+	ImageServiceClass imageService;
+	Queue queue(5);
+	while (true)
+	{
+		Queue::Element element = {};
+		if (queue.pull(&element)) {
+			unsigned int* arg;
+			arg = (unsigned int*)malloc(sizeof(unsigned int));
+			*arg = element.numberLink;
+			HANDLE handle = (HANDLE)_beginthreadex(NULL, 1000, downloadImage, (void*)arg, 0, &element.numberLink);
+			imageService.activeHandles.push_back(handle);
+		}
+	}
+	return 0;
+}
+
+unsigned __stdcall downloadImage(void* pArg)
+{
+	ImageServiceClass imageService;
+	SOCKET socketArr[1024];
+	fstream image[1024];
+	string imageNameArr[1024];
+	unsigned int numPtr = *((int*)pArg);
+	unsigned int numLink = numPtr;
+	string timeForAnswer = imageService.getCurrentTimeString();
+	int threadId = std::hash<std::thread::id>{}(std::this_thread::get_id());
+	string message = imageService.format(START_DOWNOLOAD_IMAGE_MESSAGE, timeForAnswer.c_str(), threadId, imageNameArr[numLink].c_str());
+	imageService.logInfo(message.c_str());
+	char buf[10240];
+	image[numLink].open("./image/" + imageNameArr[numLink], ios::out | ios::binary);
+	memset(buf, 0, sizeof(buf));
+	int n = recv(socketArr[numLink], buf, sizeof(buf) - 1, 0);
+	if (n == -1) {
+		imageService.logInfo(SOCKER_DATA_READ_EXCEPTION_MESSAGE);
+		free(pArg);
+		_endthreadex(0);
+		return 0;
+	}
+	else {
+		char* cpos = strstr(buf, RESPONSE_DELIMETER);
+		image[numLink].write(cpos + strlen(RESPONSE_DELIMETER), n - (cpos - buf) - strlen(RESPONSE_DELIMETER));
+		string message = imageService.generateMessageOfImageDownoloading(imageNameArr[numLink], n);
+		imageService.writeToLogFile(message);
+	}
+
+	while (true) {
+		if (FD_ISSET(socketArr[numLink], &readfds)) {
+			memset(buf, 0, sizeof(buf));
+			n = recv(socketArr[numLink], buf, sizeof(buf) - 1, 0);
+			if (n > 0) {
+				image[numLink].write(buf, n);
+				string message = imageService.generateMessageOfImageDownoloading(imageNameArr[numLink], n);
+				imageService.writeToLogFile(message);
+			}
+			else if (n == 0) {
+				FD_CLR(socketArr[numLink], &readfds);
+				image[numLink].close();
+				string message = imageService.generateMessageOfImageDownoloading(imageNameArr[numLink], n);
+				imageService.logInfo(message.c_str());
+				break;
+			}
+			else if (n == -1) {
+				imageService.logInfo(SOCKER_DATA_READ_EXCEPTION_MESSAGE);
+			}
+		}
+	}
+	free(pArg);
+	_endthreadex(0);
+	return(0);
 }

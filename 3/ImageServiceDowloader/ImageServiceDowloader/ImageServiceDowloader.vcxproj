@@ -139,11 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ImageServiceClass.cpp" />
     <ClCompile Include="Link.cpp" />
     <ClCompile Include="Queue.cpp" />
-    <ClCompile Include="StartApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ImageServiceClass.h" />
     <ClInclude Include="Link.h" />
     <ClInclude Include="Queue.h" />
   </ItemGroup>
