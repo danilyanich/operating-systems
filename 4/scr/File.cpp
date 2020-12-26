@@ -1,0 +1,15 @@
+#include "File.h"
+
+File::File(int id, const std::string &name, Block *first) : id(id), name(name), first(first) {}
+
+const std::string &File::getName() const {
+    return name;
+}
+
+Block *File::getFirst() const {
+    return first;
+}
+
+int File::getId() const {
+    return id;
+}
