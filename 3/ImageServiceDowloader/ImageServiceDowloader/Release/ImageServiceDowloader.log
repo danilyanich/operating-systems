@@ -1,0 +1,9 @@
+﻿  StartApplication.cpp
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\StartApplication.cpp(98,42): warning C4838: Преобразование из "int" в "unsigned int" требует сужающего преобразования.
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\StartApplication.cpp(198,20): warning C4018: <: несоответствие типов со знаком и без знака
+  Создание кода
+  3 of 941 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  ImageServiceDowloader.vcxproj -> C:\Study\ОС\operating-systems\3\ImageServiceDowloader\Release\ImageServiceDowloader.exe

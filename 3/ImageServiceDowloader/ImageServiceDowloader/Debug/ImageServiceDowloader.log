@@ -1,0 +1,21 @@
+﻿  Link.cpp
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(17,21): warning C4129: /: неизвестная escape-последовательность
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(18,21): warning C4129: /: неизвестная escape-последовательность
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(19,21): warning C4129: /: неизвестная escape-последовательность
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(35,20): warning C4018: <: несоответствие типов со знаком и без знака
+  StartApplication.cpp
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(17,21): warning C4129: /: неизвестная escape-последовательность
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(18,21): warning C4129: /: неизвестная escape-последовательность
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(19,21): warning C4129: /: неизвестная escape-последовательность
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\Link.cpp(35,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\StartApplication.cpp(76,16): warning C4129: I: неизвестная escape-последовательность
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\StartApplication.cpp(93,42): warning C4838: Преобразование из "int" в "unsigned int" требует сужающего преобразования.
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\StartApplication.cpp(193,20): warning C4018: <: несоответствие типов со знаком и без знака
+  Создание кода...
+StartApplication.obj : error LNK2005: "public: __thiscall Link::Link(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0Link@@QAE@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z) уже определен в Link.obj
+StartApplication.obj : error LNK2005: "public: __thiscall Queue::Queue(int)" (??0Queue@@QAE@H@Z) уже определен в Queue.obj
+StartApplication.obj : error LNK2005: "public: __thiscall Queue::~Queue(void)" (??1Queue@@QAE@XZ) уже определен в Queue.obj
+StartApplication.obj : error LNK2005: "class Link * __cdecl convertToImageLink(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,int *,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > *)" (?convertToImageLink@@YAPAVLink@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAHPAV23@@Z) уже определен в Link.obj
+StartApplication.obj : error LNK2005: "public: int __thiscall Queue::pull(class Queue::Element *)" (?pull@Queue@@QAEHPAVElement@1@@Z) уже определен в Queue.obj
+StartApplication.obj : error LNK2005: "public: int __thiscall Queue::put(class Queue::Element *,unsigned long)" (?put@Queue@@QAEHPAVElement@1@K@Z) уже определен в Queue.obj
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\Debug\ImageServiceDowloader.exe : fatal error LNK1169: обнаружен многократно определенный символ - один или более
