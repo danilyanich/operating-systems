@@ -18,6 +18,6 @@ public:
 	void logInfo(const char* messageToWrite);
 	void startDownoloadProcess(string* url, int* numlink);
 
-
-
+	const int REQUEST_MESSAGE_LENGTH = 70;
+	const char* N{};
 };

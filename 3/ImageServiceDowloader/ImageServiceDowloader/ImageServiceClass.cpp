@@ -18,25 +18,6 @@
 #include "ImageServiceClass.h"
 using namespace std;
 
-const char* START_DOWNOLOAD_IMAGE_MESSAGE = "%s [INFO] - Thread: %d start downnoload image %s";
-const char* ADD_ELEMENT_IN_QUEUE_EXCEPTION_MESSAGE = "Failed to add new element to sync queue";
-const char* WSDATA_LOAD_EXCEPTION_MESSAGE = "Can't load WSDATA library";
-const char* SOCKET_INITIALIZATION_EXCEPTION_MESSAGE = "Can't initialize socket";
-const char* INCORRECT_LINK_EXCEPTION_MESSAGE = "Incorrect link was input";
-const char* CONNECTION_EXCEPTION_MESSAGE = "Can't establish connection with socket";
-const char* REQUEST_MESSAGE = "GET %s HTTP/1.1\r\nHost: %s\r\nConnection:Close\r\n\r\n";
-const int REQUEST_MESSAGE_LENGTH = 70;
-const char* SEND_REQUEST_EXCEPTION_MESSAGE = "Error occurred during send request";
-const char* TIME_TEMPLATE_IN_FILE = "%Y-%m-%d %H:%M:%S";
-const char* RESPONSE_DELIMETER = "\r\n\r\n";
-const char* IMAGE_STILL_DOWNLOADING_MESSAGE = "%s[INFO] - Image: %s is still downloading , Bites received: %d";
-const char* IMAGE_NOT_DOWNLOADING_MESSAGE = "%s[INFO] - Image: %s don't downoload due to some problems";
-const char* IMAGE_DOWNLOAD_SUCCESSFULLY_MESSAGE = "%s[INFO] - Image: %s downoload successfully";
-const char* SOCKER_DATA_READ_EXCEPTION_MESSAGE = "Failed to read socket data";
-const char* TEST_FILE = "test.txt";
-const char* TEST_MODE = "test";
-const char* N;
-
 fd_set readfds;
 char logFileName[80];
 CRITICAL_SECTION console;
@@ -51,7 +32,7 @@ int main() {
 	int choose;
 	while (workMode == true) {
 		ImageServiceClass imageService;
-		printf("The program`s now start working");
+		printf("The program`s now start working\n");
 		time_t t = time(0);
 		struct tm* now = localtime(&t);
 		strftime(logFileName, 80, "%Y-%m-%d %H.%M.log", now);
@@ -60,13 +41,13 @@ int main() {
 		InitializeCriticalSection(&file);
 		unsigned int qThreadID = 0;
 		HANDLE threadsHandler = (HANDLE)_beginthreadex(NULL, 0, runThreadPool, NULL, 0, &qThreadID);
-		cout << "Select the operating mode\n1-Test work\n2-Main work" <<  endl;
+		cout << "Select the operating mode\n1-Main work\n2-Test work" <<  endl;
 		cin >> choose;
-		if (choose == 1) {
+		if (choose == 2) {
 			imageService.runWorkTest();
 			workMode = false;
 		}
-		else if (choose == 2)
+		else if (choose == 1)
 		{
 			imageService.start();
 			workMode = false;
@@ -90,6 +71,15 @@ void ImageServiceClass::start()
 
 void ImageServiceClass::runWorkTest()
 {
+	string urlAdress;
+	char link[500];
+	int numLink = -1;
+	ifstream file("ImageTest/Test1.txt");
+	file >> link;
+	printf("%s", link);
+	getline(file, urlAdress);
+	startDownoloadProcess(&urlAdress, &numLink);
+	file.close();
 }
 
 void ImageServiceClass::startDownoloadProcess(string* url, int* numlink)
@@ -104,7 +94,7 @@ void ImageServiceClass::startDownoloadProcess(string* url, int* numlink)
 	Queue::Element element = { (*numlink), (*numlink) };
 	bool rez = queue.put(&element, 1000);
 	if (!rez) {
-		logInfo(ADD_ELEMENT_IN_QUEUE_EXCEPTION_MESSAGE);
+		logInfo("Failed to add new element to sync queue");
 	}
 }
 
@@ -117,13 +107,13 @@ SOCKET ImageServiceClass::establishConnection(string* host, string* path)
 
 	int result = WSAStartup(MAKEWORD(2, 2), &wd);
 	if (result != 0) {
-		logInfo(WSDATA_LOAD_EXCEPTION_MESSAGE);
+		logInfo("Can't load WSDATA library");
 		return result;
 	}
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == INVALID_SOCKET) {
-		logInfo(SOCKET_INITIALIZATION_EXCEPTION_MESSAGE);
+		logInfo("Can't initialize socket");
 		return sock;
 	}
 
@@ -132,7 +122,7 @@ SOCKET ImageServiceClass::establishConnection(string* host, string* path)
 
 	hostInfo = gethostbyname((*host).c_str());
 	if (hostInfo == NULL) {
-		logInfo(INCORRECT_LINK_EXCEPTION_MESSAGE);
+		logInfo("Incorrect link was input");
 		return sock;
 	}
 	sai.sin_port = htons(80);
@@ -140,15 +130,15 @@ SOCKET ImageServiceClass::establishConnection(string* host, string* path)
 
 	int check = connect(sock, (sockaddr*)&sai, sizeof(sai));
 	if (check == SOCKET_ERROR) {
-		logInfo(CONNECTION_EXCEPTION_MESSAGE);
+		logInfo("Can't establish connection with socket");
 		return sock;
 	}
 
 	char* requestMessage = new char[sizeof(path) + sizeof(host) + REQUEST_MESSAGE_LENGTH];
-	sprintf(requestMessage, REQUEST_MESSAGE, (*path).c_str(), (*host).c_str());
+	sprintf(requestMessage, "GET %s HTTP/1.1\r\nHost: %s\r\nConnection:Close\r\n\r\n", (*path).c_str(), (*host).c_str());
 	int sendInfo = send(sock, requestMessage, strlen(requestMessage), 0);
 	if (SOCKET_ERROR == sendInfo) {
-		logInfo(SEND_REQUEST_EXCEPTION_MESSAGE);
+		logInfo("Error occurred during send request");
 		closesocket(sock);
 		return sock;
 	}
@@ -161,7 +151,7 @@ string ImageServiceClass::getCurrentTimeString()
 	time_t seconds = time(NULL);
 	tm* timeinfo = localtime(&seconds);
 	char timeForAnswer[100];
-	strftime(timeForAnswer, 80, TIME_TEMPLATE_IN_FILE, timeinfo);
+	strftime(timeForAnswer, 80, "%Y-%m-%d %H:%M:%S", timeinfo);
 	return timeForAnswer;
 }
 
@@ -173,21 +163,21 @@ string ImageServiceClass::generateMessageOfImageDownoloading(string image, int b
 
 	if (bites > 0) {
 		char message[1000];
-		sprintf(message, IMAGE_STILL_DOWNLOADING_MESSAGE, timeForAnswer.c_str(), image.c_str(), bites);
+		sprintf(message, "%s[INFO] - Image: %s is still downloading , Bites received: %d", timeForAnswer.c_str(), image.c_str(), bites);
 		answer = message;
 	}
 	else if (bites < 0) {
 		char message[1000];
-		sprintf(message, IMAGE_NOT_DOWNLOADING_MESSAGE, timeForAnswer.c_str(), image.c_str());
+		sprintf(message, "%s[INFO] - Image: %s don't downoload due to some problems", timeForAnswer.c_str(), image.c_str());
 		answer = message;
 	}
 	else {
 		char message[1000];
-		sprintf(message, IMAGE_DOWNLOAD_SUCCESSFULLY_MESSAGE, timeForAnswer.c_str(), image.c_str());
+		sprintf(message, "%s[INFO] - Image: %s downoload successfully", timeForAnswer.c_str(), image.c_str());
 		answer = message;
 	}
 
-	for (int j = 0; j < answer.length(); j++) {
+	for (int j = 0; j < (int) answer.length(); j++) {
 		answer_char[j] = answer[j];
 	}
 
@@ -239,11 +229,12 @@ unsigned __stdcall runThreadPool(void* pArg)
 	{
 		Queue::Element element = {};
 		if (queue.pull(&element)) {
-			unsigned int* arg;
-			arg = (unsigned int*)malloc(sizeof(unsigned int));
-			*arg = element.numberLink;
-			HANDLE handle = (HANDLE)_beginthreadex(NULL, 1000, downloadImage, (void*)arg, 0, &element.numberLink);
-			imageService.activeHandles.push_back(handle);
+			unsigned int* arg = (unsigned int*)malloc(sizeof(unsigned int));
+			if (arg) {
+				*arg = element.numberLink;
+				HANDLE handle = (HANDLE)_beginthreadex(NULL, 1000, downloadImage, (void*)arg, 0, &element.numberLink);
+				imageService.activeHandles.push_back(handle);
+			}
 		}
 	}
 	return 0;
@@ -259,21 +250,21 @@ unsigned __stdcall downloadImage(void* pArg)
 	unsigned int numLink = numPtr;
 	string timeForAnswer = imageService.getCurrentTimeString();
 	int threadId = std::hash<std::thread::id>{}(std::this_thread::get_id());
-	string message = imageService.format(START_DOWNOLOAD_IMAGE_MESSAGE, timeForAnswer.c_str(), threadId, imageNameArr[numLink].c_str());
+	string message = imageService.format("%s [INFO] - Thread: %d start downnoload image %s", timeForAnswer.c_str(), threadId, imageNameArr[numLink].c_str());
 	imageService.logInfo(message.c_str());
 	char buf[10240];
 	image[numLink].open("./image/" + imageNameArr[numLink], ios::out | ios::binary);
 	memset(buf, 0, sizeof(buf));
 	int n = recv(socketArr[numLink], buf, sizeof(buf) - 1, 0);
 	if (n == -1) {
-		imageService.logInfo(SOCKER_DATA_READ_EXCEPTION_MESSAGE);
+		imageService.logInfo("Failed to read socket data");
 		free(pArg);
 		_endthreadex(0);
 		return 0;
 	}
 	else {
-		char* cpos = strstr(buf, RESPONSE_DELIMETER);
-		image[numLink].write(cpos + strlen(RESPONSE_DELIMETER), n - (cpos - buf) - strlen(RESPONSE_DELIMETER));
+		char* cpos = strstr(buf, "\r\n\r\n");
+		image[numLink].write(cpos + strlen("\r\n\r\n"), static_cast<unsigned __int64> (n) - (cpos - buf) - strlen("\r\n\r\n"));
 		string message = imageService.generateMessageOfImageDownoloading(imageNameArr[numLink], n);
 		imageService.writeToLogFile(message);
 	}
@@ -295,7 +286,7 @@ unsigned __stdcall downloadImage(void* pArg)
 				break;
 			}
 			else if (n == -1) {
-				imageService.logInfo(SOCKER_DATA_READ_EXCEPTION_MESSAGE);
+				imageService.logInfo("Failed to read socket data");
 			}
 		}
 	}
