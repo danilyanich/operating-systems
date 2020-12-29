@@ -1,51 +1,35 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "memory/memory.h"
+#include <stdlib.h>
+#include "assert.h"
+#include <string.h>
 
-int main(int argc, char **argv) {
-  m_init(1, 500);
+void test_str_alloc(char *data) {
+    VA ptr = NULL;
+    VA *ptr2 = &ptr;
+    _malloc(ptr2, strlen(data));
+    _write(*ptr2, data, strlen(data));
 
-  int error_code;
+    char *resData = malloc(strlen(data));
+    _read(*ptr2, resData, strlen(data));
+    assert(strcmp(resData, data) == 0);
 
-  m_id chunk_1 = m_malloc(13, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    _free(*ptr2);
 
-  m_id chunk_2 = m_malloc(20, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    char *emptyData = malloc(strlen(data));
+    int res_code = _read(*ptr2, emptyData, strlen(data));
+    assert(res_code == ERR_BAD_PARAMS);
+}
 
-  m_id chunk_3 = m_malloc(50, &error_code);
-  if (error_code != M_ERR_OK) abort();
+int main(int argc, char *argv[]) {
+    int res = _init_(3, 10);
+    assert(res == 0);
+    test_str_alloc("masha");
+    test_str_alloc("ilya");
+    test_str_alloc("lol");
+    test_str_alloc("kek");
+    test_str_alloc("chebyrek");
 
-  m_write(chunk_1, "Hello World!", 13, &error_code);
-  if (error_code != M_ERR_OK) abort();
-
-  m_write(chunk_2, "Operating Systems", 18, &error_code);
-  if (error_code != M_ERR_OK) abort();
-
-  m_write(chunk_3, "Super dumb memory allocator", 28, &error_code);
-  if (error_code != M_ERR_OK) abort();
-
-  char buffer[50];
-
-  m_read(chunk_1, buffer, 13, &error_code);
-  if (error_code != M_ERR_OK) abort();
-  printf("%s\n", buffer);
-
-  m_read(chunk_2, buffer, 18, &error_code);
-  if (error_code != M_ERR_OK) abort();
-  printf("%s\n", buffer);
-
-  m_read(chunk_3, buffer, 28, &error_code);
-  if (error_code != M_ERR_OK) abort();
-  printf("%s\n", buffer);
-
-  m_free(chunk_1, &error_code);
-  if (error_code != M_ERR_OK) abort();
-
-  m_free(chunk_2, &error_code);
-  if (error_code != M_ERR_OK) abort();
-
-  m_free(chunk_3, &error_code);
-  if (error_code != M_ERR_OK) abort();
+    _clean();
+    printf("success!");
+    return 0;
 }
