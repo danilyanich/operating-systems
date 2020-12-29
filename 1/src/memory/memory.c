@@ -94,6 +94,12 @@ void m_free(
     m_id ptr, 
     m_err_code* error
 ){
+
+    if (ptr == NULL) {
+        *error = M_ERR_ALREADY_DEALLOCATED;
+        return;
+    }
+
     ptr -> is_used = false;
     *error = M_ERR_OK;
 }
@@ -106,6 +112,12 @@ void m_read(
     int size_to_read, 
     m_err_code* error
 ){
+
+    if (size_to_read > read_from_id->size) {
+        *error = M_ERR_OUT_OF_BOUNDS;
+        return;
+    }
+
     read_from_id -> not_calling = 0;
 
     memcpy(read_to_buffer, read_from_id->data, size_to_read);
@@ -130,13 +142,30 @@ void m_write(
     int size_to_write, 
     m_err_code* error
 ){
-    memcpy(
-        write_to_id->data, 
-        write_from_buffer, 
-        size_to_write
-    );
+    if (write_to_id == NULL) {
+        *error = M_ERR_INVALID_CHUNK;
+        return;
+    }
 
-    *error = M_ERR_OK;
+    if (size_to_write > write_to_id->size) {
+        *error = M_ERR_OUT_OF_BOUNDS;
+        return;
+    }
+
+    if (write_to_id -> is_used){
+        // size condition
+        // exist condition
+        memcpy(
+            write_to_id->data, 
+            write_from_buffer, 
+            size_to_write
+        );
+
+        *error = M_ERR_OK;
+    }
+    else{
+        *error = 1;
+    }
 }
 
 
