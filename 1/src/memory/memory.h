@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef MEMORY_H
 #define MEMORY_H
 
@@ -7,9 +9,21 @@
 #define M_ERR_INVALID_CHUNK 3 // The chunk is invalid, the operation did not succeed
 #define M_ERR_OUT_OF_BOUNDS 4 // The read/write operation out of bounds
 
-
 typedef int m_err_code; // Error code of sandbox memory
 typedef void* m_id; // Identifier of sandbox memory chunk
+
+struct block {
+	int size;
+	struct block* prev;
+	struct block* next;
+	m_id memory;
+	bool is_next_null;
+};
+
+// Initializes sandbox memory allocator. Usually it is number_of_pages*size_of_page.
+// @param number_of_pages Number of pages to allocate
+// @param size_of_page Size of the page
+void m_init(int number_of_pages, int size_of_page);
 
 
 // Allocates a chunk in sandbox memory
@@ -40,11 +54,6 @@ void m_read(m_id read_from_id, void* read_to_buffer, int size_to_read, m_err_cod
 // @param error_code [out] M_ERR_OK, M_ERR_INVALID_CHUNK, M_ERR_OUT_OF_BOUNDS
 void m_write(m_id write_to_id, void* write_from_buffer, int size_to_write, m_err_code* error_code);
 
-
-// Initializes sandbox memory allocator. Usually it is number_of_pages*size_of_page.
-// @param number_of_pages Number of pages to allocate
-// @param size_of_page Size of the page
-void m_init(int number_of_pages, int size_of_page);
-
+bool insert_block (struct block* temp, struct block* current, int size_of_chunk);
 
 #endif /* MEMORY_H */
