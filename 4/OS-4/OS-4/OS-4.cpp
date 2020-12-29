@@ -1,6 +1,4 @@
-﻿// OS-4.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+﻿
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,6 +8,8 @@
 
 
 #define MEMORY_SIZE 512
+#define SUCCESS 0
+#define NO_SUCH_FILE 1
 using namespace std;
 
 struct file {
@@ -48,18 +48,116 @@ void createFile(string fileName, string fileType) {
 	}
 }
 
-int main()
-{
-    std::cout << "Hello World!\n";
+int writeToFile(file& file, string data) {
+	for (unsigned int i = 0; i < data.size(); i++) {
+		string temp;
+		if (i += 7 < data.size()) {
+			temp = data.substr(i - 1, 8);
+			bool isWriten = false;
+			for (unsigned int j = 0; j < MEMORY_SIZE; j++) {
+				if (memory[j].empty() && !isWriten) {
+					memory[j] = temp;
+					file.indexes.push_back(j);
+					isWriten = true;
+				}
+			}
+		}
+		else {
+			temp = data.substr(i, data.size());
+			bool isWriten = false;
+			for (unsigned int j = 0; j < MEMORY_SIZE; j++) {
+				if (memory[j].empty() && !isWriten) {
+					memory[j] = temp;
+					file.indexes.push_back(j);
+					isWriten = true;
+				}
+			}
+		}
+		i += 6;
+	}
+	return SUCCESS;
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+int writeToFile(file& file, string data) {
+	for (unsigned int i = 0; i < data.size(); i++) {
+		string temp;
+		if (i += 7 < data.size()) {
+			temp = data.substr(i - 1, 8);
+			bool isWriten = false;
+			for (unsigned int j = 0; j < MEMORY_SIZE; j++) {
+				if (memory[j].empty() && !isWriten) {
+					memory[j] = temp;
+					file.indexes.push_back(j);
+					isWriten = true;
+				}
+			}
+		}
+		else {
+			temp = data.substr(i, data.size());
+			bool isWriten = false;
+			for (unsigned int j = 0; j < MEMORY_SIZE; j++) {
+				if (memory[j].empty() && !isWriten) {
+					memory[j] = temp;
+					file.indexes.push_back(j);
+					isWriten = true;
+				}
+			}
+		}
+		i += 6;
+	}
+	return SUCCESS;
+}
+int renameFile(string fileName, string fileType, string newFileName) {
+	if (!checkForFileName(newFileName, fileType)) {
+		for (vector<file>::iterator it = root.files.begin(); it < root.files.end(); it++) {
+			if (it->name == fileName && it->type == fileType) {
+				it->name = newFileName;
+				return SUCCESS;
+			}
+		}
+	}
+	return NO_SUCH_FILE;
+}
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+int main()
+{
+	string request;
+	while (true) {
+		cout << "\n>";
+		cin >> request;
+		request = request.substr(0, request.find(' '));
+		if (request == "cr") {
+			string fileName_dot_Type;
+			cin >> fileName_dot_Type;
+			createFile(fileName_dot_Type.substr(0, fileName_dot_Type.find('.')),
+				fileName_dot_Type.substr(fileName_dot_Type.find('.') + 1, fileName_dot_Type.size()));
+		}
+
+		else if (request == "dir") {
+			dir();
+		}
+
+		else if (request == "help") {
+			cout << "dir	Show all files in directory" << endl;
+			cout << "cr	create file" << endl;
+			cout << "rm	remove file" << endl;
+			cout << "move	rename file" << endl;
+			cout << "copy	copy file" << endl;
+			cout << "write	write data to file" << endl;
+			cout << "read	read data from file" << endl;
+			cout << "dump	create dump" << endl;
+			cout << "cls	clear screen" << endl;
+			cout << "exit	finish program" << endl;
+		}
+		else if (request == "exit") {
+			return 0;
+		}
+		else if (request == "cls") {
+			system("cls");
+		}
+		else {
+			cout << "Unknown command..." << endl;
+		}
+	}
+}
+
