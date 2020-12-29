@@ -4,7 +4,7 @@
 Обеспечить создание дампа файловой системы таким образом, чтобы можно было просмотреть структуру файловой системы и содержимое файлов.
 Иерархическая (дерево) файловая система, с физической организацией файла -  непрерывное размещение;
 ## Author
- Ilya Hontarau, Maria Zhirko
+ Shepko Matvey, Shyshko Alexandr
 ## Description
 Implemented a file system with a tree hierarchy and continuous file allocation. Used File entity as abstraction above file and directory.
 Used c++17 with string_view and move semantic(not good example of using move sematic:)).
