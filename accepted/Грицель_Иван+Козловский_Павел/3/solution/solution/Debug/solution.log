@@ -1,0 +1,4 @@
+﻿  solution.cpp
+D:\лабы\3_1\ос\33\solu\solution\solution\solution.cpp(37,27): warning C4018: <: несоответствие типов со знаком и без знака
+D:\лабы\3_1\ос\33\solu\solution\solution\solution.cpp(41,30): warning C4302: <function-style-cast>: усечение из "const char *" к "char"
+  solution.vcxproj -> D:\лабы\3_1\ос\33\solu\solution\Debug\solution.exe

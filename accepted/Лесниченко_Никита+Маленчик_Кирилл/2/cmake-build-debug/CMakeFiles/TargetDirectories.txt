@@ -1,0 +1,3 @@
+D:/BSUIR/OS/operating-systems/2/cmake-build-debug/CMakeFiles/os2.dir
+D:/BSUIR/OS/operating-systems/2/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/BSUIR/OS/operating-systems/2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

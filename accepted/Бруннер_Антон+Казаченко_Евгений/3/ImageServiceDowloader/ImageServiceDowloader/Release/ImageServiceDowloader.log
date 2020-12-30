@@ -1,0 +1,8 @@
+﻿  ImageServiceClass.cpp
+C:\Study\ОС\operating-systems\3\ImageServiceDowloader\ImageServiceDowloader\ImageServiceClass.cpp(94,42): warning C4838: Преобразование из "int" в "unsigned int" требует сужающего преобразования.
+  Создание кода
+  2 of 949 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  ImageServiceDowloader.vcxproj -> C:\Study\ОС\operating-systems\3\ImageServiceDowloader\Release\ImageServiceDowloader.exe

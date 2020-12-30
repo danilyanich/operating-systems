@@ -1,0 +1,6 @@
+﻿  File.cpp
+  FileSystem.cpp
+  Source.cpp
+  Создание кода...
+C:\Users\User\Downloads\FileSystem.cpp(71): warning C4715: FileSystem::copy: значение возвращается не при всех путях выполнения
+  os4.vcxproj -> C:\Users\User\source\repos\os4\Debug\os4.exe

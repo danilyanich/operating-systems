@@ -1,0 +1,11 @@
+.vscode/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+Makefile
+bin
+<<<<<<< HEAD
+.vs
+out
+=======
+>>>>>>> 396c44bd111d0e33385da953549e4e420a8c0977

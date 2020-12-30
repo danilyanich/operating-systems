@@ -1,0 +1,7 @@
+﻿  file_system.cpp
+C:\Users\ASUS-PC\Desktop\labi\operating-systems\4\file_system\file_system\file_system.cpp(171,49): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\ASUS-PC\Desktop\labi\operating-systems\4\file_system\file_system\file_system.cpp(211,47): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\ASUS-PC\Desktop\labi\operating-systems\4\file_system\file_system\file_system.cpp(283,39): warning C4018: <: несоответствие типов со знаком и без знака
+  main.cpp
+  Создание кода...
+  file_system.vcxproj -> C:\Users\ASUS-PC\Desktop\labi\operating-systems\4\file_system\Debug\file_system.exe
