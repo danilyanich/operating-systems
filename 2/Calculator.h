@@ -16,11 +16,11 @@ struct Point {
     double y;
 };
 
-class SysInfoPoint {
+class SystemInfoPoint {
 
 public:
 
-    SysInfoPoint(Point p) : point(p) {
+    SystemInfoPoint(Point p) : point(p) {
 
     }
     
@@ -33,9 +33,7 @@ public:
 void produceFuncValues(const function<void(const Point & p)>& func) {
     
     for (int i = 0; i < 10; i++) {
-        Point p{};
-        p.x = i;
-        p.y = 3 * i * i;
+        Point p { i, 7 * i * i + 12 * i - 2 };
         func(p);
     }
 }
@@ -43,7 +41,7 @@ void produceFuncValues(const function<void(const Point & p)>& func) {
 class Calculator {
     
     Producer <Point> calculator = Producer <Point>(1);
-    Producer <SysInfoPoint> system_info = Producer <SysInfoPoint>(1);
+    Producer <SystemInfoPoint> system_info = Producer <SystemInfoPoint>(1);
     
     thread values_writer;
     thread logging_tr;
@@ -71,22 +69,22 @@ public:
 
 private:
 
-    static void calculatorSubscribe(Producer <Point>& subscribe, Producer <SysInfoPoint>& publish, ostream& fout) {
+    static void calculatorSubscribe(Producer <Point>& subscribe, Producer <SystemInfoPoint>& publish, ostream& fout) {
         auto foo = [&publish, &fout](Point& v) {
          
-            SysInfoPoint pointWithSysInfo(v);
-            pointWithSysInfo.accept_time = system_clock::now();
+            SystemInfoPoint pointWithSystemInfo(v);
+            pointWithSystemInfo.accept_time = system_clock::now();
             
             fout << v.y << " " << v.x << "\n";
             
-            pointWithSysInfo.write_time = system_clock::now();
-            publish.publish(pointWithSysInfo);
+            pointWithSystemInfo.write_time = system_clock::now();
+            publish.publish(pointWithSystemInfo);
         };
         subscribe.subscribe(foo);
     }
 
-    static void logging(Producer <SysInfoPoint>& cq, ostream& fout) {
-        auto foo = [&fout](SysInfoPoint& v) {
+    static void logging(Producer <SystemInfoPoint>& cq, ostream& fout) {
+        auto foo = [&fout](SystemInfoPoint& v) {
           
             auto accept_time = system_clock::to_time_t(v.accept_time);
             auto write_time = system_clock::to_time_t(v.write_time);

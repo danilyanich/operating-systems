@@ -13,7 +13,6 @@ class Parser {
 public:
 
     Parser(int argc, char** argv);
-
     string getFlagValue(string flag);
 
 };
