@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
 	struct block* block3 = _malloc(23);
 	struct block* block4 = _malloc(33);
 	struct block* block5 = _malloc(43);
-	_write(block1, "Liza");
-	_write(block2, "Ksenia"); 
+	_write(block1, "Dasha");
+	_write(block2, "Vadzim"); 
 	_write(block3, "OS 1 lab"); 
 	_write(block4, "success");
 	_write(block5, "please accept our lab"); 
