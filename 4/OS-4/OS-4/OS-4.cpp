@@ -136,6 +136,40 @@ string readFromFile(string fileName, string fileType) {
 		}
 	}
 }
+
+int copyFile(string fileName, string fileType) {
+	for (vector<file>::iterator it = root.files.begin(); it < root.files.end(); it++) {
+		if (it->name == fileName && it->type == fileType) {
+			for (unsigned int i = 0; i < root.files.size(); i++) {
+				if (checkForFileName(it->name + "(copy" + to_string(i) + ')', it->type)) {
+					continue;
+				}
+				else {
+					file newFile;
+					newFile.name = it->name + "(copy" + to_string(i) + ')';
+					newFile.type = it->type;
+					writeToFile(newFile, readFromFile(it->name, it->type));
+					root.files.push_back(newFile);
+					return SUCCESS;
+				}
+			}
+		}
+	}
+	return NO_SUCH_FILE;
+}
+
+int deleteFile(string fileName, string fileType) {
+	for (vector<file>::iterator it = root.files.begin(); it < root.files.end(); it++) {
+		if (it->name == fileName && it->type == fileType) {
+			for (vector<int>::iterator index = it->indexes.begin(); index < it->indexes.end(); index++) {
+				memory[*index].clear();
+			}
+			root.files.erase(it);
+			return SUCCESS;
+		}
+	}
+	return NO_SUCH_FILE;
+}
 void dump(string dumpName) {
 	ofstream dump(dumpName, ios::binary | ios::out);
 	dump << "root>" << endl;
@@ -213,7 +247,22 @@ int main()
 			cin >> dumpName;
 			dump(dumpName);
 		}
-
+		else if (request == "rm") {
+			string fileName_dot_Type;
+			cin >> fileName_dot_Type;
+			if (deleteFile(fileName_dot_Type.substr(0, fileName_dot_Type.find('.')),
+				fileName_dot_Type.substr(fileName_dot_Type.find('.') + 1, fileName_dot_Type.size())) == NO_SUCH_FILE) {
+				cout << "Can't delete file. No such file" << endl;
+			}
+		}
+		else if (request == "copy") {
+			string fileName_dot_Type;
+			cin >> fileName_dot_Type;
+			if (copyFile(fileName_dot_Type.substr(0, fileName_dot_Type.find('.')),
+				fileName_dot_Type.substr(fileName_dot_Type.find('.') + 1, fileName_dot_Type.size())) == NO_SUCH_FILE) {
+				cout << "Can't copy file. No such file" << endl;
+			}
+		}
 		else if (request == "help") {
 			cout << "dir	Show all files in directory" << endl;
 			cout << "cr	create file" << endl;
