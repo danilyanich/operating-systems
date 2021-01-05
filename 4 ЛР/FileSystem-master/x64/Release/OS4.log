@@ -1,0 +1,7 @@
+﻿  FileSystem.cpp
+  Jingle.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winnt.h(173,1): fatal error C1189: #error:  "No Target Architecture"
+  Создание кода...
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(344): error C4716: FileSystem::deleteFileData: должна возвращать значение
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(294): warning C4715: FileSystem::renameFile: значение возвращается не при всех путях выполнения
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(332): warning C4715: FileSystem::deleteFile: значение возвращается не при всех путях выполнения

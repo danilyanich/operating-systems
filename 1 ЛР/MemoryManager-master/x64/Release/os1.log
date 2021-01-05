@@ -1,0 +1,23 @@
+﻿  mmemory.c
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(26,17): error C2054: требуется "(" после "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(26,50): error C2085: _malloc: отсутствует в списке формальных параметров
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(41,1): error C2061: синтаксическая ошибка: идентификатор "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(59,17): error C2054: требуется "(" после "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(59,63): error C2085: _read: отсутствует в списке формальных параметров
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(77,1): error C2061: синтаксическая ошибка: идентификатор "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(95,17): error C2054: требуется "(" после "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(95,42): error C2085: _init: отсутствует в списке формальных параметров
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(97,1): error C2061: синтаксическая ошибка: идентификатор "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.c(389,23): warning C4312: приведение типов: преобразование из "int" в "VA" большего размера
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.c(503,23): warning C4311: приведение типов: усечение указателя из "VA" в "int"
+  test.c
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(26,17): error C2054: требуется "(" после "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(26,50): error C2085: _malloc: отсутствует в списке формальных параметров
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(41,1): error C2061: синтаксическая ошибка: идентификатор "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(59,17): error C2054: требуется "(" после "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(59,63): error C2085: _read: отсутствует в списке формальных параметров
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(77,1): error C2061: синтаксическая ошибка: идентификатор "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(95,17): error C2054: требуется "(" после "MMEMORY_API"
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(95,42): error C2085: _init: отсутствует в списке формальных параметров
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\mmemory.h(97,1): error C2061: синтаксическая ошибка: идентификатор "MMEMORY_API"
+  Создание кода...

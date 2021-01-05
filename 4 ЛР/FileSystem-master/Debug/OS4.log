@@ -1,0 +1,16 @@
+﻿  DataBlock.cpp
+  FileSystem.cpp
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(111,20): error C2131: выражение не определяется константой
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(111,16): message : сбой вызван чтением переменной вне срока ее существования
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(111,16): message : см. использование "this"
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(165,41): warning C4018: <: несоответствие типов со знаком и без знака
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(180,37): warning C4244: инициализация: преобразование "double" в "unsigned int", возможна потеря данных
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(190,61): warning C4018: <: несоответствие типов со знаком и без знака
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\FileSystem.cpp(422,41): warning C4018: <: несоответствие типов со знаком и без знака
+  Jingle.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winnt.h(173,1): fatal error C1189: #error:  "No Target Architecture"
+  main.cpp
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\main.cpp(70,9): warning C4101: error: неиспользованная локальная переменная
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\main.cpp(248,27): warning C4018: <: несоответствие типов со знаком и без знака
+  Создание кода...
+D:\3\Work\OS\samples\OS4\FileSystem-master\filesystem-master\main.cpp(365): warning C4715: play: значение возвращается не при всех путях выполнения

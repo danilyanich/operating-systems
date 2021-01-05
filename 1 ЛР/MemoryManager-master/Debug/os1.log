@@ -1,0 +1,10 @@
+﻿  test.c
+ucrtd.lib(ucrtbased.dll) : error LNK2005: __read уже определен в mmemory.obj
+ucrtd.lib(ucrtbased.dll) : error LNK2005: __write уже определен в mmemory.obj
+     Создается библиотека D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\Debug\os1.lib и объект D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\Debug\os1.exp
+test.obj : warning LNK4217: локально определенный символ __malloc импортирован в функцию _test_program
+test.obj : warning LNK4217: локально определенный символ __free импортирован в функцию _test_program
+test.obj : warning LNK4217: локально определенный символ __init импортирован в функцию _test_initialization
+test.obj : warning LNK4217: локально определенный символ __printBuffer импортирован в функцию _test_program
+MSVCRTD.lib(exe_winmain.obj) : error LNK2019: ссылка на неразрешенный внешний символ _WinMain@16 в функции "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+D:\3\Work\OS\samples\OS1\MemoryManagerYalchik\MemoryManager-master\Debug\os1.exe : fatal error LNK1120: неразрешенных внешних элементов: 1
